@@ -19,12 +19,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Calendar.cpp" />
+    <ClCompile Include="src\Calendar_Loan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Calendar_Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\Calendar_HolidayCalendar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Calendar_Loan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
