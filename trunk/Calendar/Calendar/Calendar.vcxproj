@@ -81,6 +81,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Calendar.cpp" />
+    <ClCompile Include="src\Calendar_HolidayCalendar.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc\Calendar_Common.h" />
+    <ClInclude Include="inc\Calendar_HolidayCalendar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
