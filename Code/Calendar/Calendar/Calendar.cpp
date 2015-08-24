@@ -6,6 +6,7 @@
 
 #include <iostream>
 
+// todo: dllmain
 int main(int argc, char* argv[])
 {
     boost::locale::generator gen;

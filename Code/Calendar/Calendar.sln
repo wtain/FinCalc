@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Calendar", "Calendar\Calendar.vcxproj", "{838A5D36-E55E-486D-B06E-7AF7E8F979CE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Calendar_UnitTest", "Calendar_UnitTest\Calendar_UnitTest.vcxproj", "{0FC27C61-82D8-48BD-9A10-F96841396D7D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{838A5D36-E55E-486D-B06E-7AF7E8F979CE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{838A5D36-E55E-486D-B06E-7AF7E8F979CE}.Debug|Win32.Build.0 = Debug|Win32
+		{838A5D36-E55E-486D-B06E-7AF7E8F979CE}.Release|Win32.ActiveCfg = Release|Win32
+		{838A5D36-E55E-486D-B06E-7AF7E8F979CE}.Release|Win32.Build.0 = Release|Win32
+		{0FC27C61-82D8-48BD-9A10-F96841396D7D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0FC27C61-82D8-48BD-9A10-F96841396D7D}.Debug|Win32.Build.0 = Debug|Win32
+		{0FC27C61-82D8-48BD-9A10-F96841396D7D}.Release|Win32.ActiveCfg = Release|Win32
+		{0FC27C61-82D8-48BD-9A10-F96841396D7D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

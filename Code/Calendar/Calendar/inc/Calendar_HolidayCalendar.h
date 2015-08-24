@@ -16,7 +16,7 @@ enum BumpType
     eBump_ModBackward = 4
 };
 
-class HolidayCalendarBase
+class CALENDAR_API HolidayCalendarBase
 {
 public:
     virtual ~HolidayCalendarBase();
@@ -30,7 +30,7 @@ public:
     virtual bool IsHoliday(Date date) const = 0;
 };
 
-class HolidayCalendar 
+class CALENDAR_API HolidayCalendar 
     : public HolidayCalendarBase
 {
     std::set<Date> m_holidays;
@@ -46,7 +46,7 @@ private:
     HolidayCalendar();
 };
 
-class WeekendCalendar
+class CALENDAR_API WeekendCalendar
     : public HolidayCalendarBase
 {
 public:

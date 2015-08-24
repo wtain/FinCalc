@@ -11,18 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{838A5D36-E55E-486D-B06E-7AF7E8F979CE}</ProjectGuid>
+    <ProjectGuid>{0FC27C61-82D8-48BD-9A10-F96841396D7D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Calendar</RootNamespace>
+    <RootNamespace>Calendar_UnitTest</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
@@ -39,13 +39,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\OpenCV2.1\include\opencv;C:\Program Files (x86)\MATLAB\R2010b\extern\include;$(BOOST_DIR);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;C:\Program Files (x86)\Microsoft DirectX SDK (November 2008)\Include</IncludePath>
-    <LibraryPath>$(BOOST_DIR)\stage\lib;C:\Program Files (x86)\Microsoft DirectX SDK (November 2008)\Lib\x86;C:\OpenCV2.1\lib;C:\Program Files (x86)\MATLAB\R2010b\extern\lib\win32\microsoft;$(BOOST_DIR)\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\OpenCV2.1\include\opencv;C:\Program Files (x86)\MATLAB\R2010b\extern\include;$(BOOST_DIR);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;C:\Program Files (x86)\Microsoft DirectX SDK (November 2008)\Include</IncludePath>
-    <LibraryPath>$(BOOST_DIR)\stage\lib;C:\Program Files (x86)\Microsoft DirectX SDK (November 2008)\Lib\x86;C:\OpenCV2.1\lib;C:\Program Files (x86)\MATLAB\R2010b\extern\lib\win32\microsoft;$(BOOST_DIR)\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -53,7 +49,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>CALENDAR_EXPORTS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>
@@ -62,7 +58,6 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);libboost_thread-vc100-mt-gd-1_55.lib;libboost_system-vc100-mt-gd-1_55.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -73,7 +68,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CALENDAR_EXPORTS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>
@@ -84,18 +79,15 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);libboost_thread-vc100-mt-1_55.lib;libboost_system-vc100-mt-1_55.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Calendar.cpp" />
-    <ClCompile Include="src\Calendar_HolidayCalendar.cpp" />
-    <ClCompile Include="src\Calendar_Loan.cpp" />
+    <ClCompile Include="Calendar_UnitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\Calendar_Common.h" />
-    <ClInclude Include="inc\Calendar_HolidayCalendar.h" />
-    <ClInclude Include="inc\Calendar_Loan.h" />
+    <ProjectReference Include="..\Calendar\Calendar.vcxproj">
+      <Project>{838a5d36-e55e-486d-b06e-7af7e8f979ce}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
