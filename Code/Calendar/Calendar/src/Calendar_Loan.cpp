@@ -71,11 +71,11 @@ namespace Calendar
                 break;
         assert(i > 0 && i < m_payments.size());
         Currency totalPaid = 0.0;
-        for (size_t j = 0; j <= i; ++j)
+        for (size_t j = 0; j < i; ++j)
             totalPaid += m_payments[j].principalPayment;
         totalPaid += payment;
         Currency newAmount = m_principal - totalPaid;
-        const bool bHasFuturePayments = (i + 1 < m_payments.size());
+        const bool bHasFuturePayments = (i < m_payments.size());
         Date newStartDate = bHasFuturePayments ? m_payments[i+1].date : date;
         int newDuration = m_payments.size() - i;
         m_payments.reserve(m_payments.size() + 1);
