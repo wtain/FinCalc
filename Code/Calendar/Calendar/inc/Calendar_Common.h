@@ -1,10 +1,10 @@
 
 #pragma once
 
-#include <boost/locale/date_time.hpp>
+#include <boost/date_time/gregorian/gregorian.hpp>
 
 typedef double Currency;
-typedef boost::locale::date_time Date;
+typedef boost::gregorian::date Date;
 
 #ifdef CALENDAR_EXPORTS
 #define CALENDAR_API __declspec(dllexport)

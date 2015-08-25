@@ -5,8 +5,33 @@
 #include <boost/locale/generator.hpp>
 
 #include <iostream>
+#include <windows.h>
 
-// todo: dllmain
+BOOL APIENTRY DllMain(HINSTANCE hinstDLL,
+                      DWORD fdwReason, LPVOID lpvReserved)
+{
+    switch (fdwReason)
+    {
+    case DLL_PROCESS_ATTACH:
+        {
+            boost::locale::generator gen;
+            std::locale::global(gen(""));
+        }
+      
+        return 1; 
+
+    case DLL_PROCESS_DETACH:
+        break;
+
+    case DLL_THREAD_ATTACH:
+        break;
+
+    case DLL_THREAD_DETACH:
+        break;
+    }
+    return TRUE;
+}
+
 int main(int argc, char* argv[])
 {
     boost::locale::generator gen;
@@ -14,9 +39,7 @@ int main(int argc, char* argv[])
 
     HolidayCalendar rus("d:\\workspace_git\\FinCalc\\Data\\RUS.json");
 
-    Date t = boost::locale::period::year(2015) + 
-             boost::locale::period::month(1) + 
-             boost::locale::period::day(1);
+    Date t(2015, 1, 1);
 
     Loan loan(3800000.0, 0.12, t, 120, rus);
 
@@ -25,9 +48,7 @@ int main(int argc, char* argv[])
     std::cout << "Total interest: " << ti << std::endl;
     std::cout << "Payment: " << loan.Payment() << std::endl;
 
-    Date t1 = boost::locale::period::year(2015) + 
-              boost::locale::period::month(6) + 
-              boost::locale::period::day(1);
+    Date t1(2015, 6, 1);
                                        
     loan.AdditionalPayment(200000.0, t1);
 

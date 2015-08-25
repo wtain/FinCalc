@@ -25,7 +25,7 @@ Loan::Loan(Currency principal, double rate, Date startDate, int duration, const 
         const Currency principalPayment = m_payment - interestPayment;
         amount -= principalPayment;
         m_payments.push_back(Cashflow(date, principalPayment, interestPayment));
-        date += boost::locale::period::month(1); // don't respect calendar
+        date += boost::gregorian::months(1); // don't respect calendar
     }
     assert(std::abs(amount) < 0.01);
 }

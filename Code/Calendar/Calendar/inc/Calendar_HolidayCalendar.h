@@ -6,6 +6,7 @@
 #include <set>
 #include <string>
 #include <boost/locale/date_time.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 enum BumpType
 {
@@ -37,6 +38,7 @@ class CALENDAR_API HolidayCalendar
 public:
     
     explicit HolidayCalendar(const std::string& path);
+    explicit HolidayCalendar(std::istream& stream);
 
     virtual bool IsHoliday(Date date) const override;
 
@@ -44,6 +46,8 @@ public:
 
 private:
     HolidayCalendar();
+
+    void init(const boost::property_tree::ptree& pt);
 };
 
 class CALENDAR_API WeekendCalendar
