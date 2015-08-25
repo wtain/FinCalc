@@ -3,6 +3,7 @@
 #include "inc\Calendar_Loan.h"
 
 #include <boost/locale/generator.hpp>
+#include <boost/make_shared.hpp>
 
 #include <iostream>
 #include <windows.h>
@@ -37,11 +38,11 @@ int main(int argc, char* argv[])
     boost::locale::generator gen;
     std::locale::global(gen(""));
 
-    HolidayCalendar rus("d:\\workspace_git\\FinCalc\\Data\\RUS.json");
+    boost::shared_ptr<Calendar::HolidayCalendar> pRus = boost::make_shared<Calendar::HolidayCalendar>("d:\\workspace_git\\FinCalc\\Data\\RUS.json");
 
     Date t(2015, 1, 1);
 
-    Loan loan(3800000.0, 0.12, t, 120, rus);
+    Calendar::Loan loan(3800000.0, 0.12, t, 120, pRus);
 
     const Currency ti = loan.TotalInterest();
 

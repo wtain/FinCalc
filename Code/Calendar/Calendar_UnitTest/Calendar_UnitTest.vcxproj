@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Calendar_Fixture.cpp" />
     <ClCompile Include="Calendar_UnitTest.cpp" />
     <ClCompile Include="HolidayCalendar_Test.cpp" />
     <ClCompile Include="Loan_Test.cpp" />
@@ -98,6 +99,9 @@
     <ProjectReference Include="..\Calendar\Calendar.vcxproj">
       <Project>{838a5d36-e55e-486d-b06e-7af7e8f979ce}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Calendar_Fixture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
