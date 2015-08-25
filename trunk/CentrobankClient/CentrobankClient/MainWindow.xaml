@@ -1,0 +1,46 @@
+﻿<Window x:Class="CentrobankClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525" Name="mainWin">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <DatePicker Name="dtPick"  Grid.Row="0"  SelectedDateChanged="DatePicker_SelectedDateChanged" />
+        
+        <ListView Grid.Row="1"  ItemsSource="{Binding FXRates, ElementName=mainWin}" DataContext="{Binding RelativeSource={RelativeSource Self}}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn>
+                        <GridViewColumn.Header>
+                            <TextBlock Text="CCY" />
+                        </GridViewColumn.Header>
+                        
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding CCY}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn>
+                        <GridViewColumn.Header>
+                            <TextBlock Text="Rate" />
+                        </GridViewColumn.Header>
+
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Rate}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        
+        <Button Grid.Row="2"  Content="Exit" Click="Button_Click" />
+    </Grid>
+</Window>
