@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <iterator>
 #include <assert.h>
+#include <iomanip>
 
 namespace Calendar
 {
@@ -107,5 +108,40 @@ namespace Calendar
     size_t Loan::NumberOfPayments() const
     {
         return m_payments.size();
+    }
+
+    std::ostream& operator << (std::ostream& stream, const Loan& loan)
+    {
+        stream << "Notional: " << std::setprecision(2) << loan.Principal() << std::endl;
+        stream << "Number of payments: " << loan.NumberOfPayments() << std::endl;
+        stream << "Monthly payment: " << std::setprecision(2) << loan.Payment() << std::endl;
+        stream << "Interest rate: " << std::setprecision(2) << 100 * loan.Rate() << " %" << std::endl;
+        stream << "Total interest: " << std::setprecision(2) << loan.TotalInterest() << std::endl;
+        stream << "Total payment: " << std::setprecision(2) << loan.TotalPayment() << std::endl;
+        // + start, + maturity, + loan cost percentage
+        stream << "Schedule: " << std::endl << std::endl;
+        stream << std::setw(3)  << "#" << " "
+               << std::setw(8)  << "Date" << " "
+               << std::setw(11) << "Prncpl Begin" << " "
+               << std::setw(11) << "Payment" << " "
+               << std::setw(11) << "Prncpl pmt" << " "
+               << std::setw(11) << "Int pmt" << " "
+               << std::setw(11) << "Prncpl End" << std::endl;
+        int nPeriod = 0;
+        Currency amount = loan.Principal();
+        BOOST_FOREACH (const Loan::Cashflow& cf, loan.m_payments)
+        {
+            Currency newAmount = amount - cf.principalPayment;
+            stream << std::fixed
+                   << std::setw(3)  << ++nPeriod << " "
+                   << std::setw(8)  << boost::gregorian::to_iso_string(cf.date) << " " // to_simple_string
+                   << std::setw(11) << std::setprecision(2) << amount << " "
+                   << std::setw(11) << std::setprecision(2) << cf.Payment() << " "
+                   << std::setw(11) << std::setprecision(2) << cf.principalPayment << " "
+                   << std::setw(11) << std::setprecision(2) << cf.interestPayment  << " "
+                   << std::setw(11) << std::setprecision(2) << newAmount << std::endl;
+            amount = newAmount;
+        }
+        return stream;
     }
 }

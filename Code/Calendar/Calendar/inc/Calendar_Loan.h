@@ -6,9 +6,12 @@
 
 #include <boost/locale/date_time.hpp>
 #include <vector>
+#include <ostream>
 
 namespace Calendar
 {
+    // todo: add core (iterators)
+
     class CALENDAR_API Loan
     {
     public:
@@ -52,5 +55,7 @@ namespace Calendar
         Currency Payment() const;
 
         size_t NumberOfPayments() const;
+
+        friend CALENDAR_API std::ostream& operator << (std::ostream& stream, const Loan& loan);
     };
 }
