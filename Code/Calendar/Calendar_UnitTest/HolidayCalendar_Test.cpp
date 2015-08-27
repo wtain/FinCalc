@@ -49,4 +49,21 @@ BOOST_AUTO_TEST_CASE( CompositeCalendarTest )
     }
 }
 
+BOOST_AUTO_TEST_CASE( RusCalendarBumpTest )
+{
+    std::istringstream stream(JsonCalendarRus());
+
+    // todo: composite to fixture
+    boost::shared_ptr<Calendar::HolidayCalendar> pRus = boost::make_shared<Calendar::HolidayCalendar>(stream);
+    boost::shared_ptr<Calendar::WeekendCalendar> pXxx  = boost::make_shared<Calendar::WeekendCalendar>();
+    boost::shared_ptr<Calendar::CompositeCalendar> pComposite  = boost::make_shared<Calendar::CompositeCalendar>();
+
+    pComposite->AddCalendar(pRus);
+    pComposite->AddCalendar(pXxx);
+
+    BOOST_REQUIRE_EQUAL(pComposite->BumpModBackward(Date(2014, 5, 1)), Date(2014, 5, 5));
+
+    BOOST_REQUIRE_EQUAL(pComposite->BumpModForward(Date(2014, 5, 31)), Date(2014, 5, 30));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

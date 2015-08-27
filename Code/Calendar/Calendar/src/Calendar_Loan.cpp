@@ -10,7 +10,8 @@
 
 namespace Calendar
 {
-    // todo: pointer for calendar
+    // todo: LoanBuilder: enum: loanType
+
     Loan::Loan(Currency principal, double rate, Date startDate, int duration, boost::shared_ptr<const HolidayCalendarBase> pCalendar)
         : m_principal(principal)
         , m_rate(rate)
@@ -110,6 +111,11 @@ namespace Calendar
         return m_payments.size();
     }
 
+    /*double Loan::LoanCostRate() const
+    {
+        return Principal() / TotalPayment();
+    }*/
+
     std::ostream& operator << (std::ostream& stream, const Loan& loan)
     {
         stream << "Notional: " << std::setprecision(2) << loan.Principal() << std::endl;
@@ -118,7 +124,14 @@ namespace Calendar
         stream << "Interest rate: " << std::setprecision(2) << 100 * loan.Rate() << " %" << std::endl;
         stream << "Total interest: " << std::setprecision(2) << loan.TotalInterest() << std::endl;
         stream << "Total payment: " << std::setprecision(2) << loan.TotalPayment() << std::endl;
-        // + start, + maturity, + loan cost percentage
+        if (!loan.m_payments.empty())
+        {
+            Date startDate = loan.m_payments[0].date;
+            Date maturityDate = loan.m_payments[loan.m_payments.size()-1].date;
+            stream << "Start date: " << boost::gregorian::to_iso_string(startDate) << std::endl;
+            stream << "Maturity date: " << boost::gregorian::to_iso_string(maturityDate) << std::endl;
+            //stream << "Loan cost rate: " << std::setprecision(3) << 100 * loan.LoanCostRate() << " %" << std::endl;
+        }
         stream << "Schedule: " << std::endl << std::endl;
         stream << std::setw(3)  << "#" << " "
                << std::setw(8)  << "Date" << " "

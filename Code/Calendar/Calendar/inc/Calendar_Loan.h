@@ -48,6 +48,9 @@ namespace Calendar
         Currency TotalPayment() const;
         Currency TotalPrincipalPayment() const;
 
+        // todo: implement properly
+        //double LoanCostRate() const;
+
         void AdditionalPayment(Currency payment, Date date);
 
         double Rate() const;

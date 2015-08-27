@@ -12,11 +12,10 @@ BOOST_FIXTURE_TEST_SUITE( LoanTests, Fixture )
 BOOST_AUTO_TEST_CASE( LoanTest_AdditionalPayment )
 {
     std::istringstream stream(JsonCalendarRus());
-    boost::shared_ptr<Calendar::HolidayCalendar> pRus = boost::make_shared<Calendar::HolidayCalendar>(stream);
-
+    
     Date t(2015, 1, 1);
 
-    Calendar::Loan loan(3800000.0, 0.12, t, 120, pRus);
+    Calendar::Loan loan(3800000.0, 0.12, t, 120, Calendar::HolidayCalendar::Empty);
     BOOST_REQUIRE_EQUAL(loan.NumberOfPayments(), 120);
     BOOST_REQUIRE_CLOSE(loan.TotalPrincipalPayment(), 3800000.0, Eps);
     BOOST_REQUIRE_CLOSE(loan.TotalPayment(), loan.TotalPrincipalPayment() + loan.TotalInterest(), Eps);

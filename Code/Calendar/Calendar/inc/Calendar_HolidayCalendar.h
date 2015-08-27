@@ -21,6 +21,8 @@ namespace Calendar
         eBump_ModBackward = 4
     };
 
+    // todo: daycounts
+
     class CALENDAR_API HolidayCalendarBase
     {
     public:
