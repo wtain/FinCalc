@@ -1,3 +1,4 @@
+
 *.suo
 *.ncb
 *.sdf
@@ -7,3 +8,4 @@
 Debug
 Release
 Thumbs.db
+~$*.xlsx
