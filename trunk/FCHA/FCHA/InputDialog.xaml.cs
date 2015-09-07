@@ -18,6 +18,15 @@ namespace FCHA
 	/// </summary>
 	public partial class InputDialog : Window
 	{
+		public static readonly DependencyProperty ValueProperty 
+			= DependencyProperty.Register("Value", typeof(InputDialog), typeof(string));
+
+		public string Value
+		{
+			get { return (string)GetValue(ValueProperty); }
+			set { SetValue(ValueProperty, value); }
+		}
+
 		public InputDialog()
 		{
 			InitializeComponent();
