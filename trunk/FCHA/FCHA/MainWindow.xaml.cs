@@ -25,7 +25,7 @@ namespace FCHA
 		//    DependencyProperty.Register("TopLevelCategories", typeof(IEnu))
 
 		public IEnumerable<Category> TopLevelCategories { get; private set; }
-
+		
 		public MainWindow()
 		{
 			SQLiteConnection conn = new SQLiteConnection("Data Source=..\\..\\..\\..\\..\\Data\\FCHA_Master;Version=3;");

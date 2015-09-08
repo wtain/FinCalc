@@ -1,2 +1,10 @@
+loan cost
 http://ecson.ru/economics/post/zadacha-9.sostavlenie-plana-pogasheniya-kredita/
 http://ecson.ru/detail/post/kak-rasschitat-kredit/
+
+sqlite hierarchival query
+https://www.sqlite.org/lang_with.html
+
+ПСК
+http://www.banki.ru/wikibank/polnaya_stoimost_kredita/
+http://habrahabr.ru/post/233987/
