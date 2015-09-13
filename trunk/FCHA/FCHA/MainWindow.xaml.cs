@@ -24,9 +24,6 @@ namespace FCHA
 		: Window
 		, INotifyPropertyChanged
 	{
-		//public static readonly DependencyProperty TopLevelCategoriesProprerty =
-		//    DependencyProperty.Register("TopLevelCategories", typeof(IEnu))
-
 		public IEnumerable<Category> TopLevelCategories { get; private set; }
 
 		private CategoriesManager m_mgr;
@@ -60,16 +57,6 @@ namespace FCHA
 			FirePropertyChanged("TopLevelCategories");
 		}
 
-		private void Add_Click(object sender, RoutedEventArgs e)
-		{
-			InputDialog dlg = new InputDialog();
-			if (true != dlg.ShowDialog())
-				return;
-			m_mgr.AddCategory(dlg.Value);
-			RefreshCategories();
-			
-		}
-
 		private PropertyChangedEventHandler propertyChangedHandlers;
 
 		private void FirePropertyChanged(string propertyName)
@@ -92,6 +79,58 @@ namespace FCHA
 			{
 				propertyChangedHandlers = (PropertyChangedEventHandler)MulticastDelegate.Remove(propertyChangedHandlers, value);
 			}
+		}
+
+		public Category SelectedCategory
+		{
+			get { return treeCategories.SelectedValue as Category; }
+		}
+
+		private void btnAdd_Click(object sender, RoutedEventArgs e)
+		{
+			InputDialog dlg = new InputDialog();
+			if (true != dlg.ShowDialog())
+				return;
+			m_mgr.AddCategory(dlg.Value);
+			RefreshCategories();
+		}
+
+		private void btnAddChild_Click(object sender, RoutedEventArgs e)
+		{
+			if (null == SelectedCategory)
+				return;
+			InputDialog dlg = new InputDialog();
+			if (true != dlg.ShowDialog())
+				return;
+			m_mgr.AddCategory(dlg.Value, SelectedCategory.categoryId);
+			RefreshCategories();
+		}
+
+		private void btnRename_Click(object sender, RoutedEventArgs e)
+		{
+			if (null == SelectedCategory)
+				return;
+			InputDialog dlg = new InputDialog();
+			dlg.Value = SelectedCategory.CategoryName;
+			if (true != dlg.ShowDialog())
+				return;
+			Category cat = SelectedCategory;
+			cat.CategoryName = dlg.Value;
+			m_mgr.UpdateCategory(cat);
+			RefreshCategories();
+		}
+
+		private void btnRemove_Click(object sender, RoutedEventArgs e)
+		{
+			if (null == SelectedCategory)
+				return;
+			m_mgr.DeleteCategory(SelectedCategory);
+			RefreshCategories();
+		}
+
+		private void btnExit_Click(object sender, RoutedEventArgs e)
+		{
+			Application.Current.Shutdown();
 		}
 	}
 }

@@ -44,5 +44,10 @@ namespace FCHA
 			DialogResult = false;
 			Close();
 		}
+
+		private void dlgInputBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			txtValue.SelectAll();
+		}
 	}
 }

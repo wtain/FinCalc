@@ -15,7 +15,13 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        
-        <Button Grid.Row="1" Name="Add" Click="Add_Click" Content="Add" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Name="btnAdd" Click="btnAdd_Click" Content="Add" />
+            <Button Name="btnAddChild" Click="btnAddChild_Click" Content="Add child" />
+            <Button Name="btnRename" Click="btnRename_Click" Content="Rename" />
+            <Button Name="btnRemove" Click="btnRemove_Click" Content="Remove" />
+            <Button Name="btnExit" Click="btnExit_Click" Content="Exit" />
+        </StackPanel>        
     </Grid>
 </Window>
