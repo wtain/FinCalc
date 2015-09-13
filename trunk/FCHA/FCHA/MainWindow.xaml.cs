@@ -15,6 +15,8 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.ComponentModel;
 
+using IOPath = System.IO.Path;
+
 namespace FCHA
 {
 	/// <summary>
@@ -33,6 +35,15 @@ namespace FCHA
 			get { return (CategoryViewModel)GetValue(VirtualRootProperty); }
 			private set { SetValue(VirtualRootProperty, value); }
 		}
+
+		public static readonly DependencyProperty DatabaseFileNameProperty =
+			DependencyProperty.Register("DatabaseFileName", typeof(string), typeof(MainWindow));
+
+		public string DatabaseFileName
+		{
+			get { return (string)GetValue(DatabaseFileNameProperty); }
+			private set { SetValue(DatabaseFileNameProperty, value); }
+		}
 		
 		public MainWindow()
 		{
@@ -48,8 +59,9 @@ namespace FCHA
 					}
 				};
 
+			DatabaseFileName = IOPath.GetFullPath("..\\..\\..\\..\\..\\Data\\FCHA_Master");
 
-			SQLiteConnection conn = new SQLiteConnection("Data Source=..\\..\\..\\..\\..\\Data\\FCHA_Master;Version=3;");
+			SQLiteConnection conn = new SQLiteConnection(string.Format("Data Source={0};Version=3;", DatabaseFileName));
 			conn.Open();
 
 			m_mgr = new CategoriesManager(conn);
