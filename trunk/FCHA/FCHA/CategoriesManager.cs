@@ -24,15 +24,13 @@ namespace FCHA
 
 		public void AddCategory(string name)
 		{
-			string query = QueryBuilder.Insert("categories", new KeyValuePair<string, string>("name", QueryBuilder.DecorateString(name)));
-			SQLiteCommand insert = new SQLiteCommand(query, m_conn);
-			insert.ExecuteNonQuery();
+			AddCategory(name, 0);
 		}
 
 		public void AddCategory(string name, int parentId)
 		{
-			string query = QueryBuilder.Insert("categories", new KeyValuePair<string, string>("name", QueryBuilder.DecorateString(name)),
-															 new KeyValuePair<string, string>("parentId", parentId.ToString()));
+			string query = QueryBuilder.Insert("categories_view", new KeyValuePair<string, string>("name", QueryBuilder.DecorateString(name)),
+															      new KeyValuePair<string, string>("parentId", parentId.ToString()));
 			SQLiteCommand insert = new SQLiteCommand(query, m_conn);
 			insert.ExecuteNonQuery();
 		}

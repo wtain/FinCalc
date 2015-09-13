@@ -13,28 +13,85 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace FCHA
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow 
+		: Window
+		, INotifyPropertyChanged
 	{
 		//public static readonly DependencyProperty TopLevelCategoriesProprerty =
 		//    DependencyProperty.Register("TopLevelCategories", typeof(IEnu))
 
 		public IEnumerable<Category> TopLevelCategories { get; private set; }
+
+		private CategoriesManager m_mgr;
 		
 		public MainWindow()
 		{
+			InitializeComponent();
+
+			Application.Current.DispatcherUnhandledException += (e, a) =>
+				{
+					if (a.Exception is SQLiteException)
+					{
+						SQLiteException ex = (SQLiteException)a.Exception;
+						MessageBox.Show(this, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+						a.Handled = true;
+					}
+				};
+
+
 			SQLiteConnection conn = new SQLiteConnection("Data Source=..\\..\\..\\..\\..\\Data\\FCHA_Master;Version=3;");
 			conn.Open();
 
-			CategoriesManager mgr = new CategoriesManager(conn);
-			TopLevelCategories = new List<Category>(mgr.EnumCategoriesByParent(0));
+			m_mgr = new CategoriesManager(conn);
 
-			InitializeComponent();
+			RefreshCategories();
+		}
+
+		private void RefreshCategories()
+		{
+			TopLevelCategories = new List<Category>(m_mgr.EnumCategoriesByParent(0));
+			FirePropertyChanged("TopLevelCategories");
+		}
+
+		private void Add_Click(object sender, RoutedEventArgs e)
+		{
+			InputDialog dlg = new InputDialog();
+			if (true != dlg.ShowDialog())
+				return;
+			m_mgr.AddCategory(dlg.Value);
+			RefreshCategories();
+			
+		}
+
+		private PropertyChangedEventHandler propertyChangedHandlers;
+
+		private void FirePropertyChanged(string propertyName)
+		{
+			if (null == propertyChangedHandlers)
+				return;
+			propertyChangedHandlers(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged
+		{
+			add
+			{
+				if (null == propertyChangedHandlers)
+					propertyChangedHandlers = (PropertyChangedEventHandler) MulticastDelegate.Combine(value);
+				else
+					propertyChangedHandlers = (PropertyChangedEventHandler) MulticastDelegate.Combine(propertyChangedHandlers, value);
+			}
+			remove
+			{
+				propertyChangedHandlers = (PropertyChangedEventHandler)MulticastDelegate.Remove(propertyChangedHandlers, value);
+			}
 		}
 	}
 }

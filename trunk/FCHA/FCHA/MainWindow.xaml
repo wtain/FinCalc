@@ -3,12 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525" Name="winMain">
     <Grid>
-        <TreeView ItemsSource="{Binding TopLevelCategories, ElementName=winMain}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="24" />
+        </Grid.RowDefinitions>
+        
+        <TreeView Grid.Row="0" ItemsSource="{Binding TopLevelCategories, ElementName=winMain, UpdateSourceTrigger=PropertyChanged}" Name="treeCategories">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate>
                     <TextBlock Text="{Binding CategoryName}"></TextBlock>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
+        
+        <Button Grid.Row="1" Name="Add" Click="Add_Click" Content="Add" />
     </Grid>
 </Window>

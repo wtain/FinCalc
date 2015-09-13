@@ -18,8 +18,8 @@ namespace FCHA
 	/// </summary>
 	public partial class InputDialog : Window
 	{
-		public static readonly DependencyProperty ValueProperty 
-			= DependencyProperty.Register("Value", typeof(InputDialog), typeof(string));
+		public static readonly DependencyProperty ValueProperty
+			= DependencyProperty.Register("Value", typeof(string), typeof(InputDialog));
 
 		public string Value
 		{
@@ -30,6 +30,19 @@ namespace FCHA
 		public InputDialog()
 		{
 			InitializeComponent();
+			txtValue.Focus();
+		}
+
+		private void btnOK_Click(object sender, RoutedEventArgs e)
+		{
+			DialogResult = true;
+			Close();
+		}
+
+		private void btnCancel_Click(object sender, RoutedEventArgs e)
+		{
+			DialogResult = false;
+			Close();
 		}
 	}
 }
