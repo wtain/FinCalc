@@ -1,0 +1,1 @@
+INSERT INTO categories_view (name, parentId) VALUES ('asdweasd', 0)

@@ -24,7 +24,31 @@ namespace FCHA
 		: Window
 		, INotifyPropertyChanged
 	{
-		public IEnumerable<Category> TopLevelCategories { get; private set; }
+		public IEnumerable<CategoryViewModel> TopLevelCategories { get; private set; }
+
+		private PropertyChangedEventHandler propertyChangedHandlers;
+
+		private void FirePropertyChanged(string propertyName)
+		{
+			if (null == propertyChangedHandlers)
+				return;
+			propertyChangedHandlers(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged
+		{
+			add
+			{
+				if (null == propertyChangedHandlers)
+					propertyChangedHandlers = (PropertyChangedEventHandler)MulticastDelegate.Combine(value);
+				else
+					propertyChangedHandlers = (PropertyChangedEventHandler)MulticastDelegate.Combine(propertyChangedHandlers, value);
+			}
+			remove
+			{
+				propertyChangedHandlers = (PropertyChangedEventHandler)MulticastDelegate.Remove(propertyChangedHandlers, value);
+			}
+		}
 
 		private CategoriesManager m_mgr;
 		
@@ -53,37 +77,13 @@ namespace FCHA
 
 		private void RefreshCategories()
 		{
-			TopLevelCategories = new List<Category>(m_mgr.EnumCategoriesByParent(0));
+			TopLevelCategories = new List<CategoryViewModel>(m_mgr.EnumCategoriesByParent(0).Select(c => new CategoryViewModel(m_mgr, null, c)));
 			FirePropertyChanged("TopLevelCategories");
 		}
 
-		private PropertyChangedEventHandler propertyChangedHandlers;
-
-		private void FirePropertyChanged(string propertyName)
+		public CategoryViewModel SelectedCategory
 		{
-			if (null == propertyChangedHandlers)
-				return;
-			propertyChangedHandlers(this, new PropertyChangedEventArgs(propertyName));
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged
-		{
-			add
-			{
-				if (null == propertyChangedHandlers)
-					propertyChangedHandlers = (PropertyChangedEventHandler) MulticastDelegate.Combine(value);
-				else
-					propertyChangedHandlers = (PropertyChangedEventHandler) MulticastDelegate.Combine(propertyChangedHandlers, value);
-			}
-			remove
-			{
-				propertyChangedHandlers = (PropertyChangedEventHandler)MulticastDelegate.Remove(propertyChangedHandlers, value);
-			}
-		}
-
-		public Category SelectedCategory
-		{
-			get { return treeCategories.SelectedValue as Category; }
+			get { return treeCategories.SelectedValue as CategoryViewModel; }
 		}
 
 		private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -102,8 +102,8 @@ namespace FCHA
 			InputDialog dlg = new InputDialog();
 			if (true != dlg.ShowDialog())
 				return;
-			m_mgr.AddCategory(dlg.Value, SelectedCategory.categoryId);
-			RefreshCategories();
+			m_mgr.AddCategory(dlg.Value, SelectedCategory.UnderlyingData.categoryId);
+			SelectedCategory.RefreshChildren();
 		}
 
 		private void btnRename_Click(object sender, RoutedEventArgs e)
@@ -111,21 +111,29 @@ namespace FCHA
 			if (null == SelectedCategory)
 				return;
 			InputDialog dlg = new InputDialog();
-			dlg.Value = SelectedCategory.CategoryName;
+			dlg.Value = SelectedCategory.UnderlyingData.name;
 			if (true != dlg.ShowDialog())
 				return;
-			Category cat = SelectedCategory;
-			cat.CategoryName = dlg.Value;
+			Category cat = SelectedCategory.UnderlyingData;
+			cat.name = dlg.Value;
 			m_mgr.UpdateCategory(cat);
-			RefreshCategories();
+			RefreshCurrentLevel();
+		}
+
+		private void RefreshCurrentLevel()
+		{
+			if (null == SelectedCategory.Parent)
+				RefreshCategories();
+			else
+				SelectedCategory.RefreshParentChildren();
 		}
 
 		private void btnRemove_Click(object sender, RoutedEventArgs e)
 		{
 			if (null == SelectedCategory)
 				return;
-			m_mgr.DeleteCategory(SelectedCategory);
-			RefreshCategories();
+			m_mgr.DeleteCategory(SelectedCategory.UnderlyingData);
+			RefreshCurrentLevel();
 		}
 
 		private void btnExit_Click(object sender, RoutedEventArgs e)

@@ -1,13 +1,11 @@
 ﻿
 namespace FCHA
 {
-	public class Category
+	public struct Category
 	{
 		public int categoryId;
 		public int parentId;
 		public string name;
-
-		public string CategoryName { get { return name; } set { name = value; } }
 
 		public Category(string name, int categoryId, int parentId)
 		{

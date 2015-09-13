@@ -8,20 +8,36 @@
             <RowDefinition Height="24" />
         </Grid.RowDefinitions>
         
-        <TreeView Grid.Row="0" ItemsSource="{Binding TopLevelCategories, ElementName=winMain, UpdateSourceTrigger=PropertyChanged}" Name="treeCategories">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate>
-                    <TextBlock Text="{Binding CategoryName}"></TextBlock>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
+        <TabControl Grid.Row="0">
+            <TabControl.Items>
+                <TabItem Name="tiCategories" Header="Categories">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="24" />
+                        </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Name="btnAdd" Click="btnAdd_Click" Content="Add" />
-            <Button Name="btnAddChild" Click="btnAddChild_Click" Content="Add child" />
-            <Button Name="btnRename" Click="btnRename_Click" Content="Rename" />
-            <Button Name="btnRemove" Click="btnRemove_Click" Content="Remove" />
-            <Button Name="btnExit" Click="btnExit_Click" Content="Exit" />
-        </StackPanel>        
+                        <TreeView Grid.Row="0" ItemsSource="{Binding TopLevelCategories, ElementName=winMain, UpdateSourceTrigger=PropertyChanged}" Name="treeCategories">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button Name="btnAdd" Click="btnAdd_Click" Content="Add" />
+                            <Button Name="btnAddChild" Click="btnAddChild_Click" Content="Add child" />
+                            <Button Name="btnRename" Click="btnRename_Click" Content="Rename" />
+                            <Button Name="btnRemove" Click="btnRemove_Click" Content="Remove" />
+                        </StackPanel>
+                    </Grid>                    
+                </TabItem>
+            </TabControl.Items>
+        </TabControl>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button Name="btnExit" Click="btnExit_Click" Content="Exit"/>
+        </StackPanel>
     </Grid>
 </Window>
