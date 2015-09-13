@@ -1,7 +1,7 @@
 ﻿<Window x:Class="FCHA.InputDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="InputDialog" Height="64" Width="200" Name="dlgInputBox" ResizeMode="NoResize" ShowInTaskbar="False" IsVisibleChanged="dlgInputBox_IsVisibleChanged">
+        Title="InputDialog" Height="48" Width="200" Name="dlgInputBox" ResizeMode="NoResize" ShowInTaskbar="False" IsVisibleChanged="dlgInputBox_IsVisibleChanged">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />

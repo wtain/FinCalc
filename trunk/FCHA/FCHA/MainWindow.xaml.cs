@@ -22,35 +22,17 @@ namespace FCHA
 	/// </summary>
 	public partial class MainWindow 
 		: Window
-		, INotifyPropertyChanged
 	{
-		public IEnumerable<CategoryViewModel> TopLevelCategories { get; private set; }
-
-		private PropertyChangedEventHandler propertyChangedHandlers;
-
-		private void FirePropertyChanged(string propertyName)
-		{
-			if (null == propertyChangedHandlers)
-				return;
-			propertyChangedHandlers(this, new PropertyChangedEventArgs(propertyName));
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged
-		{
-			add
-			{
-				if (null == propertyChangedHandlers)
-					propertyChangedHandlers = (PropertyChangedEventHandler)MulticastDelegate.Combine(value);
-				else
-					propertyChangedHandlers = (PropertyChangedEventHandler)MulticastDelegate.Combine(propertyChangedHandlers, value);
-			}
-			remove
-			{
-				propertyChangedHandlers = (PropertyChangedEventHandler)MulticastDelegate.Remove(propertyChangedHandlers, value);
-			}
-		}
-
 		private CategoriesManager m_mgr;
+
+		public static readonly DependencyProperty VirtualRootProperty =
+			DependencyProperty.Register("VirtualRoot", typeof(CategoryViewModel), typeof(MainWindow));
+			
+		public CategoryViewModel VirtualRoot
+		{
+			get { return (CategoryViewModel)GetValue(VirtualRootProperty); }
+			private set { SetValue(VirtualRootProperty, value); }
+		}
 		
 		public MainWindow()
 		{
@@ -72,13 +54,7 @@ namespace FCHA
 
 			m_mgr = new CategoriesManager(conn);
 
-			RefreshCategories();
-		}
-
-		private void RefreshCategories()
-		{
-			TopLevelCategories = new List<CategoryViewModel>(m_mgr.EnumCategoriesByParent(0).Select(c => new CategoryViewModel(m_mgr, null, c)));
-			FirePropertyChanged("TopLevelCategories");
+			VirtualRoot = new CategoryViewModel(m_mgr, null, new Category("Virtual", 0));
 		}
 
 		public CategoryViewModel SelectedCategory
@@ -92,7 +68,7 @@ namespace FCHA
 			if (true != dlg.ShowDialog())
 				return;
 			m_mgr.AddCategory(dlg.Value);
-			RefreshCategories();
+			VirtualRoot.RefreshChildren();
 		}
 
 		private void btnAddChild_Click(object sender, RoutedEventArgs e)
@@ -122,10 +98,8 @@ namespace FCHA
 
 		private void RefreshCurrentLevel()
 		{
-			if (null == SelectedCategory.Parent)
-				RefreshCategories();
-			else
-				SelectedCategory.RefreshParentChildren();
+			Debug.Assert(null != SelectedCategory && null != SelectedCategory.Parent);
+			SelectedCategory.RefreshParentChildren();
 		}
 
 		private void btnRemove_Click(object sender, RoutedEventArgs e)

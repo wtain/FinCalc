@@ -17,7 +17,7 @@
                             <RowDefinition Height="24" />
                         </Grid.RowDefinitions>
 
-                        <TreeView Grid.Row="0" ItemsSource="{Binding TopLevelCategories, ElementName=winMain, UpdateSourceTrigger=PropertyChanged}" Name="treeCategories">
+                        <TreeView Grid.Row="0" ItemsSource="{Binding VirtualRoot.Children, ElementName=winMain}" Name="treeCategories">
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                     <TextBlock Text="{Binding Name}"></TextBlock>
