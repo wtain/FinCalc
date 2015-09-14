@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.ComponentModel;
 
 using IOPath = System.IO.Path;
+using System.Globalization;
 
 namespace FCHA
 {
@@ -27,6 +28,7 @@ namespace FCHA
 	{
 		private CategoriesManager m_mgr;
 		private UsersManager m_usersManager;
+		private AccountsManager m_accountsManager;
 
 		public static readonly DependencyProperty VirtualRootProperty =
 			DependencyProperty.Register("VirtualRoot", typeof(CategoryViewModel), typeof(MainWindow));
@@ -76,6 +78,7 @@ namespace FCHA
 
 			m_mgr = new CategoriesManager(conn);
 			m_usersManager = new UsersManager(conn);
+			m_accountsManager = new AccountsManager(conn);
 
 			VirtualRoot = new CategoryViewModel(m_mgr, null, new Category("Virtual", 0));
 			UpdateUsers();
@@ -83,7 +86,7 @@ namespace FCHA
 
 		private void UpdateUsers()
 		{
-			Users = new List<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => new PersonViewModel(p)));
+			Users = new List<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => new PersonViewModel(p, m_accountsManager, m_usersManager)));
 		}
 
 		public CategoryViewModel SelectedCategory
@@ -151,7 +154,7 @@ namespace FCHA
 
 		private void btnAddUser_Click(object sender, RoutedEventArgs e)
 		{
-			UserInfoDialog dlg = new UserInfoDialog();
+			UserInfoDialog dlg = new UserInfoDialog(m_accountsManager, m_usersManager);
 			if (true != dlg.ShowDialog())
 				return;
 			m_usersManager.AddUser(dlg.PersonInfo.UnderlyingData);
@@ -175,6 +178,49 @@ namespace FCHA
 				return;
 			m_usersManager.DeleteUser(SelectedUser.UnderlyingData);
 			UpdateUsers();
+		}
+
+		private void btnAccountAdd_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void btnAccountChange_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void btnAccountRemove_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+	}
+
+	public class SelectedUserToAccountsConverter : IValueConverter
+	{
+		private static SelectedUserToAccountsConverter m_instance;
+
+		public static SelectedUserToAccountsConverter Instance
+		{
+			get
+			{
+				if (null == m_instance)
+					m_instance = new SelectedUserToAccountsConverter();
+				return m_instance;
+			}
+		}
+
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			PersonViewModel vm = value as PersonViewModel;
+			if (null == vm)
+				return null;
+			return vm.GetUserAccounts();
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			throw new NotImplementedException("ConvertBack");
 		}
 	}
 }

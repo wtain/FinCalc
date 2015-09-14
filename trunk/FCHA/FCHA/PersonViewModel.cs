@@ -9,6 +9,8 @@ namespace FCHA
 	public class PersonViewModel : DependencyObject
 	{
 		private Person m_underlyingData;
+		private AccountsManager m_accountsManager;
+		private UsersManager m_userManager;
 
 		public Person UnderlyingData
 		{
@@ -33,11 +35,18 @@ namespace FCHA
 			set { SetValue(FullNameProperty, value); }
 		}
 
-		public PersonViewModel(Person person)
+		public PersonViewModel(Person person, AccountsManager accountsManager, UsersManager userManager)
 		{
 			m_underlyingData = person;
 			Name = person.name;
 			FullName = person.fullName;
+			m_accountsManager = accountsManager;
+			m_userManager = userManager;
+		}
+
+		public IEnumerable<AccountViewModel> GetUserAccounts()
+		{
+			return m_accountsManager.EnumUserAccounts(m_underlyingData).Select(a => new AccountViewModel(a, m_userManager, m_accountsManager));
 		}
 
 		public void UpdateUnderlyingData()

@@ -27,13 +27,13 @@ namespace FCHA
 			set { SetValue(PersonInfoProperty, value); }
 		}
 
-		public UserInfoDialog()
-			: this(new Person("Name", "Full Name", 0))
+		public UserInfoDialog(AccountsManager accountsManager, UsersManager usersManager)
+			: this(new Person("Name", "Full Name", 0), accountsManager, usersManager)
 		{
 		}
 
-		public UserInfoDialog(Person person)
-			: this(new PersonViewModel(person))
+		public UserInfoDialog(Person person, AccountsManager accountsManager, UsersManager usersManager)
+			: this(new PersonViewModel(person, accountsManager, usersManager))
 		{
 		}
 

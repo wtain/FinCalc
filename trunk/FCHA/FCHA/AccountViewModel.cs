@@ -43,14 +43,14 @@ namespace FCHA
 			set { SetValue(OwnerProperty, value); }
 		}
 
-		public AccountViewModel(Account account, UsersManager userManager)
+		public AccountViewModel(Account account, UsersManager userManager, AccountsManager accountsManager)
 		{
 			m_underlyingData = account;
 			m_userManager = userManager;
 
 			Name = account.name;
 			Currency = account.currency;
-			Owner = new PersonViewModel(userManager.GetUser(account.ownerPersonId));
+			Owner = new PersonViewModel(userManager.GetUser(account.ownerPersonId), accountsManager, userManager);
 		}
 
 		public void UpdateUnderlyingData()
