@@ -39,5 +39,10 @@ namespace FCHA
 			Name = person.name;
 			FullName = person.fullName;
 		}
+
+		public void UpdateUnderlyingData()
+		{
+			m_underlyingData = new Person(Name, FullName, m_underlyingData.personId);
+		}
 	}
 }

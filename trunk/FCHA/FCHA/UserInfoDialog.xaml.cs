@@ -18,9 +18,59 @@ namespace FCHA
 	/// </summary>
 	public partial class UserInfoDialog : Window
 	{
-		public UserInfoDialog()
+		public static readonly DependencyProperty PersonInfoProperty =
+			DependencyProperty.Register("PersonInfo", typeof(PersonViewModel), typeof(UserInfoDialog));
+
+		public PersonViewModel PersonInfo
 		{
+			get { return (PersonViewModel)GetValue(PersonInfoProperty); }
+			set { SetValue(PersonInfoProperty, value); }
+		}
+
+		public UserInfoDialog()
+			: this(new Person("Name", "Full Name", 0))
+		{
+		}
+
+		public UserInfoDialog(Person person)
+			: this(new PersonViewModel(person))
+		{
+		}
+
+		public UserInfoDialog(PersonViewModel personVM)
+		{
+			PersonInfo = personVM;
 			InitializeComponent();
+			txtUserName.Focus();
+		}
+
+		// todo: + validation
+		private void btnOK_Click(object sender, RoutedEventArgs e)
+		{
+			DialogResult = true;
+			PersonInfo.UpdateUnderlyingData();
+			Close();
+		}
+
+		private void btnCancel_Click(object sender, RoutedEventArgs e)
+		{
+			DialogResult = false;
+			Close();
+		}
+
+		private void txtUserName_GotFocus(object sender, RoutedEventArgs e)
+		{
+			txtUserName.SelectAll();
+		}
+
+		private void txtFullName_GotFocus(object sender, RoutedEventArgs e)
+		{
+			txtFullName.SelectAll();
+		}
+
+		private void dlgUserInput_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			txtUserName.SelectAll();
 		}
 	}
 }

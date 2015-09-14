@@ -17,12 +17,36 @@ namespace FCHA
 
 		// todo: uniquify all managers
 
+		public IEnumerable<Person> EnumAllUsers()
+		{
+			return SelectUsers(QueryBuilder.Select(new string[] { "Name", "FullName", "PersonId" }, "persons"));
+		}
+
+		private IEnumerable<Person> SelectUsers(string query)
+		{
+			SQLiteCommand select = new SQLiteCommand(query, m_conn);
+			SQLiteDataReader reader = select.ExecuteReader();
+
+			while (reader.Read())
+			{
+				string name = reader.GetString(0);
+				string fullName = reader.GetString(1);
+				int personId = reader.GetInt32(2);
+				yield return new Person(name, fullName, personId);
+			}
+		}
+
 		public void AddUser(string name, string fullName)
 		{
 			string query = QueryBuilder.Insert("persons", new KeyValuePair<string, string>("Name", QueryBuilder.DecorateString(name)),
 														  new KeyValuePair<string, string>("FullName", QueryBuilder.DecorateString(fullName)));
 			SQLiteCommand insert = new SQLiteCommand(query, m_conn);
 			insert.ExecuteNonQuery();
+		}
+
+		public void AddUser(Person person)
+		{
+			AddUser(person.name, person.fullName);
 		}
 
 		public void UpdateUser(Person person)

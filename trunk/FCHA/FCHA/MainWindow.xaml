@@ -42,9 +42,16 @@
                         </Grid.RowDefinitions>
                         
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <ComboBox Name="cboUsers" Width="150" />
-                            <Button Name="btnAddUser" Content="Add..." />
-                            <Button Name="btnEditUser" Content="Edit..." />
+                            <ComboBox Name="cboUsers" Width="150" ItemsSource="{Binding Users, ElementName=winMain}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Button Name="btnAddUser" Content="Add..." Click="btnAddUser_Click" />
+                            <Button Name="btnEditUser" Content="Edit..." Click="btnEditUser_Click" />
+                            <Button Name="btnRemoveUser" Content="Remove" Click="btnRemoveUser_Click" />
                         </StackPanel>
 
                         <Grid Grid.Row="1">

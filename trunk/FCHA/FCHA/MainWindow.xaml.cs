@@ -26,6 +26,7 @@ namespace FCHA
 		: Window
 	{
 		private CategoriesManager m_mgr;
+		private UsersManager m_usersManager;
 
 		public static readonly DependencyProperty VirtualRootProperty =
 			DependencyProperty.Register("VirtualRoot", typeof(CategoryViewModel), typeof(MainWindow));
@@ -43,6 +44,15 @@ namespace FCHA
 		{
 			get { return (string)GetValue(DatabaseFileNameProperty); }
 			private set { SetValue(DatabaseFileNameProperty, value); }
+		}
+
+		public static readonly DependencyProperty UsersProperty =
+			DependencyProperty.Register("Users", typeof(List<PersonViewModel>), typeof(MainWindow));
+
+		public List<PersonViewModel> Users
+		{
+			get { return (List<PersonViewModel>)GetValue(UsersProperty); }
+			private set { SetValue(UsersProperty, value); }
 		}
 		
 		public MainWindow()
@@ -65,13 +75,31 @@ namespace FCHA
 			conn.Open();
 
 			m_mgr = new CategoriesManager(conn);
+			m_usersManager = new UsersManager(conn);
 
 			VirtualRoot = new CategoryViewModel(m_mgr, null, new Category("Virtual", 0));
+			UpdateUsers();
 		}
+
+		private void UpdateUsers()
+		{
+			Users = new List<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => new PersonViewModel(p)));
+		}
+
+		// todo: observable collections
+		// todo: preserve selection
+		// todo: don't update everything
+		// todo: hotkeys
+		// todo: check can be executed
 
 		public CategoryViewModel SelectedCategory
 		{
 			get { return treeCategories.SelectedValue as CategoryViewModel; }
+		}
+
+		public PersonViewModel SelectedUser
+		{
+			get { return cboUsers.SelectedValue as PersonViewModel; }
 		}
 
 		private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -125,6 +153,34 @@ namespace FCHA
 		private void btnExit_Click(object sender, RoutedEventArgs e)
 		{
 			Application.Current.Shutdown();
+		}
+
+		private void btnAddUser_Click(object sender, RoutedEventArgs e)
+		{
+			UserInfoDialog dlg = new UserInfoDialog();
+			if (true != dlg.ShowDialog())
+				return;
+			m_usersManager.AddUser(dlg.PersonInfo.UnderlyingData);
+			UpdateUsers();
+		}
+
+		private void btnEditUser_Click(object sender, RoutedEventArgs e)
+		{
+			if (null == SelectedUser)
+				return;
+			UserInfoDialog dlg = new UserInfoDialog(SelectedUser);
+			if (true != dlg.ShowDialog())
+				return;
+			m_usersManager.UpdateUser(dlg.PersonInfo.UnderlyingData);
+			UpdateUsers();
+		}
+
+		private void btnRemoveUser_Click(object sender, RoutedEventArgs e)
+		{
+			if (null == SelectedUser)
+				return;
+			m_usersManager.DeleteUser(SelectedUser.UnderlyingData);
+			UpdateUsers();
 		}
 	}
 }
