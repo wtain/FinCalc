@@ -4,6 +4,7 @@ Code quality
 - Organize files in filesystem (move by layers - data access, data structures, view models, dialogs, ...)
 - Utilize Linq to sqlite
 - Utilize WPF features to reduce code size
+- Separate libraries for functionality
 
 UI
 - General dialogs (rather than speciffic ones for each data structure)
@@ -56,5 +57,4 @@ Processes
 
 
 todo:
-Trigger: Remove all balances for removed account
 All viewModels should be unique in the process
