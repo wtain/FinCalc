@@ -27,7 +27,7 @@ CREATE TABLE "accounts" (
 	`AccountId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`Currency`	TEXT NOT NULL,
 	`OwnerPersonId`	INTEGER,
-	`Balance`	NUMERIC NOT NULL
+	`Name`	TEXT NOT NULL
 );
 CREATE TABLE `Cashflows` (
 	`FlowId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -35,6 +35,13 @@ CREATE TABLE `Cashflows` (
 	`TargetAccountId`	INTEGER NOT NULL,
 	`Amount`	NUMERIC NOT NULL,
 	`ConversionFactor`	NUMERIC
+);
+CREATE TABLE "AccountBalance" (
+	`BalanceId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`AccountId`	INTEGER NOT NULL,
+	`Version`	INTEGER NOT NULL,
+	`Date`	TEXT NOT NULL,
+	`Value`	NUMERIC NOT NULL
 );
 CREATE TRIGGER categories_view_insert_trigger
 INSTEAD OF INSERT 
@@ -83,6 +90,12 @@ BEGIN
 	UPDATE categories
 	     SET SeqNo=CategoryId
     WHERE SeqNo is NULL;
+END;
+CREATE TRIGGER accounts_after_delete_trigger
+AFTER DELETE
+ON categories
+BEGIN
+		DELETE FROM AccountBalance WHERE AccountId=OLD.AccountId;
 END;
 CREATE VIEW categories_view
 AS

@@ -45,3 +45,16 @@ Code organization
 
 Technical
 - Migrate to the latest Visual Studio
+
+Information
+ - Static - e.g. currency list
+ - Dynamic - e.g. rates
+ - Informtaion security - don't commit personal database data; commit rather the SQL DML for the database
+
+Processes
+ - Account flows aggregation?
+
+
+todo:
+Trigger: Remove all balances for removed account
+All viewModels should be unique in the process

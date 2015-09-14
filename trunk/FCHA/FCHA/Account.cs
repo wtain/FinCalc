@@ -10,14 +10,14 @@ namespace FCHA
 		public int accountId;
 		public string currency;
 		public int ownerPersonId;
-		public decimal balance;
+		public string name;
 
-		public Account(int accountId, string currency, int ownerPersonId, decimal balance)
+		public Account(int accountId, string currency, int ownerPersonId, string name)
 		{
 			this.accountId = accountId;
 			this.currency = currency;
 			this.ownerPersonId = ownerPersonId;
-			this.balance = balance;
+			this.name = name;
 		}
 	}
 }
