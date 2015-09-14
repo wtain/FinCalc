@@ -15,8 +15,6 @@ namespace FCHA
 			m_conn = conn;
 		}
 
-		// todo: uniquify all managers
-
 		public IEnumerable<Person> EnumAllUsers()
 		{
 			return SelectUsers(QueryBuilder.Select(new string[] { "Name", "FullName", "PersonId" }, "persons"));

@@ -1,0 +1,28 @@
+Code quality
+- Uniquify all managers
+- Unit tests
+- Organize files in filesystem (move by layers - data access, data structures, view models, dialogs, ...)
+- Utilize Linq to sqlite
+- Utilize WPF features to reduce code size
+
+UI
+- General dialogs (rather than speciffic ones for each data structure)
+- Property sheets
+
+Collections management
+- Utilize observable collections
+- Preserve selection and expanded nodes (for tree view)
+- Don't update everything
+
+User experrience
+- Add hotkeys
+- Introduce commands
+- Check can be executed
+- User input data validation
+
+Functionality:
+- User settings (key-value pairs)
+- Database versioning
+- Auto-complete based on e.g. categories list
+- Auto complete based on statistical probability (MRU first)
+- User commands (for most-frequent entries)

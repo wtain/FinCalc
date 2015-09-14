@@ -86,12 +86,6 @@ namespace FCHA
 			Users = new List<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => new PersonViewModel(p)));
 		}
 
-		// todo: observable collections
-		// todo: preserve selection
-		// todo: don't update everything
-		// todo: hotkeys
-		// todo: check can be executed
-
 		public CategoryViewModel SelectedCategory
 		{
 			get { return treeCategories.SelectedValue as CategoryViewModel; }
