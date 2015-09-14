@@ -20,9 +20,28 @@ User experrience
 - Check can be executed
 - User input data validation
 
-Functionality:
+Functionality
 - User settings (key-value pairs)
 - Database versioning
 - Auto-complete based on e.g. categories list
 - Auto complete based on statistical probability (MRU first)
 - User commands (for most-frequent entries)
+
+Specific features
+- User setting - date change bound
+- User setting - currency
+- Expense category speciffication (from general to particular for existing expense)
+- Global variables - e.g. date for inputting older expenses
+
+Settings
+- Database path
+- MUI?
+
+Graphics
+- Icons
+
+Code organization
+- Move database code to Code from Data
+
+Technical
+- Migrate to the latest Visual Studio
