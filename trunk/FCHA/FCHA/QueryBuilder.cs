@@ -25,8 +25,9 @@ namespace FCHA
 		public static string Insert(string tableName, params KeyValuePair<string, string>[] keysAndValues)
 		{
 			StringBuilder sb = new StringBuilder("INSERT INTO ");
-			sb.AppendFormat("{0} ({1}) VALUES ({2})", tableName, string.Join<string>(", ", keysAndValues.Select(x => x.Key)),
+			sb.AppendFormat("{0} ({1}) VALUES ({2}); ", tableName, string.Join<string>(", ", keysAndValues.Select(x => x.Key)),
 																 string.Join<string>(", ", keysAndValues.Select(x => x.Value)));
+			sb.Append("SELECT last_insert_rowid()");
 			return sb.ToString();
 		}
 

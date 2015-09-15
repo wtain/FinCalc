@@ -9,9 +9,11 @@ namespace FCHA
 	{
 		public string name;
 		public string fullName;
-		public int personId;
+		public long personId;
 
-		public Person(string name, string fullName, int personId)
+		public static readonly Person DefaultPerson = new Person("Name", "Full Name", 0);
+
+		public Person(string name, string fullName, long personId)
 		{
 			this.name = name;
 			this.fullName = fullName;

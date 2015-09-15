@@ -4,11 +4,12 @@ CREATE TABLE `persons` (
 	`FullName`	TEXT UNIQUE,
 	`PersonId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE
 );
-CREATE TABLE `expenses` (
+CREATE TABLE "expenses" (
 	`ExpenseId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`AccountId`	INTEGER NOT NULL,
 	`Amount`	NUMERIC NOT NULL,
-	`CategoryId`	INTEGER NOT NULL
+	`CategoryId`	INTEGER NOT NULL,
+	`Date`	TEXT NOT NULL
 );
 CREATE TABLE `debug_log` (
 	`tableName`	TEXT NOT NULL,
@@ -30,25 +31,27 @@ CREATE TABLE "accounts" (
 	`Name`	TEXT NOT NULL,
 	`Type`	TEXT NOT NULL
 );
-CREATE TABLE `Cashflows` (
+CREATE TABLE "Cashflows" (
 	`FlowId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`SourceAccountId`	INTEGER NOT NULL,
 	`TargetAccountId`	INTEGER NOT NULL,
 	`Amount`	NUMERIC NOT NULL,
-	`ConversionFactor`	NUMERIC
+	`ConversionFactor`	NUMERIC NOT NULL,
+	`FlowDate`	TEXT NOT NULL
 );
 CREATE TABLE "AccountBalance" (
 	`BalanceId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`AccountId`	INTEGER NOT NULL,
 	`Version`	INTEGER NOT NULL,
 	`Date`	TEXT NOT NULL,
-	`Value`	NUMERIC NOT NULL
+	`Value`	NUMERIC NOT NULL,
+	`LatestVersionYN`	TEXT NOT NULL
 );
 CREATE TRIGGER persons_after_delete_trigger
 AFTER DELETE
-ON categories
+ON persons
 BEGIN
-		DELETE FROM accounts WHERE OwnerPErsonId=OLD.PersonId;
+		DELETE FROM accounts WHERE OwnerPersonId=OLD.PersonId;
 END;
 CREATE TRIGGER categories_view_insert_trigger
 INSTEAD OF INSERT 
@@ -97,12 +100,6 @@ BEGIN
 	UPDATE categories
 	     SET SeqNo=CategoryId
     WHERE SeqNo is NULL;
-END;
-CREATE TRIGGER accounts_after_delete_trigger
-AFTER DELETE
-ON categories
-BEGIN
-		DELETE FROM AccountBalance WHERE AccountId=OLD.AccountId;
 END;
 CREATE VIEW categories_view
 AS

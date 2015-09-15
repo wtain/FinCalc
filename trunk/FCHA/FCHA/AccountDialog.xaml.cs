@@ -18,9 +18,6 @@ namespace FCHA
 	/// </summary>
 	public partial class AccountDialog : Window
 	{
-		private UsersManager m_usersManager;
-		private AccountsManager m_accountsManager;
-
 		public static readonly DependencyProperty AccountInfoProperty =
 			DependencyProperty.Register("AccountInfo", typeof(AccountViewModel), typeof(AccountDialog));
 
@@ -39,14 +36,10 @@ namespace FCHA
 			set { SetValue(UsersProperty, value); }
 		}
 
-		public AccountDialog(UsersManager usersManager, AccountsManager accountsManager, AccountViewModel account)
+		public AccountDialog(AccountViewModel account, AccountancyApplication accountancyApplication)
 		{
-			m_usersManager = usersManager;
-			m_accountsManager = accountsManager;
-			Users = new List<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => new PersonViewModel(p, m_accountsManager, m_usersManager)));
+			Users = accountancyApplication.Users;
 			AccountInfo = account;
-			if (null != AccountInfo.Owner)
-				AccountInfo.Owner = Users.Find(p => { return p.UnderlyingData.personId == account.Owner.UnderlyingData.personId; });
 			InitializeComponent();
 			txtName.SelectAll();
 		}

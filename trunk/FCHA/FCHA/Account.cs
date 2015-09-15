@@ -8,13 +8,18 @@ namespace FCHA
 {
 	public struct Account
 	{
-		public int accountId;
+		public long accountId;
 		public string currency;
-		public int ownerPersonId;
+		public long ownerPersonId;
 		public string name;
 		public AccountType type;
 
-		public Account(int accountId, string currency, int ownerPersonId, string name, AccountType type)
+		public static Account CreateDefault(long ownerId)
+		{
+			return new Account(0, "RUB", ownerId, "(Default)", AccountType.Cash);
+		}
+
+		public Account(long accountId, string currency, long ownerPersonId, string name, AccountType type)
 		{
 			this.accountId = accountId;
 			this.currency = currency;

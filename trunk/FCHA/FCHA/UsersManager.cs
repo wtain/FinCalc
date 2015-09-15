@@ -21,7 +21,7 @@ namespace FCHA
 			return SelectUsers(QueryBuilder.Select(new string[] { "Name", "FullName", "PersonId" }, "persons"));
 		}
 
-		public Person GetUser(int personId)
+		public Person GetUser(long personId)
 		{
 			return SelectOne(QueryBuilder.Select(new string[] { "Name", "FullName", "PersonId" }, "persons", "personId", personId.ToString()));
 		}
@@ -30,7 +30,7 @@ namespace FCHA
 		{
 			string name = reader.GetString(0);
 			string fullName = reader.GetString(1);
-			int personId = reader.GetInt32(2);
+			long personId = reader.GetInt64(2);
 			return new Person(name, fullName, personId);
 		}
 
@@ -57,17 +57,17 @@ namespace FCHA
 			return new Person();
 		}
 
-		public void AddUser(string name, string fullName)
+		public long AddUser(string name, string fullName)
 		{
 			string query = QueryBuilder.Insert("persons", new KeyValuePair<string, string>("Name", QueryBuilder.DecorateString(name)),
 														  new KeyValuePair<string, string>("FullName", QueryBuilder.DecorateString(fullName)));
 			using (SQLiteCommand insert = new SQLiteCommand(query, m_conn))
-				insert.ExecuteNonQuery();
+				return (long)insert.ExecuteScalar();
 		}
 
-		public void AddUser(Person person)
+		public void AddUser(ref Person person)
 		{
-			AddUser(person.name, person.fullName);
+			person.personId = AddUser(person.name, person.fullName);
 		}
 
 		public void UpdateUser(Person person)

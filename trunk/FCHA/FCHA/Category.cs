@@ -3,18 +3,18 @@ namespace FCHA
 {
 	public struct Category
 	{
-		public int categoryId;
-		public int parentId;
+		public long categoryId;
+		public long parentId;
 		public string name;
 
-		public Category(string name, int categoryId, int parentId)
+		public Category(string name, long categoryId, long parentId)
 		{
 			this.categoryId = categoryId;
 			this.name = name;
 			this.parentId = parentId;
 		}
 
-		public Category(string name, int categoryId)
+		public Category(string name, long categoryId)
 		{
 			this.categoryId = categoryId;
 			this.name = name;

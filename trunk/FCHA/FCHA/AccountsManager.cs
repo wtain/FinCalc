@@ -30,16 +30,16 @@ namespace FCHA
 													"ownerPersonId", person.personId.ToString()));
 		}
 
-		public Account GetAccount(int accountId)
+		public Account GetAccount(long accountId)
 		{
 			return SelectOne(QueryBuilder.Select(Columns, "accounts", "accountId", accountId.ToString()));
 		}
 
 		private Account BuildAccountStructure(SQLiteDataReader reader)
 		{
-			int accountId = reader.GetInt32(0);
+			long accountId = reader.GetInt64(0);
 			string currency = reader.GetString(1);
-			int ownerPersonId = reader.GetInt32(2);
+			long ownerPersonId = reader.GetInt64(2);
 			string name = reader.GetString(3);
 			string type = reader.GetString(4);
 			return new Account(accountId, currency, ownerPersonId, name, Account.AccountTypeFromString(type));
@@ -68,19 +68,19 @@ namespace FCHA
 			return new Account();
 		}
 
-		public void AddAccount(string name, string currency, int ownerPersonId, AccountType type)
+		public long AddAccount(string name, string currency, long ownerPersonId, AccountType type)
 		{
 			string query = QueryBuilder.Insert("accounts", new KeyValuePair<string, string>("Name", QueryBuilder.DecorateString(name)),
 														   new KeyValuePair<string, string>("Currency", QueryBuilder.DecorateString(currency)),
 														   new KeyValuePair<string, string>("OwnerPersonId", ownerPersonId.ToString()),
 														   new KeyValuePair<string, string>("Type", QueryBuilder.DecorateString(Account.AccountTypeToString(type))));
 			using (SQLiteCommand insert = new SQLiteCommand(query, m_conn))
-				insert.ExecuteNonQuery();
+				return (long)insert.ExecuteScalar();
 		}
 
-		public void AddAccount(Account account)
+		public void AddAccount(ref Account account)
 		{
-			AddAccount(account.name, account.currency, account.ownerPersonId, account.type);
+			account.accountId = AddAccount(account.name, account.currency, account.ownerPersonId, account.type);
 		}
 
 		public void UpdateAccount(Account account)

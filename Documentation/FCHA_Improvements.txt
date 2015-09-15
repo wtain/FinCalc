@@ -31,6 +31,7 @@ Functionality
 - Auto-complete based on e.g. categories list
 - Auto complete based on statistical probability (MRU first)
 - User commands (for most-frequent entries)
+- Order categories
 
 Specific features
 - User setting - date change bound
@@ -69,3 +70,9 @@ managers to cache viewmodels
 nobody should manipultate plain data
 
 UnderlyingData to be updated when accesed - in get accessor?
+
+Expenses - update balance - aggregate flows
+
+? What to do with deleted account's flows and expenses?
+? Enforce update of cached entities?
+? How do I get the id of just-added entity?

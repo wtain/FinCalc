@@ -27,16 +27,6 @@ namespace FCHA
 			set { SetValue(PersonInfoProperty, value); }
 		}
 
-		public UserInfoDialog(AccountsManager accountsManager, UsersManager usersManager)
-			: this(new Person("Name", "Full Name", 0), accountsManager, usersManager)
-		{
-		}
-
-		public UserInfoDialog(Person person, AccountsManager accountsManager, UsersManager usersManager)
-			: this(new PersonViewModel(person, accountsManager, usersManager))
-		{
-		}
-
 		public UserInfoDialog(PersonViewModel personVM)
 		{
 			PersonInfo = personVM;

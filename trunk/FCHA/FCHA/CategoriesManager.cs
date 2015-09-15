@@ -17,7 +17,7 @@ namespace FCHA
 			return SelectCategories(QueryBuilder.Select(new string[] { "name", "categoryId", "parentId" }, "categories"));
 		}
 
-		public IEnumerable<Category> EnumCategoriesByParent(int parentId)
+		public IEnumerable<Category> EnumCategoriesByParent(long parentId)
 		{
 			return SelectCategories(QueryBuilder.Select(new string[] { "name", "categoryId", "parentId" }, "categories", "parentId", parentId.ToString()));
 		}
@@ -27,7 +27,7 @@ namespace FCHA
 			AddCategory(name, 0);
 		}
 
-		public void AddCategory(string name, int parentId)
+		public void AddCategory(string name, long parentId)
 		{
 			string query = QueryBuilder.Insert("categories_view", new KeyValuePair<string, string>("name", QueryBuilder.DecorateString(name)),
 															      new KeyValuePair<string, string>("parentId", parentId.ToString()));
@@ -59,8 +59,8 @@ namespace FCHA
 					while (reader.Read())
 					{
 						string name = reader.GetString(0);
-						int categoryId = reader.GetInt32(1);
-						int parentId = reader.GetInt32(2);
+						long categoryId = reader.GetInt64(1);
+						long parentId = reader.GetInt64(2);
 						yield return new Category(name, categoryId, parentId);
 					}
 				}

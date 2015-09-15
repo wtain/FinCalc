@@ -9,11 +9,11 @@ namespace FCHA
 	public class AccountViewModel : DependencyObject
 	{
 		private Account m_underlyingData;
-		private UsersManager m_userManager;
 
 		public Account UnderlyingData
 		{
 			get { return m_underlyingData; }
+			set { m_underlyingData = value; }
 		}
 
 		public static readonly DependencyProperty NameProperty =
@@ -52,16 +52,14 @@ namespace FCHA
 			set { SetValue(AccountTypeProperty, value); }
 		}
 
-		public AccountViewModel(Account account, UsersManager userManager, AccountsManager accountsManager)
+		public AccountViewModel(Account account, AccountancyApplication accountancyApplication)
 		{
 			m_underlyingData = account;
-			m_userManager = userManager;
-
+		
 			Name = account.name;
 			Currency = account.currency;
 			AccountType = account.type;
-			if (0 != account.ownerPersonId)
-				Owner = new PersonViewModel(userManager.GetUser(account.ownerPersonId), accountsManager, userManager);
+			Owner = accountancyApplication.GetPerson(account.ownerPersonId);
 		}
 
 		public void UpdateUnderlyingData()
