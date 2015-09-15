@@ -43,9 +43,9 @@ namespace FCHA
 			m_accountancyApplication = accountancyApplication;
 		}
 
-		public IEnumerable<AccountViewModel> GetUserAccounts()
+		public IEnumerable<AccountViewModel> UserAccounts
 		{
-			return m_accountancyApplication.EnumUserAccounts(this);
+			get { return m_accountancyApplication.EnumUserAccounts(this); }
 		}
 
 		public void UpdateUnderlyingData()

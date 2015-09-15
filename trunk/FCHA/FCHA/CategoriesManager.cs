@@ -7,6 +7,8 @@ namespace FCHA
 	{
 		private SQLiteConnection m_conn;
 
+		private static readonly string[] Columns = new string[] { "name", "categoryId", "parentId" };
+
 		public CategoriesManager(SQLiteConnection conn)
 		{
 			m_conn = conn;
@@ -14,12 +16,12 @@ namespace FCHA
 
 		public IEnumerable<Category> EnumAllCategories()
 		{
-			return SelectCategories(QueryBuilder.Select(new string[] { "name", "categoryId", "parentId" }, "categories"));
+			return SelectCategories(QueryBuilder.Select(Columns, "categories"));
 		}
 
 		public IEnumerable<Category> EnumCategoriesByParent(long parentId)
 		{
-			return SelectCategories(QueryBuilder.Select(new string[] { "name", "categoryId", "parentId" }, "categories", "parentId", parentId.ToString()));
+			return SelectCategories(QueryBuilder.Select(Columns, "categories", "parentId", parentId.ToString()));
 		}
 
 		public void AddCategory(string name)
@@ -27,10 +29,20 @@ namespace FCHA
 			AddCategory(name, 0);
 		}
 
+		private KeyValuePair<string, string> GetNameColumnPair(string name)
+		{
+			return new KeyValuePair<string, string>("name", QueryBuilder.DecorateString(name));
+		}
+
+		private KeyValuePair<string, string> GetParentIdColumnPair(long parentId)
+		{
+			return new KeyValuePair<string, string>("parentId", parentId.ToString());
+		}
+
 		public void AddCategory(string name, long parentId)
 		{
-			string query = QueryBuilder.Insert("categories_view", new KeyValuePair<string, string>("name", QueryBuilder.DecorateString(name)),
-															      new KeyValuePair<string, string>("parentId", parentId.ToString()));
+			string query = QueryBuilder.Insert("categories_view", GetNameColumnPair(name),
+															      GetParentIdColumnPair(parentId));
 			using (SQLiteCommand insert = new SQLiteCommand(query, m_conn))
 				insert.ExecuteNonQuery();
 		}
@@ -38,8 +50,8 @@ namespace FCHA
 		public void UpdateCategory(Category cat)
 		{
 			string query = QueryBuilder.Update("categories", "categoryId", cat.categoryId.ToString(),
-				new KeyValuePair<string, string>("name", QueryBuilder.DecorateString(cat.name)),
-				new KeyValuePair<string, string>("parentId", cat.parentId.ToString()));
+														          GetNameColumnPair(cat.name),
+																  GetParentIdColumnPair(cat.parentId));
 			using (SQLiteCommand update = new SQLiteCommand(query, m_conn))
 				update.ExecuteNonQuery();
 		}

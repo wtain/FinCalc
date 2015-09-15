@@ -68,12 +68,32 @@ namespace FCHA
 			return new Account();
 		}
 
+		private KeyValuePair<string, string> GetNameColumnPair(string name)
+		{
+			return new KeyValuePair<string, string>("Name", QueryBuilder.DecorateString(name));
+		}
+
+		private KeyValuePair<string, string> GetCurrencyColumnPair(string currency)
+		{
+			return new KeyValuePair<string, string>("Currency", QueryBuilder.DecorateString(currency));
+		}
+
+		private KeyValuePair<string, string> GetOwnerPersonIdColumnPair(long ownerPersonId)
+		{
+			return new KeyValuePair<string, string>("OwnerPersonId", ownerPersonId.ToString());
+		}
+
+		private KeyValuePair<string, string> GetTypeColumnPair(AccountType type)
+		{
+			return new KeyValuePair<string, string>("Type", QueryBuilder.DecorateString(Account.AccountTypeToString(type)));
+		}
+
 		public long AddAccount(string name, string currency, long ownerPersonId, AccountType type)
 		{
-			string query = QueryBuilder.Insert("accounts", new KeyValuePair<string, string>("Name", QueryBuilder.DecorateString(name)),
-														   new KeyValuePair<string, string>("Currency", QueryBuilder.DecorateString(currency)),
-														   new KeyValuePair<string, string>("OwnerPersonId", ownerPersonId.ToString()),
-														   new KeyValuePair<string, string>("Type", QueryBuilder.DecorateString(Account.AccountTypeToString(type))));
+			string query = QueryBuilder.Insert("accounts", GetNameColumnPair(name),
+														   GetCurrencyColumnPair(currency),
+														   GetOwnerPersonIdColumnPair(ownerPersonId),
+														   GetTypeColumnPair(type));
 			using (SQLiteCommand insert = new SQLiteCommand(query, m_conn))
 				return (long)insert.ExecuteScalar();
 		}
@@ -86,10 +106,10 @@ namespace FCHA
 		public void UpdateAccount(Account account)
 		{
 			string query = QueryBuilder.Update("accounts", "AccountId", account.accountId.ToString(),
-														   new KeyValuePair<string, string>("Name", QueryBuilder.DecorateString(account.name)),
-														   new KeyValuePair<string, string>("Currency", QueryBuilder.DecorateString(account.currency)),
-														   new KeyValuePair<string, string>("OwnerPersonId", account.ownerPersonId.ToString()),
-														   new KeyValuePair<string, string>("Type", QueryBuilder.DecorateString(Account.AccountTypeToString(account.type))));
+														   GetNameColumnPair(account.name),
+														   GetCurrencyColumnPair(account.currency),
+														   GetOwnerPersonIdColumnPair(account.ownerPersonId),
+														   GetTypeColumnPair(account.type));
 			using (SQLiteCommand update = new SQLiteCommand(query, m_conn))
 				update.ExecuteNonQuery();
 		}

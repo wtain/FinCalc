@@ -11,6 +11,8 @@ namespace FCHA
 	{
 		private SQLiteConnection m_conn;
 
+		public static readonly string[] Columns = new string[] { "Name", "FullName", "PersonId" };
+
 		public UsersManager(SQLiteConnection conn)
 		{
 			m_conn = conn;
@@ -18,12 +20,12 @@ namespace FCHA
 
 		public IEnumerable<Person> EnumAllUsers()
 		{
-			return SelectUsers(QueryBuilder.Select(new string[] { "Name", "FullName", "PersonId" }, "persons"));
+			return SelectUsers(QueryBuilder.Select(Columns, "persons"));
 		}
 
 		public Person GetUser(long personId)
 		{
-			return SelectOne(QueryBuilder.Select(new string[] { "Name", "FullName", "PersonId" }, "persons", "personId", personId.ToString()));
+			return SelectOne(QueryBuilder.Select(Columns, "persons", "personId", personId.ToString()));
 		}
 
 		private Person BuildUserStructure(SQLiteDataReader reader)
@@ -57,10 +59,20 @@ namespace FCHA
 			return new Person();
 		}
 
+		private KeyValuePair<string, string> GetNameColumnPair(string name)
+		{
+			return new KeyValuePair<string, string>("Name", QueryBuilder.DecorateString(name));
+		}
+
+		private KeyValuePair<string, string> GetFullNameColumnPair(string fullName)
+		{
+			return new KeyValuePair<string, string>("FullName", QueryBuilder.DecorateString(fullName));
+		}
+
 		public long AddUser(string name, string fullName)
 		{
-			string query = QueryBuilder.Insert("persons", new KeyValuePair<string, string>("Name", QueryBuilder.DecorateString(name)),
-														  new KeyValuePair<string, string>("FullName", QueryBuilder.DecorateString(fullName)));
+			string query = QueryBuilder.Insert("persons", GetNameColumnPair(name),
+														  GetFullNameColumnPair(fullName));
 			using (SQLiteCommand insert = new SQLiteCommand(query, m_conn))
 				return (long)insert.ExecuteScalar();
 		}
@@ -73,8 +85,8 @@ namespace FCHA
 		public void UpdateUser(Person person)
 		{
 			string query = QueryBuilder.Update("persons", "PersonId", person.personId.ToString(),
-				new KeyValuePair<string, string>("Name", QueryBuilder.DecorateString(person.name)),
-				new KeyValuePair<string, string>("FullName", QueryBuilder.DecorateString(person.fullName)));
+														  GetNameColumnPair(person.name),
+														  GetFullNameColumnPair(person.fullName));
 			using (SQLiteCommand update = new SQLiteCommand(query, m_conn))
 				update.ExecuteNonQuery();
 		}

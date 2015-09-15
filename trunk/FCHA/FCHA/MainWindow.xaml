@@ -69,9 +69,9 @@
                                 </Grid.RowDefinitions>
 
                                 <ListView Grid.Row="0" Name="listAccounts" IsSynchronizedWithCurrentItem="True"
-                                          ItemsSource="{Binding Path=(Selector.SelectedValue), 
-                                                                ElementName=cboUsers, 
-                                                                Converter={x:Static local:SelectedUserToAccountsConverter.Instance}, Mode=OneWay}"
+                                          DataContext="{Binding Path=(Selector.SelectedValue), 
+                                                                ElementName=cboUsers, Mode=OneWay}"
+                                          ItemsSource="{Binding UserAccounts}"
                                           DisplayMemberPath="Name" />
                                 
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
