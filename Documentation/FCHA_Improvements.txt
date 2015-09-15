@@ -5,6 +5,7 @@ Code quality
 - Utilize Linq to sqlite
 - Utilize WPF features to reduce code size
 - Separate libraries for functionality
+- Introduce UserControls
 
 UI
 - General dialogs (rather than speciffic ones for each data structure)
@@ -20,6 +21,9 @@ User experrience
 - Introduce commands
 - Check can be executed
 - User input data validation
+- Drag & Drop for categories editor
+- Confirmation dialogs
+- Edit in-place rather than open dialogs
 
 Functionality
 - User settings (key-value pairs)
@@ -59,3 +63,9 @@ Processes
 todo:
 All viewModels should be unique in the process
 factories for creating models
+Introduce one place in code for all objects, objects' view models access (so that only one copy of each physical entity exists)
+
+managers to cache viewmodels
+nobody should manipultate plain data
+
+UnderlyingData to be updated when accesed - in get accessor?

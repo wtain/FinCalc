@@ -26,8 +26,9 @@ CREATE TABLE "categories" (
 CREATE TABLE "accounts" (
 	`AccountId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`Currency`	TEXT NOT NULL,
-	`OwnerPersonId`	INTEGER,
-	`Name`	TEXT NOT NULL
+	`OwnerPersonId`	INTEGER NOT NULL,
+	`Name`	TEXT NOT NULL,
+	`Type`	TEXT NOT NULL
 );
 CREATE TABLE `Cashflows` (
 	`FlowId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -43,6 +44,12 @@ CREATE TABLE "AccountBalance" (
 	`Date`	TEXT NOT NULL,
 	`Value`	NUMERIC NOT NULL
 );
+CREATE TRIGGER persons_after_delete_trigger
+AFTER DELETE
+ON categories
+BEGIN
+		DELETE FROM accounts WHERE OwnerPErsonId=OLD.PersonId;
+END;
 CREATE TRIGGER categories_view_insert_trigger
 INSTEAD OF INSERT 
 ON categories_view

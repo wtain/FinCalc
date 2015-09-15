@@ -65,6 +65,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Account.cs" />
+    <Compile Include="AccountDialog.xaml.cs">
+      <DependentUpon>AccountDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AccountsManager.cs" />
     <Compile Include="AccountViewModel.cs" />
     <Compile Include="Category.cs" />
@@ -76,6 +79,10 @@
       <DependentUpon>UserInfoDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UsersManager.cs" />
+    <Page Include="AccountDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="InputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -17,6 +17,7 @@ using System.ComponentModel;
 
 using IOPath = System.IO.Path;
 using System.Globalization;
+using System.Windows.Controls.Primitives;
 
 namespace FCHA
 {
@@ -97,6 +98,11 @@ namespace FCHA
 		public PersonViewModel SelectedUser
 		{
 			get { return cboUsers.SelectedValue as PersonViewModel; }
+		}
+
+		public AccountViewModel SelectedAccount
+		{
+			get { return listAccounts.SelectedValue as AccountViewModel; }
 		}
 
 		private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -180,19 +186,39 @@ namespace FCHA
 			UpdateUsers();
 		}
 
+		private void UpdateSelectedUserHack()
+		{
+			object si = cboUsers.SelectedItem;
+			cboUsers.SelectedItem = null;
+			cboUsers.SelectedItem = si;
+		}
+
 		private void btnAccountAdd_Click(object sender, RoutedEventArgs e)
 		{
-
+			AccountDialog dlg = new AccountDialog(m_usersManager, m_accountsManager, new AccountViewModel(new Account(0, "RUB", null != SelectedUser ? SelectedUser.UnderlyingData.personId : 0, "(Default)", AccountType.Cash), m_usersManager, m_accountsManager));
+			if (true != dlg.ShowDialog())
+				return;
+			m_accountsManager.AddAccount(dlg.AccountInfo.UnderlyingData);
+			UpdateSelectedUserHack();
 		}
 
 		private void btnAccountChange_Click(object sender, RoutedEventArgs e)
 		{
-
+			if (null == SelectedAccount)
+				return;
+			AccountDialog dlg = new AccountDialog(m_usersManager, m_accountsManager, SelectedAccount);
+			if (true != dlg.ShowDialog())
+				return;
+			m_accountsManager.UpdateAccount(dlg.AccountInfo.UnderlyingData);
+			UpdateSelectedUserHack();
 		}
 
 		private void btnAccountRemove_Click(object sender, RoutedEventArgs e)
 		{
-
+			if (null == SelectedAccount)
+				return;
+			m_accountsManager.DeleteAccount(SelectedAccount.UnderlyingData);
+			UpdateSelectedUserHack();
 		}
 	}
 
@@ -221,6 +247,31 @@ namespace FCHA
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			throw new NotImplementedException("ConvertBack");
+		}
+	}
+
+	public class DebugConverter : IValueConverter
+	{
+		private static DebugConverter m_instance;
+
+		public static DebugConverter Instance
+		{
+			get
+			{
+				if (null == m_instance)
+					m_instance = new DebugConverter();
+				return m_instance;
+			}
+		}
+
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return value;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return value;
 		}
 	}
 }

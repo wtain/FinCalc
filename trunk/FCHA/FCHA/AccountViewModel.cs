@@ -25,6 +25,9 @@ namespace FCHA
 		public static readonly DependencyProperty OwnerProperty =
 			DependencyProperty.Register("Owner", typeof(PersonViewModel), typeof(AccountViewModel));
 
+		public static readonly DependencyProperty AccountTypeProperty =
+			DependencyProperty.Register("AccountType", typeof(AccountType), typeof(AccountViewModel));
+
 		public string Name
 		{
 			get { return (string)GetValue(NameProperty); }
@@ -43,6 +46,12 @@ namespace FCHA
 			set { SetValue(OwnerProperty, value); }
 		}
 
+		public AccountType AccountType
+		{
+			get { return (AccountType)GetValue(AccountTypeProperty); }
+			set { SetValue(AccountTypeProperty, value); }
+		}
+
 		public AccountViewModel(Account account, UsersManager userManager, AccountsManager accountsManager)
 		{
 			m_underlyingData = account;
@@ -50,12 +59,14 @@ namespace FCHA
 
 			Name = account.name;
 			Currency = account.currency;
-			Owner = new PersonViewModel(userManager.GetUser(account.ownerPersonId), accountsManager, userManager);
+			AccountType = account.type;
+			if (0 != account.ownerPersonId)
+				Owner = new PersonViewModel(userManager.GetUser(account.ownerPersonId), accountsManager, userManager);
 		}
 
 		public void UpdateUnderlyingData()
 		{
-			m_underlyingData = new Account(m_underlyingData.accountId, Currency, Owner.UnderlyingData.personId, Name);
+			m_underlyingData = new Account(m_underlyingData.accountId, Currency, Owner.UnderlyingData.personId, Name, AccountType);
 		}
 	}
 }

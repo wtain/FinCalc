@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:FCHA"
-        Title="MainWindow" Height="350" Width="525" Name="winMain">
+        Title="Financial Calculator &amp; Home Accountancy" Height="350" Width="525" Name="winMain">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -68,10 +68,11 @@
                                     <RowDefinition Height="24" />
                                 </Grid.RowDefinitions>
 
-                                <ListView Grid.Row="0" Name="listAccounts" 
+                                <ListView Grid.Row="0" Name="listAccounts" IsSynchronizedWithCurrentItem="True"
                                           ItemsSource="{Binding Path=(Selector.SelectedValue), 
                                                                 ElementName=cboUsers, 
-                                                                Converter={x:Static local:SelectedUserToAccountsConverter.Instance}, Mode=OneWay}" />
+                                                                Converter={x:Static local:SelectedUserToAccountsConverter.Instance}, Mode=OneWay}"
+                                          DisplayMemberPath="Name" />
                                 
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
                                     <Button Name="btnAccountAdd" Content="Add..." Click="btnAccountAdd_Click" />
@@ -81,8 +82,9 @@
                             </Grid>
 
                             <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch"  />
-                            
-                            <Grid Grid.Column="2">
+
+                            <Grid Grid.Column="2" 
+                                  DataContext="{Binding (Selector.SelectedValue), ElementName=listAccounts, Mode=OneWay}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
@@ -95,10 +97,13 @@
                                 </Grid.ColumnDefinitions>
                                 
                                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Currency" />
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Currency, Mode=OneWay}" />
 
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Balance" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="-" />
 
                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Type" />
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding AccountType, Mode=OneWay}" />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -108,6 +113,12 @@
                 </TabItem>
 
                 <TabItem Name="tiStatistics" Header="Statistics">
+                </TabItem>
+
+                <TabItem Name="tiLoanCalculator" Header="Loan calculator">
+                </TabItem>
+
+                <TabItem Name="tiLiveInfo" Header="Live info">
                 </TabItem>
             </TabControl.Items>
         </TabControl>
