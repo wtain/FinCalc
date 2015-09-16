@@ -24,9 +24,9 @@ namespace FCHA
 			return SelectCategories(QueryBuilder.Select(Columns, "categories", "parentId", parentId.ToString()));
 		}
 
-		public void AddCategory(string name)
+		public long AddCategory(string name)
 		{
-			AddCategory(name, 0);
+			return AddCategory(name, 0);
 		}
 
 		private KeyValuePair<string, string> GetNameColumnPair(string name)
@@ -39,12 +39,13 @@ namespace FCHA
 			return new KeyValuePair<string, string>("parentId", parentId.ToString());
 		}
 
-		public void AddCategory(string name, long parentId)
+		public long AddCategory(string name, long parentId)
 		{
-			string query = QueryBuilder.Insert("categories_view", GetNameColumnPair(name),
+			string query = QueryBuilder.InsertView("categories_view", "categories", "CategoryId",
+				                                                  GetNameColumnPair(name),
 															      GetParentIdColumnPair(parentId));
 			using (SQLiteCommand insert = new SQLiteCommand(query, m_conn))
-				insert.ExecuteNonQuery();
+				return (long) insert.ExecuteScalar();
 		}
 
 		public void UpdateCategory(Category cat)

@@ -73,6 +73,8 @@
     <Compile Include="AccountViewModel.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="CategoryViewModel.cs" />
+    <Compile Include="Expense.cs" />
+    <Compile Include="OlapStage.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PersonViewModel.cs" />
     <Compile Include="QueryBuilder.cs" />

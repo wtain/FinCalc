@@ -76,3 +76,8 @@ Expenses - update balance - aggregate flows
 ? What to do with deleted account's flows and expenses?
 ? Enforce update of cached entities?
 ? How do I get the id of just-added entity?
+
+
++ Task tracking
+
+expenses filter - hierarchical categories

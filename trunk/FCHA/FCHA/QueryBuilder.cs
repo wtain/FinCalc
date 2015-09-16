@@ -22,12 +22,26 @@ namespace FCHA
 			return sb.ToString();
 		}
 
+		private static string InsertStatement(string tableName, KeyValuePair<string, string>[] keysAndValues)
+		{
+			return string.Format("{0} ({1}) VALUES ({2}); ", tableName, 
+									string.Join<string>(", ", keysAndValues.Select(x => x.Key)),
+									string.Join<string>(", ", keysAndValues.Select(x => x.Value)));
+		}
+
 		public static string Insert(string tableName, params KeyValuePair<string, string>[] keysAndValues)
 		{
 			StringBuilder sb = new StringBuilder("INSERT INTO ");
-			sb.AppendFormat("{0} ({1}) VALUES ({2}); ", tableName, string.Join<string>(", ", keysAndValues.Select(x => x.Key)),
-																 string.Join<string>(", ", keysAndValues.Select(x => x.Value)));
+			sb.Append(InsertStatement(tableName, keysAndValues));
 			sb.Append("SELECT last_insert_rowid()");
+			return sb.ToString();
+		}
+
+		public static string InsertView(string viewName, string underlyingTableName, string keyName, params KeyValuePair<string, string>[] keysAndValues)
+		{
+			StringBuilder sb = new StringBuilder("INSERT INTO ");
+			sb.Append(InsertStatement(viewName, keysAndValues));
+			sb.AppendFormat("SELECT MAX({1}) FROM {0}", underlyingTableName, keyName);
 			return sb.ToString();
 		}
 
@@ -67,6 +81,25 @@ namespace FCHA
 				sb.AppendFormat("{0}={1}", name, value);
 			}
 			return sb.ToString();
+		}
+
+		public static string BuildOlapStage(string tableName, OlapStage stage)
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append(Select(stage.aggregations.Union(stage.left).Union(stage.top).ToArray(), tableName));
+			if (stage.left.Length > 0 || stage.top.Length > 0)
+				sb.AppendFormat("GROUP BY {0}", string.Join(", ", stage.left.Union(stage.top)));
+			return sb.ToString();
+		}
+
+		public static string BuildOlapLeftDimensions(string tableName, OlapStage stage)
+		{
+			return string.Format("SELECT DISTINCT {0} FROM {1}", string.Join(", ", stage.left), tableName);
+		}
+
+		public static string BuildOlapTopDimensions(string tableName, OlapStage stage)
+		{
+			return string.Format("SELECT DISTINCT {0} FROM {1}", string.Join(", ", stage.top), tableName);
 		}
 	}
 }

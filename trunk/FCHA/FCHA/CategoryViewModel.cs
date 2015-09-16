@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Collections.ObjectModel;
 
 namespace FCHA
 {
@@ -22,7 +23,7 @@ namespace FCHA
 			DependencyProperty.Register("Name", typeof(string), typeof(CategoryViewModel));
 
 		public static readonly DependencyProperty ChildrenProperty =
-			DependencyProperty.Register("Children", typeof(IEnumerable<CategoryViewModel>), typeof(CategoryViewModel));
+			DependencyProperty.Register("Children", typeof(ObservableCollection<CategoryViewModel>), typeof(CategoryViewModel));
 
 		public string Name
 		{
@@ -30,9 +31,9 @@ namespace FCHA
 			set { SetValue(NameProperty, value); }
 		}
 
-		public IEnumerable<CategoryViewModel> Children
+		public ObservableCollection<CategoryViewModel> Children
 		{
-			get { return (IEnumerable<CategoryViewModel>)GetValue(ChildrenProperty); }
+			get { return (ObservableCollection<CategoryViewModel>)GetValue(ChildrenProperty); }
 			set { SetValue(ChildrenProperty, value); }
 		}
 
@@ -48,19 +49,7 @@ namespace FCHA
 			m_categoriesManager = categoriesManager;
 			m_parent = parent;
 
-			RefreshChildren();
-		}
-
-		public void RefreshChildren()
-		{
-			Children = m_categoriesManager.EnumCategoriesByParent(UnderlyingData.categoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c));
-		}
-
-		public void RefreshParentChildren()
-		{
-			if (null == Parent)
-				return;
-			Parent.RefreshChildren();
+			Children = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumCategoriesByParent(UnderlyingData.categoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c)));
 		}
 	}
 }

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.SQLite;
+using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace FCHA
 {
-	public class AccountancyApplication
+	public class AccountancyApplication : DependencyObject
 		//: IDisposable
 	{
 		private SQLiteConnection m_connection;
@@ -14,11 +16,26 @@ namespace FCHA
 		private UsersManager m_usersManager;
 		private AccountsManager m_accountsManager;
 
-		private CategoryViewModel m_categoriesVirtualRoot;
-		private List<PersonViewModel> m_users;
-
 		private Dictionary<long, PersonViewModel> m_personCache;
 
+		public static readonly DependencyProperty UsersProperty =
+			DependencyProperty.Register("Users", typeof(ObservableCollection<PersonViewModel>), typeof(AccountancyApplication));
+
+		public static readonly DependencyProperty VirtualRootProperty =
+			DependencyProperty.Register("VirtualRoot", typeof(CategoryViewModel), typeof(AccountancyApplication));
+
+		public CategoryViewModel VirtualRoot
+		{
+			get { return (CategoryViewModel)GetValue(VirtualRootProperty); }
+			private set { SetValue(VirtualRootProperty, value); }
+		}
+
+		public ObservableCollection<PersonViewModel> Users
+		{
+			get { return (ObservableCollection<PersonViewModel>)GetValue(UsersProperty); }
+			private set { SetValue(UsersProperty, value); }
+		}
+		
 		public AccountancyApplication(SQLiteConnection connection)
 		{
 			m_connection = connection;
@@ -27,16 +44,9 @@ namespace FCHA
 			m_accountsManager = new AccountsManager(m_connection);
 
 			m_personCache = new Dictionary<long, PersonViewModel>();
-		}
 
-		public CategoryViewModel CategoriesRoot
-		{
-			get
-			{
-				if (null == m_categoriesVirtualRoot)
-					m_categoriesVirtualRoot = new CategoryViewModel(m_mgr, null, new Category("Virtual", 0));
-				return m_categoriesVirtualRoot;
-			}
+			Users = new ObservableCollection<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => GetPersonFromCache(p)));
+			VirtualRoot = new CategoryViewModel(m_mgr, null, new Category("Virtual", 0));
 		}
 
 		private PersonViewModel GetPersonFromCache(Person p)
@@ -46,26 +56,16 @@ namespace FCHA
 			return m_personCache[p.personId];
 		}
 
-		public List<PersonViewModel> Users
-		{
-			get
-			{
-				if (null == m_users)
-					m_users = new List<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => GetPersonFromCache(p)));
-				return m_users;
-			}
-		}
-
 		public void AddCategory(string name)
 		{
-			m_mgr.AddCategory(name);
-			CategoriesRoot.RefreshChildren();
+			long catId = m_mgr.AddCategory(name);
+			VirtualRoot.Children.Add(new CategoryViewModel(m_mgr, VirtualRoot, new Category(name, catId)));
 		}
 
 		public void AddChildCategory(CategoryViewModel category, string name)
 		{
-			m_mgr.AddCategory(name, category.UnderlyingData.categoryId);
-			category.RefreshChildren();
+			long catId = m_mgr.AddCategory(name, category.UnderlyingData.categoryId);
+			category.Children.Add(new CategoryViewModel(m_mgr, category, new Category(name, catId)));
 		}
 
 		public void RenameCategory(CategoryViewModel category, string newName)
@@ -73,13 +73,13 @@ namespace FCHA
 			Category cat = category.UnderlyingData;
 			cat.name = newName;
 			m_mgr.UpdateCategory(cat);
-			category.RefreshParentChildren();
+			category.Name = newName;
 		}
 
 		public void RemoveCategory(CategoryViewModel category)
 		{
 			m_mgr.DeleteCategory(category.UnderlyingData);
-			category.RefreshParentChildren();
+			category.Parent.Children.Remove(category);
 		}
 
 		public PersonViewModel NewPerson()
@@ -106,7 +106,7 @@ namespace FCHA
 			m_usersManager.AddUser(ref refPerson);
 			person.UnderlyingData = refPerson;
 			m_personCache.Add(refPerson.personId, person);
-			m_users.Add(person);
+			Users.Add(person);
 		}
 
 		public void UpdatePerson(PersonViewModel person)
@@ -118,7 +118,7 @@ namespace FCHA
 		{
 			m_usersManager.DeleteUser(person.UnderlyingData);
 			m_personCache.Remove(person.UnderlyingData.personId);
-			m_users.Remove(person);
+			Users.Remove(person);
 		}
 
 		public AccountViewModel CreateAccount(PersonViewModel person)

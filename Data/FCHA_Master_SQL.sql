@@ -9,7 +9,8 @@ CREATE TABLE "expenses" (
 	`AccountId`	INTEGER NOT NULL,
 	`Amount`	NUMERIC NOT NULL,
 	`CategoryId`	INTEGER NOT NULL,
-	`Date`	TEXT NOT NULL
+	`Date`	TEXT NOT NULL,
+	`Description`	TEXT
 );
 CREATE TABLE `debug_log` (
 	`tableName`	TEXT NOT NULL,

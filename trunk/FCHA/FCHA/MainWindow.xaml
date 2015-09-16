@@ -18,7 +18,9 @@
                             <RowDefinition Height="24" />
                         </Grid.RowDefinitions>
 
-                        <TreeView Grid.Row="0" ItemsSource="{Binding VirtualRoot.Children, ElementName=winMain}" Name="treeCategories">
+                        <TreeView Grid.Row="0" 
+                                  DataContext="{Binding AccountancyApplication, ElementName=winMain}"
+                                  ItemsSource="{Binding VirtualRoot.Children}" Name="treeCategories">
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                     <TextBlock Text="{Binding Name}" />
@@ -43,7 +45,9 @@
                         </Grid.RowDefinitions>
                         
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <ComboBox Name="cboUsers" Width="150" ItemsSource="{Binding Users, ElementName=winMain}">
+                            <ComboBox Name="cboUsers" Width="150" 
+                                      DataContext="{Binding AccountancyApplication, ElementName=winMain}"
+                                      ItemsSource="{Binding Users}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Name}" />
@@ -110,6 +114,42 @@
                 </TabItem>
 
                 <TabItem Name="tiExpenses" Header="Expenses">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24" />
+                            <RowDefinition />
+                            <RowDefinition Height="24" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <DatePicker />
+
+                            <ComboBox Name="cboExpenseUsers" Width="150" 
+                                      DataContext="{Binding AccountancyApplication, ElementName=winMain}"
+                                      ItemsSource="{Binding Users}" 
+                                      DisplayMemberPath="Name" />
+
+                            <ComboBox Name="cboExpenseAccounts" Width="150" DataContext="{Binding Path=(Selector.SelectedValue), 
+                                                                ElementName=cboExpenseUsers, Mode=OneWay}"
+                                                                ItemsSource="{Binding UserAccounts}"
+                                                                DisplayMemberPath="Name" />
+                            
+                        </StackPanel>
+
+                        <DataGrid Grid.Row="1" 
+                                  CanUserReorderColumns="True" CanUserResizeColumns="True" 
+                                  CanUserResizeRows="False" CanUserSortColumns="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Source Account" />
+                                <DataGridTextColumn Header="Account Owner" />
+                                <DataGridTextColumn Header="Date" />
+                                <DataGridTextColumn Header="Amount" />
+                                <DataGridTextColumn Header="Currency" />
+                                <DataGridTextColumn Header="Category" />
+                                <DataGridTextColumn Header="Description" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
                 </TabItem>
 
                 <TabItem Name="tiStatistics" Header="Statistics">

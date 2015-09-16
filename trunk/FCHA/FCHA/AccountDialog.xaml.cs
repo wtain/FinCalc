@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace FCHA
 {
@@ -30,10 +31,16 @@ namespace FCHA
 			set { SetValue(AccountInfoProperty, value); }
 		}
 
-		public List<PersonViewModel> Users
+		public ObservableCollection<PersonViewModel> Users
 		{
-			get { return (List<PersonViewModel>)GetValue(UsersProperty); }
+			get { return (ObservableCollection<PersonViewModel>)GetValue(UsersProperty); }
 			set { SetValue(UsersProperty, value); }
+		}
+
+		public AccountDialog(PersonViewModel selectedUser, AccountancyApplication accountancyApplication)
+			: this(accountancyApplication.CreateAccount(selectedUser), accountancyApplication)
+		{
+
 		}
 
 		public AccountDialog(AccountViewModel account, AccountancyApplication accountancyApplication)

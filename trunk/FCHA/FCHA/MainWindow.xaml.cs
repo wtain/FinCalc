@@ -27,15 +27,13 @@ namespace FCHA
 	public partial class MainWindow 
 		: Window
 	{
-		private AccountancyApplication m_accountancyApplication;
+		public static readonly DependencyProperty AccountancyApplicationProperty
+			= DependencyProperty.Register("AccountancyApplication", typeof(AccountancyApplication), typeof(MainWindow));
 
-		public static readonly DependencyProperty VirtualRootProperty =
-			DependencyProperty.Register("VirtualRoot", typeof(CategoryViewModel), typeof(MainWindow));
-			
-		public CategoryViewModel VirtualRoot
+		public AccountancyApplication AccountancyApplication
 		{
-			get { return (CategoryViewModel)GetValue(VirtualRootProperty); }
-			private set { SetValue(VirtualRootProperty, value); }
+			get { return (AccountancyApplication)GetValue(AccountancyApplicationProperty); }
+			private set { SetValue(AccountancyApplicationProperty, value); }
 		}
 
 		public static readonly DependencyProperty DatabaseFileNameProperty =
@@ -45,15 +43,6 @@ namespace FCHA
 		{
 			get { return (string)GetValue(DatabaseFileNameProperty); }
 			private set { SetValue(DatabaseFileNameProperty, value); }
-		}
-
-		public static readonly DependencyProperty UsersProperty =
-			DependencyProperty.Register("Users", typeof(List<PersonViewModel>), typeof(MainWindow));
-
-		public List<PersonViewModel> Users
-		{
-			get { return (List<PersonViewModel>)GetValue(UsersProperty); }
-			private set { SetValue(UsersProperty, value); }
 		}
 		
 		public MainWindow()
@@ -75,16 +64,7 @@ namespace FCHA
 			SQLiteConnection conn = new SQLiteConnection(string.Format("Data Source={0};Version=3;", DatabaseFileName));
 			conn.Open();
 
-			m_accountancyApplication = new AccountancyApplication(conn);
-
-			VirtualRoot = m_accountancyApplication.CategoriesRoot;
-			UpdateUsers();
-		}
-
-		private void UpdateUsers()
-		{
-			Users = null;
-			Users = m_accountancyApplication.Users;
+			AccountancyApplication = new AccountancyApplication(conn);
 		}
 
 		public CategoryViewModel SelectedCategory
@@ -107,7 +87,7 @@ namespace FCHA
 			InputDialog dlg = new InputDialog();
 			if (true != dlg.ShowDialog())
 				return;
-			m_accountancyApplication.AddCategory(dlg.Value);
+			AccountancyApplication.AddCategory(dlg.Value);
 		}
 
 		private void btnAddChild_Click(object sender, RoutedEventArgs e)
@@ -117,7 +97,7 @@ namespace FCHA
 			InputDialog dlg = new InputDialog();
 			if (true != dlg.ShowDialog())
 				return;
-			m_accountancyApplication.AddChildCategory(SelectedCategory, dlg.Value);
+			AccountancyApplication.AddChildCategory(SelectedCategory, dlg.Value);
 		}
 
 		private void btnRename_Click(object sender, RoutedEventArgs e)
@@ -128,14 +108,14 @@ namespace FCHA
 			dlg.Value = SelectedCategory.UnderlyingData.name;
 			if (true != dlg.ShowDialog())
 				return;
-			m_accountancyApplication.RenameCategory(SelectedCategory, dlg.Value);
+			AccountancyApplication.RenameCategory(SelectedCategory, dlg.Value);
 		}
 
 		private void btnRemove_Click(object sender, RoutedEventArgs e)
 		{
 			if (null == SelectedCategory)
 				return;
-			m_accountancyApplication.RemoveCategory(SelectedCategory);
+			AccountancyApplication.RemoveCategory(SelectedCategory);
 		}
 
 		private void btnExit_Click(object sender, RoutedEventArgs e)
@@ -145,11 +125,10 @@ namespace FCHA
 
 		private void btnAddUser_Click(object sender, RoutedEventArgs e)
 		{
-			UserInfoDialog dlg = new UserInfoDialog(m_accountancyApplication.NewPerson());
+			UserInfoDialog dlg = new UserInfoDialog(AccountancyApplication.NewPerson());
 			if (true != dlg.ShowDialog())
 				return;
-			m_accountancyApplication.AddPerson(dlg.PersonInfo);
-			UpdateUsers();
+			AccountancyApplication.AddPerson(dlg.PersonInfo);
 		}
 
 		private void btnEditUser_Click(object sender, RoutedEventArgs e)
@@ -159,16 +138,14 @@ namespace FCHA
 			UserInfoDialog dlg = new UserInfoDialog(SelectedUser);
 			if (true != dlg.ShowDialog())
 				return;
-			m_accountancyApplication.UpdatePerson(dlg.PersonInfo);
-			UpdateUsers();
+			AccountancyApplication.UpdatePerson(dlg.PersonInfo);
 		}
 
 		private void btnRemoveUser_Click(object sender, RoutedEventArgs e)
 		{
 			if (null == SelectedUser)
 				return;
-			m_accountancyApplication.RemovePerson(SelectedUser);
-			UpdateUsers();
+			AccountancyApplication.RemovePerson(SelectedUser);
 		}
 
 		private void UpdateSelectedUserHack()
@@ -180,10 +157,10 @@ namespace FCHA
 
 		private void btnAccountAdd_Click(object sender, RoutedEventArgs e)
 		{
-			AccountDialog dlg = new AccountDialog(m_accountancyApplication.CreateAccount(SelectedUser), m_accountancyApplication);
+			AccountDialog dlg = new AccountDialog(SelectedUser, AccountancyApplication);
 			if (true != dlg.ShowDialog())
 				return;
-			m_accountancyApplication.AddAccount(dlg.AccountInfo);
+			AccountancyApplication.AddAccount(dlg.AccountInfo);
 			UpdateSelectedUserHack();
 		}
 
@@ -191,10 +168,10 @@ namespace FCHA
 		{
 			if (null == SelectedAccount)
 				return;
-			AccountDialog dlg = new AccountDialog(SelectedAccount, m_accountancyApplication);
+			AccountDialog dlg = new AccountDialog(SelectedAccount, AccountancyApplication);
 			if (true != dlg.ShowDialog())
 				return;
-			m_accountancyApplication.UpdateAccount(SelectedAccount);
+			AccountancyApplication.UpdateAccount(SelectedAccount);
 			UpdateSelectedUserHack();
 		}
 
@@ -202,7 +179,7 @@ namespace FCHA
 		{
 			if (null == SelectedAccount)
 				return;
-			m_accountancyApplication.DeleteAccount(SelectedAccount);
+			AccountancyApplication.DeleteAccount(SelectedAccount);
 			UpdateSelectedUserHack();
 		}
 	}
