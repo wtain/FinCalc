@@ -23,7 +23,7 @@ namespace FCHA
 			DependencyProperty.Register("AccountInfo", typeof(AccountViewModel), typeof(AccountDialog));
 
 		public static readonly DependencyProperty UsersProperty =
-			DependencyProperty.Register("Users", typeof(List<PersonViewModel>), typeof(AccountDialog));
+			DependencyProperty.Register("Users", typeof(ObservableCollection<PersonViewModel>), typeof(AccountDialog));
 
 		public AccountViewModel AccountInfo
 		{

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace FCHA
 {
+	[DebuggerDisplay("{Name}")]
 	public class CategoryViewModel
 		: DependencyObject
 	{

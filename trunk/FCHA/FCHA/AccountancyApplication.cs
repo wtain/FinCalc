@@ -12,17 +12,30 @@ namespace FCHA
 		//: IDisposable
 	{
 		private SQLiteConnection m_connection;
-		private CategoriesManager m_mgr;
+		private CategoriesManager m_categoriesManager;
 		private UsersManager m_usersManager;
 		private AccountsManager m_accountsManager;
 
 		private Dictionary<long, PersonViewModel> m_personCache;
-
+		private Dictionary<long, AccountViewModel> m_accountCache;
+		
 		public static readonly DependencyProperty UsersProperty =
 			DependencyProperty.Register("Users", typeof(ObservableCollection<PersonViewModel>), typeof(AccountancyApplication));
 
+		public static readonly DependencyProperty AccountsProperty =
+			DependencyProperty.Register("Accounts", typeof(ObservableCollection<AccountViewModel>), typeof(AccountancyApplication));
+
 		public static readonly DependencyProperty VirtualRootProperty =
 			DependencyProperty.Register("VirtualRoot", typeof(CategoryViewModel), typeof(AccountancyApplication));
+
+		public static readonly DependencyProperty SelectedDateProperty =
+			DependencyProperty.Register("SelectedDate", typeof(DateTime), typeof(AccountancyApplication));
+
+		public static readonly DependencyProperty SelectedUserProperty =
+			DependencyProperty.Register("SelectedUser", typeof(PersonViewModel), typeof(AccountancyApplication));
+
+		public static readonly DependencyProperty SelectedAccountProperty =
+			DependencyProperty.Register("SelectedAccount", typeof(AccountViewModel), typeof(AccountancyApplication));
 
 		public CategoryViewModel VirtualRoot
 		{
@@ -35,18 +48,51 @@ namespace FCHA
 			get { return (ObservableCollection<PersonViewModel>)GetValue(UsersProperty); }
 			private set { SetValue(UsersProperty, value); }
 		}
+
+		public ObservableCollection<AccountViewModel> Accounts
+		{
+			get { return (ObservableCollection<AccountViewModel>)GetValue(AccountsProperty); }
+			private set { SetValue(AccountsProperty, value); }
+		}
+
+		public DateTime SelectedDate
+		{
+			get { return (DateTime)GetValue(SelectedDateProperty); }
+			set { SetValue(SelectedDateProperty, value); }
+		}
+
+		public PersonViewModel SelectedUser
+		{
+			get { return (PersonViewModel)GetValue(SelectedUserProperty); }
+			set { SetValue(SelectedUserProperty, value); }
+		}
+
+		public AccountViewModel SelectedAccount
+		{
+			get { return (AccountViewModel)GetValue(SelectedAccountProperty); }
+			set { SetValue(SelectedAccountProperty, value); }
+		}
 		
 		public AccountancyApplication(SQLiteConnection connection)
 		{
 			m_connection = connection;
-			m_mgr = new CategoriesManager(m_connection);
+			m_categoriesManager = new CategoriesManager(m_connection);
 			m_usersManager = new UsersManager(m_connection);
 			m_accountsManager = new AccountsManager(m_connection);
 
 			m_personCache = new Dictionary<long, PersonViewModel>();
+			m_accountCache = new Dictionary<long, AccountViewModel>();
 
 			Users = new ObservableCollection<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => GetPersonFromCache(p)));
-			VirtualRoot = new CategoryViewModel(m_mgr, null, new Category("Virtual", 0));
+			Accounts = new ObservableCollection<AccountViewModel>(m_accountsManager.EnumAllAccounts().Select(a => GetAccountFromCache(a)));
+			VirtualRoot = new CategoryViewModel(m_categoriesManager, null, new Category("Virtual", 0));
+			SelectedDate = DateTime.Now.Date;
+			if (Users.Count > 0)
+			{
+				SelectedUser = Users[0];
+				if (SelectedUser.UserAccounts.Count > 0)
+					SelectedAccount = SelectedUser.UserAccounts[0];
+			}
 		}
 
 		private PersonViewModel GetPersonFromCache(Person p)
@@ -56,29 +102,43 @@ namespace FCHA
 			return m_personCache[p.personId];
 		}
 
+		private AccountViewModel GetAccountFromCache(Account a)
+		{
+			if (!m_accountCache.ContainsKey(a.accountId))
+				m_accountCache[a.accountId] = new AccountViewModel(a, this);
+			return m_accountCache[a.accountId];
+		}
+
+		private AccountViewModel GetAccountFromCache(PersonViewModel person, Account a)
+		{
+			if (!m_accountCache.ContainsKey(a.accountId))
+				m_accountCache[a.accountId] = new AccountViewModel(a, this, person);
+			return m_accountCache[a.accountId];
+		}
+
 		public void AddCategory(string name)
 		{
-			long catId = m_mgr.AddCategory(name);
-			VirtualRoot.Children.Add(new CategoryViewModel(m_mgr, VirtualRoot, new Category(name, catId)));
+			long catId = m_categoriesManager.AddCategory(name);
+			VirtualRoot.Children.Add(new CategoryViewModel(m_categoriesManager, VirtualRoot, new Category(name, catId)));
 		}
 
 		public void AddChildCategory(CategoryViewModel category, string name)
 		{
-			long catId = m_mgr.AddCategory(name, category.UnderlyingData.categoryId);
-			category.Children.Add(new CategoryViewModel(m_mgr, category, new Category(name, catId)));
+			long catId = m_categoriesManager.AddCategory(name, category.UnderlyingData.categoryId);
+			category.Children.Add(new CategoryViewModel(m_categoriesManager, category, new Category(name, catId)));
 		}
 
 		public void RenameCategory(CategoryViewModel category, string newName)
 		{
 			Category cat = category.UnderlyingData;
 			cat.name = newName;
-			m_mgr.UpdateCategory(cat);
+			m_categoriesManager.UpdateCategory(cat);
 			category.Name = newName;
 		}
 
 		public void RemoveCategory(CategoryViewModel category)
 		{
-			m_mgr.DeleteCategory(category.UnderlyingData);
+			m_categoriesManager.DeleteCategory(category.UnderlyingData);
 			category.Parent.Children.Remove(category);
 		}
 
@@ -128,8 +188,7 @@ namespace FCHA
 
 		public IEnumerable<AccountViewModel> EnumUserAccounts(PersonViewModel person)
 		{
-			// todo: cache
-			return m_accountsManager.EnumUserAccounts(person.UnderlyingData).Select(a => new AccountViewModel(a, this));
+			return m_accountsManager.EnumUserAccounts(person.UnderlyingData).Select(a => GetAccountFromCache(person, a));
 		}
 
 		public void AddAccount(AccountViewModel account)
@@ -137,6 +196,8 @@ namespace FCHA
 			Account refAccount = account.UnderlyingData;
 			m_accountsManager.AddAccount(ref refAccount);
 			account.UnderlyingData = refAccount;
+			account.Owner.UserAccounts.Add(account);
+			m_accountCache.Add(account.UnderlyingData.accountId, account);
 		}
 
 		public void UpdateAccount(AccountViewModel account)
@@ -147,6 +208,8 @@ namespace FCHA
 		public void DeleteAccount(AccountViewModel account)
 		{
 			m_accountsManager.DeleteAccount(account.UnderlyingData);
+			account.Owner.UserAccounts.Remove(account);
+			m_accountCache.Remove(account.UnderlyingData.accountId);
 		}
 	}
 }

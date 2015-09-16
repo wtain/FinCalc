@@ -81,3 +81,11 @@ Expenses - update balance - aggregate flows
 + Task tracking
 
 expenses filter - hierarchical categories
+
+
+todo: remove from caches
+
+
+group dates in OLAP - week, month, year
+
+trees for olap filters, utilise Grid

@@ -72,16 +72,6 @@ namespace FCHA
 			get { return treeCategories.SelectedValue as CategoryViewModel; }
 		}
 
-		public PersonViewModel SelectedUser
-		{
-			get { return cboUsers.SelectedValue as PersonViewModel; }
-		}
-
-		public AccountViewModel SelectedAccount
-		{
-			get { return listAccounts.SelectedValue as AccountViewModel; }
-		}
-
 		private void btnAdd_Click(object sender, RoutedEventArgs e)
 		{
 			InputDialog dlg = new InputDialog();
@@ -133,9 +123,9 @@ namespace FCHA
 
 		private void btnEditUser_Click(object sender, RoutedEventArgs e)
 		{
-			if (null == SelectedUser)
+			if (null == AccountancyApplication.SelectedUser)
 				return;
-			UserInfoDialog dlg = new UserInfoDialog(SelectedUser);
+			UserInfoDialog dlg = new UserInfoDialog(AccountancyApplication.SelectedUser);
 			if (true != dlg.ShowDialog())
 				return;
 			AccountancyApplication.UpdatePerson(dlg.PersonInfo);
@@ -143,44 +133,34 @@ namespace FCHA
 
 		private void btnRemoveUser_Click(object sender, RoutedEventArgs e)
 		{
-			if (null == SelectedUser)
+			if (null == AccountancyApplication.SelectedUser)
 				return;
-			AccountancyApplication.RemovePerson(SelectedUser);
-		}
-
-		private void UpdateSelectedUserHack()
-		{
-			object si = cboUsers.SelectedItem;
-			cboUsers.SelectedItem = null;
-			cboUsers.SelectedItem = si;
+			AccountancyApplication.RemovePerson(AccountancyApplication.SelectedUser);
 		}
 
 		private void btnAccountAdd_Click(object sender, RoutedEventArgs e)
 		{
-			AccountDialog dlg = new AccountDialog(SelectedUser, AccountancyApplication);
+			AccountDialog dlg = new AccountDialog(AccountancyApplication.SelectedUser, AccountancyApplication);
 			if (true != dlg.ShowDialog())
 				return;
 			AccountancyApplication.AddAccount(dlg.AccountInfo);
-			UpdateSelectedUserHack();
 		}
 
 		private void btnAccountChange_Click(object sender, RoutedEventArgs e)
 		{
-			if (null == SelectedAccount)
+			if (null == AccountancyApplication.SelectedAccount)
 				return;
-			AccountDialog dlg = new AccountDialog(SelectedAccount, AccountancyApplication);
+			AccountDialog dlg = new AccountDialog(AccountancyApplication.SelectedAccount, AccountancyApplication);
 			if (true != dlg.ShowDialog())
 				return;
-			AccountancyApplication.UpdateAccount(SelectedAccount);
-			UpdateSelectedUserHack();
+			AccountancyApplication.UpdateAccount(AccountancyApplication.SelectedAccount);
 		}
 
 		private void btnAccountRemove_Click(object sender, RoutedEventArgs e)
 		{
-			if (null == SelectedAccount)
+			if (null == AccountancyApplication.SelectedAccount)
 				return;
-			AccountancyApplication.DeleteAccount(SelectedAccount);
-			UpdateSelectedUserHack();
+			AccountancyApplication.DeleteAccount(AccountancyApplication.SelectedAccount);
 		}
 	}
 }
