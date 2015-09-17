@@ -15,6 +15,7 @@ namespace FCHA
 		private CategoriesManager m_categoriesManager;
 		private UsersManager m_usersManager;
 		private AccountsManager m_accountsManager;
+		private ExpensesManager m_expensesManager;
 
 		private Dictionary<long, PersonViewModel> m_personCache;
 		private Dictionary<long, AccountViewModel> m_accountCache;
@@ -24,6 +25,12 @@ namespace FCHA
 
 		public static readonly DependencyProperty AccountsProperty =
 			DependencyProperty.Register("Accounts", typeof(ObservableCollection<AccountViewModel>), typeof(AccountancyApplication));
+
+		public static readonly DependencyProperty CategoriesProperty =
+			DependencyProperty.Register("Categories", typeof(ObservableCollection<CategoryViewModel>), typeof(AccountancyApplication));
+
+		public static readonly DependencyProperty ExpensesProperty =
+			DependencyProperty.Register("Expenses", typeof(ObservableCollection<ExpenseViewModel>), typeof(AccountancyApplication));
 
 		public static readonly DependencyProperty VirtualRootProperty =
 			DependencyProperty.Register("VirtualRoot", typeof(CategoryViewModel), typeof(AccountancyApplication));
@@ -55,6 +62,18 @@ namespace FCHA
 			private set { SetValue(AccountsProperty, value); }
 		}
 
+		public ObservableCollection<CategoryViewModel> Categories
+		{
+			get { return (ObservableCollection<CategoryViewModel>)GetValue(CategoriesProperty); }
+			private set { SetValue(CategoriesProperty, value); }
+		}
+
+		public ObservableCollection<ExpenseViewModel> Expenses
+		{
+			get { return (ObservableCollection<ExpenseViewModel>)GetValue(ExpensesProperty); }
+			private set { SetValue(ExpensesProperty, value); }
+		}
+
 		public DateTime SelectedDate
 		{
 			get { return (DateTime)GetValue(SelectedDateProperty); }
@@ -79,12 +98,15 @@ namespace FCHA
 			m_categoriesManager = new CategoriesManager(m_connection);
 			m_usersManager = new UsersManager(m_connection);
 			m_accountsManager = new AccountsManager(m_connection);
+			m_expensesManager = new ExpensesManager(m_connection);
 
 			m_personCache = new Dictionary<long, PersonViewModel>();
 			m_accountCache = new Dictionary<long, AccountViewModel>();
 
-			Users = new ObservableCollection<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => GetPersonFromCache(p)));
-			Accounts = new ObservableCollection<AccountViewModel>(m_accountsManager.EnumAllAccounts().Select(a => GetAccountFromCache(a)));
+			Users = new ObservableCollection<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => GetPerson(p)));
+			Accounts = new ObservableCollection<AccountViewModel>(m_accountsManager.EnumAllAccounts().Select(a => GetAccount(a)));
+			Categories = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumAllCategories().Select(c => new CategoryViewModel(c)));
+			Expenses = new ObservableCollection<ExpenseViewModel>(m_expensesManager.EnumAllExpenses().Select(e => new ExpenseViewModel(e, this)));
 			VirtualRoot = new CategoryViewModel(m_categoriesManager, null, new Category("Virtual", 0));
 			SelectedDate = DateTime.Now.Date;
 			if (Users.Count > 0)
@@ -93,58 +115,6 @@ namespace FCHA
 				if (SelectedUser.UserAccounts.Count > 0)
 					SelectedAccount = SelectedUser.UserAccounts[0];
 			}
-		}
-
-		private PersonViewModel GetPersonFromCache(Person p)
-		{
-			if (!m_personCache.ContainsKey(p.personId))
-				m_personCache[p.personId] = new PersonViewModel(p, this);
-			return m_personCache[p.personId];
-		}
-
-		private AccountViewModel GetAccountFromCache(Account a)
-		{
-			if (!m_accountCache.ContainsKey(a.accountId))
-				m_accountCache[a.accountId] = new AccountViewModel(a, this);
-			return m_accountCache[a.accountId];
-		}
-
-		private AccountViewModel GetAccountFromCache(PersonViewModel person, Account a)
-		{
-			if (!m_accountCache.ContainsKey(a.accountId))
-				m_accountCache[a.accountId] = new AccountViewModel(a, this, person);
-			return m_accountCache[a.accountId];
-		}
-
-		public void AddCategory(string name)
-		{
-			long catId = m_categoriesManager.AddCategory(name);
-			VirtualRoot.Children.Add(new CategoryViewModel(m_categoriesManager, VirtualRoot, new Category(name, catId)));
-		}
-
-		public void AddChildCategory(CategoryViewModel category, string name)
-		{
-			long catId = m_categoriesManager.AddCategory(name, category.UnderlyingData.categoryId);
-			category.Children.Add(new CategoryViewModel(m_categoriesManager, category, new Category(name, catId)));
-		}
-
-		public void RenameCategory(CategoryViewModel category, string newName)
-		{
-			Category cat = category.UnderlyingData;
-			cat.name = newName;
-			m_categoriesManager.UpdateCategory(cat);
-			category.Name = newName;
-		}
-
-		public void RemoveCategory(CategoryViewModel category)
-		{
-			m_categoriesManager.DeleteCategory(category.UnderlyingData);
-			category.Parent.Children.Remove(category);
-		}
-
-		public PersonViewModel NewPerson()
-		{
-			return new PersonViewModel(Person.DefaultPerson, this);
 		}
 
 		public PersonViewModel GetPerson(long personId)
@@ -158,6 +128,67 @@ namespace FCHA
 		public PersonViewModel GetPerson(Person p)
 		{
 			return GetPerson(p.personId);
+		}
+
+		public AccountViewModel GetAccount(long accountId)
+		{
+			if (!m_accountCache.ContainsKey(accountId))
+				m_accountCache[accountId] = new AccountViewModel(m_accountsManager.GetAccount(accountId), this);
+			return m_accountCache[accountId];
+		}
+
+		public AccountViewModel GetAccount(Account a)
+		{
+			return GetAccount(a.accountId);
+		}
+
+		public AccountViewModel GetAccount(PersonViewModel person, Account a)
+		{
+			if (!m_accountCache.ContainsKey(a.accountId))
+				m_accountCache[a.accountId] = new AccountViewModel(a, this, person);
+			return m_accountCache[a.accountId];
+		}
+
+		public void AddCategory(string name)
+		{
+			long catId = m_categoriesManager.AddCategory(name);
+			Category c = new Category(name, catId);
+			VirtualRoot.Children.Add(new CategoryViewModel(m_categoriesManager, VirtualRoot, c));
+			Categories.Add(new CategoryViewModel(c));
+		}
+
+		public void AddChildCategory(CategoryViewModel category, string name)
+		{
+			long catId = m_categoriesManager.AddCategory(name, category.UnderlyingData.categoryId);
+			Category c = new Category(name, catId);
+			category.Children.Add(new CategoryViewModel(m_categoriesManager, category, c));
+			Categories.Add(new CategoryViewModel(c));
+		}
+
+		public CategoryViewModel GetCategory(long categoryId)
+		{
+			return Categories.Where(c => c.UnderlyingData.categoryId == categoryId).FirstOrDefault();
+		}
+
+		public void RenameCategory(CategoryViewModel category, string newName)
+		{
+			Category cat = category.UnderlyingData;
+			cat.name = newName;
+			m_categoriesManager.UpdateCategory(cat);
+			category.Name = newName;
+			GetCategory(category.UnderlyingData.categoryId).Name = newName;
+		}
+
+		public void RemoveCategory(CategoryViewModel category)
+		{
+			m_categoriesManager.DeleteCategory(category.UnderlyingData);
+			category.Parent.Children.Remove(category);
+			Categories.Remove(GetCategory(category.UnderlyingData.categoryId));
+		}
+
+		public PersonViewModel NewPerson()
+		{
+			return new PersonViewModel(Person.DefaultPerson, this);
 		}
 
 		public void AddPerson(PersonViewModel person)
@@ -188,7 +219,7 @@ namespace FCHA
 
 		public IEnumerable<AccountViewModel> EnumUserAccounts(PersonViewModel person)
 		{
-			return m_accountsManager.EnumUserAccounts(person.UnderlyingData).Select(a => GetAccountFromCache(person, a));
+			return m_accountsManager.EnumUserAccounts(person.UnderlyingData).Select(a => GetAccount(person, a));
 		}
 
 		public void AddAccount(AccountViewModel account)
@@ -210,6 +241,30 @@ namespace FCHA
 			m_accountsManager.DeleteAccount(account.UnderlyingData);
 			account.Owner.UserAccounts.Remove(account);
 			m_accountCache.Remove(account.UnderlyingData.accountId);
+		}
+
+		public AccountBalance GetAccountState(AccountViewModel account)
+		{
+			return m_accountsManager.GetAccountBalance(account.UnderlyingData.accountId);
+		}
+
+		public void AddExpense(ExpenseViewModel expense)
+		{
+			Expense refExpense = expense.UnderlyingData;
+			m_expensesManager.AddExpense(ref refExpense);
+			expense.UnderlyingData = refExpense;
+			Expenses.Add(expense);
+		}
+
+		public void UpdateExpense(ExpenseViewModel expense)
+		{
+			m_expensesManager.UpdateExpense(expense.UnderlyingData);
+		}
+
+		public void DeleteExpense(ExpenseViewModel expense)
+		{
+			m_expensesManager.DeleteExpense(expense.UnderlyingData);
+			Expenses.Remove(expense);
 		}
 	}
 }

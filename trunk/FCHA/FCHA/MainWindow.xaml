@@ -91,6 +91,7 @@
                                     <RowDefinition />
                                     <RowDefinition />
                                     <RowDefinition />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
                                 
                                 <Grid.ColumnDefinitions>
@@ -101,11 +102,14 @@
                                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Currency" />
                                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Currency, Mode=OneWay}" />
 
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Balance" />
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text="-" />
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Type" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AccountType, Mode=OneWay}" />
 
-                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Type" />
-                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding AccountType, Mode=OneWay}" />
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Balance" />
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Balance, Mode=OneWay}" />
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Last updated" />
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding LastUpdated, Mode=OneWay, StringFormat=dd-MMM-yyyy}" />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -116,7 +120,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="24" />
                             <RowDefinition />
-                            <RowDefinition Height="24" />
+                            <RowDefinition Height="48" />
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Tag="{Binding SelectedAccount, Mode=TwoWay}" Name="spExpenses">
@@ -137,17 +141,67 @@
 
                         <DataGrid Grid.Row="1" 
                                   CanUserReorderColumns="True" CanUserResizeColumns="True" 
-                                  CanUserResizeRows="False" CanUserSortColumns="True">
+                                  CanUserResizeRows="False" CanUserSortColumns="True"
+                                  AutoGenerateColumns="False"
+                                  ItemsSource="{Binding Expenses}"
+                                  Name="dgExpenses">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Source Account" />
-                                <DataGridTextColumn Header="Account Owner" />
-                                <DataGridTextColumn Header="Date" />
-                                <DataGridTextColumn Header="Amount" />
-                                <DataGridTextColumn Header="Currency" />
-                                <DataGridTextColumn Header="Category" />
-                                <DataGridTextColumn Header="Description" />
+                                <DataGridTextColumn Header="Source Account" Binding="{Binding Account}" />
+                                <DataGridTemplateColumn Header="Account Owner">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock DataContext="{Binding Account}"
+                                                       Text="{Binding Owner}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd-MMM-yyyy}" />
+                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" />
+                                <DataGridTemplateColumn Header="Currency">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock DataContext="{Binding Account}"
+                                                       Text="{Binding Currency}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Category" Binding="{Binding Category}" />
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
                             </DataGrid.Columns>
                         </DataGrid>
+                        
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Amount" />
+                            <TextBox Grid.Row="1" Grid.Column="0" Name="txtExpenseAmount" TextAlignment="Right"
+                                     Text="{Binding (Selector.SelectedItem).Amount, ElementName=dgExpenses, Mode=OneWay}" />
+
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="Category" />
+                            <ComboBox Grid.Row="1" Grid.Column="1" IsEditable="True" Name="cboExpenseCategory"
+                                      ItemsSource="{Binding Categories}" DisplayMemberPath="Name" 
+                                      SelectedItem="{Binding (Selector.SelectedItem).Category, ElementName=dgExpenses, Mode=OneWay}" />
+
+                            <TextBlock Grid.Row="0" Grid.Column="2" Text="Description" />
+                            <TextBox Grid.Row="1" Grid.Column="2" Name="txtExpenseDescription" 
+                                     Text="{Binding (Selector.SelectedItem).Description, ElementName=dgExpenses, Mode=OneWay}" />
+                            
+                            <StackPanel Grid.Column="3" Grid.RowSpan="2" Orientation="Horizontal">
+                                <Button Name="btnExpenseAdd" Content="Add" Click="btnExpenseAdd_Click" />
+                                <Button Name="btnExpenseChange" Content="Change" Click="btnExpenseChange_Click" />
+                                <Button Name="btnExpenseRemove" Content="Remove" Click="btnExpenseRemove_Click" />
+                            </StackPanel>
+                        </Grid>
                     </Grid>
                 </TabItem>
 

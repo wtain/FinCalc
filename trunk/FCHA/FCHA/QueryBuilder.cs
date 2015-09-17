@@ -8,6 +8,8 @@ namespace FCHA
 {
 	public static class QueryBuilder
 	{
+		public static readonly string DateFormat = "dd-MMM-yyyy";
+		
 		public static string Select(string[] fields, string tableName, params string[] filters)
 		{
 			Debug.Assert(filters.Length % 2 == 0);

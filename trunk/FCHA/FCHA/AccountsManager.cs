@@ -14,6 +14,9 @@ namespace FCHA
 		private static readonly string[] Columns = 
 			new string[] { "AccountId", "Currency", "OwnerPersonId", "Name", "Type" };
 
+		private static readonly string[] ColumnsBalance =
+			new string[] { "Value", "LastUpdatedDate" };
+
 		public AccountsManager(SQLiteConnection conn)
 		{
 			m_conn = conn;
@@ -35,14 +38,26 @@ namespace FCHA
 			return SelectOne(QueryBuilder.Select(Columns, "accounts", "accountId", accountId.ToString()));
 		}
 
+		public AccountBalance GetAccountBalance(long accountId)
+		{
+			return SelectOneBalance(QueryBuilder.Select(ColumnsBalance, "AccountBalance", "accountId", accountId.ToString()));
+		}
+
 		private Account BuildAccountStructure(SQLiteDataReader reader)
 		{
 			long accountId = reader.GetInt64(0);
 			string currency = reader.GetString(1);
 			long ownerPersonId = reader.GetInt64(2);
 			string name = reader.GetString(3);
-			string type = reader.GetString(4);
-			return new Account(accountId, currency, ownerPersonId, name, Account.AccountTypeFromString(type));
+			AccountType type = Account.AccountTypeFromString(reader.GetString(4));
+			return new Account(accountId, currency, ownerPersonId, name, type);
+		}
+
+		private AccountBalance BuildAccountBalanceStructure(SQLiteDataReader reader)
+		{
+			long balance = reader.GetInt64(0);
+			DateTime lastUpdated = DateTime.Parse(reader.GetString(1));
+			return new AccountBalance(balance, lastUpdated);
 		}
 
 		private IEnumerable<Account> SelectAccounts(string query)
@@ -53,6 +68,19 @@ namespace FCHA
 					while (reader.Read())
 						yield return BuildAccountStructure(reader);
 				}
+		}
+
+		private AccountBalance SelectOneBalance(string query)
+		{
+			using (SQLiteCommand select = new SQLiteCommand(query, m_conn))
+			using (SQLiteDataReader reader = select.ExecuteReader())
+			{
+				Debug.Assert(1 == reader.StepCount);
+
+				while (reader.Read())
+					return BuildAccountBalanceStructure(reader);
+			}
+			return new AccountBalance();
 		}
 
 		private Account SelectOne(string query)

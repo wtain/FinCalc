@@ -162,5 +162,45 @@ namespace FCHA
 				return;
 			AccountancyApplication.DeleteAccount(AccountancyApplication.SelectedAccount);
 		}
+
+		private void btnExpenseAdd_Click(object sender, RoutedEventArgs e)
+		{
+			CategoryViewModel selectedCategory = cboExpenseCategory.SelectedItem as CategoryViewModel;
+			if (null == selectedCategory)
+				return;
+			Expense ex = new Expense(0, AccountancyApplication.SelectedAccount.UnderlyingData.accountId,
+									long.Parse(txtExpenseAmount.Text), selectedCategory.UnderlyingData.categoryId,
+									AccountancyApplication.SelectedDate, txtExpenseDescription.Text);
+			AccountancyApplication.AddExpense(new ExpenseViewModel(ex, AccountancyApplication));
+		}
+
+		public ExpenseViewModel SelectedExpense
+		{
+			get { return dgExpenses.SelectedItem as ExpenseViewModel; }
+		}
+
+		private void btnExpenseChange_Click(object sender, RoutedEventArgs e)
+		{
+			if (null == SelectedExpense)
+				return;
+			CategoryViewModel selectedCategory = cboExpenseCategory.SelectedItem as CategoryViewModel;
+			if (null == selectedCategory)
+				return;
+			SelectedExpense.Account = AccountancyApplication.SelectedAccount;
+			SelectedExpense.Description = txtExpenseDescription.Text;
+			SelectedExpense.Amount = long.Parse(txtExpenseAmount.Text);
+			SelectedExpense.Date = AccountancyApplication.SelectedDate;
+			SelectedExpense.Category = selectedCategory;
+
+			SelectedExpense.UpdateUnderlyingData();
+			AccountancyApplication.UpdateExpense(SelectedExpense);
+		}
+
+		private void btnExpenseRemove_Click(object sender, RoutedEventArgs e)
+		{
+			if (null == SelectedExpense)
+				return;
+			AccountancyApplication.DeleteExpense(SelectedExpense);
+		}
 	}
 }

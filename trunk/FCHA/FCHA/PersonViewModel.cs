@@ -60,5 +60,10 @@ namespace FCHA
 		{
 			m_underlyingData = new Person(Name, FullName, m_underlyingData.personId);
 		}
+
+		public override string ToString()
+		{
+			return Name;
+		}
 	}
 }

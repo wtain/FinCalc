@@ -66,6 +66,7 @@
     </ApplicationDefinition>
     <Compile Include="Account.cs" />
     <Compile Include="AccountancyApplication.cs" />
+    <Compile Include="AccountBalance.cs" />
     <Compile Include="AccountDialog.xaml.cs">
       <DependentUpon>AccountDialog.xaml</DependentUpon>
     </Compile>
@@ -74,6 +75,8 @@
     <Compile Include="Category.cs" />
     <Compile Include="CategoryViewModel.cs" />
     <Compile Include="Expense.cs" />
+    <Compile Include="ExpensesManager.cs" />
+    <Compile Include="ExpenseViewModel.cs" />
     <Compile Include="OlapStage.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PersonViewModel.cs" />

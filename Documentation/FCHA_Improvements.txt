@@ -89,3 +89,29 @@ todo: remove from caches
 group dates in OLAP - week, month, year
 
 trees for olap filters, utilise Grid
+
+
+UnderlyingData.accountId -> AccountId
+AccountBalance -> AccountState
+
+why caching? may be it is not useful since we load all items always?
+
+todo: move categories or remove seqno
+
+todo: triggers for deleting user or account - check accounts and expenses
+
+todo: manage categories - one VM object should exist (currently - two - one in teh tree and one in the all list)
+
+account can live without a person
+
+todo: common classes for managers and viewmodels
+
+todo: messagex instead of silent failures and returns
+
+todo: change expense account - synch combobox
+
+todo: sort and group expenses + filter
+
+todo: date format validation
+
+todo: test tricky cases when changing or removing account - what happens to expenses both in database and in view

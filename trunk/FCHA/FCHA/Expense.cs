@@ -9,12 +9,12 @@ namespace FCHA
 	{
 		public long expenseId;
 		public long accountId;
-		public decimal amount;
+		public long amount;
 		public long categoryId;
 		public DateTime date;
 		public string description;
 
-		public Expense(long expenseId, long accountId, decimal amount, long categoryId, DateTime date, string description)
+		public Expense(long expenseId, long accountId, long amount, long categoryId, DateTime date, string description)
 		{
 			this.expenseId = expenseId;
 			this.accountId = accountId;

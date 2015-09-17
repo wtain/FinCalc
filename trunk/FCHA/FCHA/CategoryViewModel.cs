@@ -44,14 +44,24 @@ namespace FCHA
 			get { return m_parent; }
 		}
 
-		public CategoryViewModel(CategoriesManager categoriesManager, CategoryViewModel parent, Category category)
+		public CategoryViewModel(Category category)
 		{
 			m_underlyingData = category;
 			Name = m_underlyingData.name;
+		}
+
+		public CategoryViewModel(CategoriesManager categoriesManager, CategoryViewModel parent, Category category)
+			: this(category)
+		{
 			m_categoriesManager = categoriesManager;
 			m_parent = parent;
 
 			Children = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumCategoriesByParent(UnderlyingData.categoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c)));
+		}
+
+		public override string ToString()
+		{
+			return Name;
 		}
 	}
 }

@@ -31,6 +31,12 @@ namespace FCHA
 		public static readonly DependencyProperty AccountTypeProperty =
 			DependencyProperty.Register("AccountType", typeof(AccountType), typeof(AccountViewModel));
 
+		public static readonly DependencyProperty BalanceProperty =
+			DependencyProperty.Register("Balance", typeof(long), typeof(AccountViewModel));
+
+		public static readonly DependencyProperty LastUpdatedProperty =
+			DependencyProperty.Register("LastUpdated", typeof(DateTime), typeof(AccountViewModel));
+
 		public string Name
 		{
 			get { return (string)GetValue(NameProperty); }
@@ -55,6 +61,18 @@ namespace FCHA
 			set { SetValue(AccountTypeProperty, value); }
 		}
 
+		public long Balance
+		{
+			get { return (long)GetValue(BalanceProperty); }
+			set { SetValue(BalanceProperty, value); }
+		}
+
+		public DateTime LastUpdated
+		{
+			get { return (DateTime)GetValue(LastUpdatedProperty); }
+			set { SetValue(LastUpdatedProperty, value); }
+		}
+
 		public AccountViewModel(Account account, AccountancyApplication accountancyApplication)
 			: this(account, accountancyApplication, accountancyApplication.GetPerson(account.ownerPersonId))
 		{
@@ -69,6 +87,8 @@ namespace FCHA
 			Currency = account.currency;
 			AccountType = account.type;
 			Owner = owner;
+
+			UpdateAccountState();
 		}
 
 		public void UpdateUnderlyingData()
@@ -79,6 +99,18 @@ namespace FCHA
 				Owner.UserAccounts.Add(this);
 			}
 			m_underlyingData = new Account(m_underlyingData.accountId, Currency, Owner.UnderlyingData.personId, Name, AccountType);
+		}
+
+		public void UpdateAccountState()
+		{
+			AccountBalance state = m_accountancyApplication.GetAccountState(this);
+			Balance = state.balance;
+			LastUpdated = state.lastUpdated;
+		}
+
+		public override string ToString()
+		{
+			return Name;
 		}
 	}
 }
