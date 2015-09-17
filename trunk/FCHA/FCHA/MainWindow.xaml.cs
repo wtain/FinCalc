@@ -168,8 +168,8 @@ namespace FCHA
 			CategoryViewModel selectedCategory = cboExpenseCategory.SelectedItem as CategoryViewModel;
 			if (null == selectedCategory)
 				return;
-			Expense ex = new Expense(0, AccountancyApplication.SelectedAccount.UnderlyingData.accountId,
-									long.Parse(txtExpenseAmount.Text), selectedCategory.UnderlyingData.categoryId,
+			Expense ex = new Expense(0, AccountancyApplication.SelectedAccount.AccountId,
+									long.Parse(txtExpenseAmount.Text), selectedCategory.CategoryId,
 									AccountancyApplication.SelectedDate, txtExpenseDescription.Text);
 			AccountancyApplication.AddExpense(new ExpenseViewModel(ex, AccountancyApplication));
 		}

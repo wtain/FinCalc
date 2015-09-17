@@ -158,7 +158,7 @@ namespace FCHA
 
 		public void AddChildCategory(CategoryViewModel category, string name)
 		{
-			long catId = m_categoriesManager.AddCategory(name, category.UnderlyingData.categoryId);
+			long catId = m_categoriesManager.AddCategory(name, category.CategoryId);
 			Category c = new Category(name, catId);
 			category.Children.Add(new CategoryViewModel(m_categoriesManager, category, c));
 			Categories.Add(new CategoryViewModel(c));
@@ -166,7 +166,7 @@ namespace FCHA
 
 		public CategoryViewModel GetCategory(long categoryId)
 		{
-			return Categories.Where(c => c.UnderlyingData.categoryId == categoryId).FirstOrDefault();
+			return Categories.Where(c => c.CategoryId == categoryId).FirstOrDefault();
 		}
 
 		public void RenameCategory(CategoryViewModel category, string newName)
@@ -175,14 +175,14 @@ namespace FCHA
 			cat.name = newName;
 			m_categoriesManager.UpdateCategory(cat);
 			category.Name = newName;
-			GetCategory(category.UnderlyingData.categoryId).Name = newName;
+			GetCategory(category.CategoryId).Name = newName;
 		}
 
 		public void RemoveCategory(CategoryViewModel category)
 		{
 			m_categoriesManager.DeleteCategory(category.UnderlyingData);
 			category.Parent.Children.Remove(category);
-			Categories.Remove(GetCategory(category.UnderlyingData.categoryId));
+			Categories.Remove(GetCategory(category.CategoryId));
 		}
 
 		public PersonViewModel NewPerson()
@@ -207,13 +207,13 @@ namespace FCHA
 		public void RemovePerson(PersonViewModel person)
 		{
 			m_usersManager.DeleteUser(person.UnderlyingData);
-			m_personCache.Remove(person.UnderlyingData.personId);
+			m_personCache.Remove(person.PersonId);
 			Users.Remove(person);
 		}
 
 		public AccountViewModel CreateAccount(PersonViewModel person)
 		{
-			return new AccountViewModel(Account.CreateDefault(null != person ? person.UnderlyingData.personId : 0), this);
+			return new AccountViewModel(Account.CreateDefault(null != person ? person.PersonId : 0), this);
 		}
 
 		public IEnumerable<AccountViewModel> EnumUserAccounts(PersonViewModel person)
@@ -227,7 +227,7 @@ namespace FCHA
 			m_accountsManager.AddAccount(ref refAccount);
 			account.UnderlyingData = refAccount;
 			account.Owner.UserAccounts.Add(account);
-			m_accountCache.Add(account.UnderlyingData.accountId, account);
+			m_accountCache.Add(account.AccountId, account);
 		}
 
 		public void UpdateAccount(AccountViewModel account)
@@ -239,12 +239,12 @@ namespace FCHA
 		{
 			m_accountsManager.DeleteAccount(account.UnderlyingData);
 			account.Owner.UserAccounts.Remove(account);
-			m_accountCache.Remove(account.UnderlyingData.accountId);
+			m_accountCache.Remove(account.AccountId);
 		}
 
 		public AccountBalance GetAccountState(AccountViewModel account)
 		{
-			return m_accountsManager.GetAccountBalance(account.UnderlyingData.accountId);
+			return m_accountsManager.GetAccountBalance(account.AccountId);
 		}
 
 		public void AddExpense(ExpenseViewModel expense)
@@ -259,8 +259,8 @@ namespace FCHA
 		public void UpdateExpense(ExpenseViewModel expense)
 		{
 			AccountViewModel oldAccount = null;
-			if (expense.Account.UnderlyingData.accountId != expense.UnderlyingData.accountId)
-				oldAccount = GetAccount(expense.UnderlyingData.accountId);
+			if (expense.Account.AccountId != expense.AccountId)
+				oldAccount = GetAccount(expense.AccountId);
 			expense.UpdateUnderlyingData();
 			m_expensesManager.UpdateExpense(expense.UnderlyingData);
 			expense.Account.UpdateAccountState();

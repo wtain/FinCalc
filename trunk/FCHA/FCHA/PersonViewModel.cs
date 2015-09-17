@@ -20,6 +20,11 @@ namespace FCHA
 			set { m_underlyingData = value; }
 		}
 
+		public long PersonId
+		{
+			get { return UnderlyingData.personId; }
+		}
+
 		public static readonly DependencyProperty NameProperty =
 			DependencyProperty.Register("Name", typeof(string), typeof(PersonViewModel));
 

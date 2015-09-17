@@ -21,6 +21,11 @@ namespace FCHA
 			get { return m_underlyingData; }
 		}
 
+		public long CategoryId
+		{
+			get { return UnderlyingData.categoryId; }
+		}
+
 		public static readonly DependencyProperty NameProperty =
 			DependencyProperty.Register("Name", typeof(string), typeof(CategoryViewModel));
 
@@ -56,7 +61,7 @@ namespace FCHA
 			m_categoriesManager = categoriesManager;
 			m_parent = parent;
 
-			Children = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumCategoriesByParent(UnderlyingData.categoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c)));
+			Children = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumCategoriesByParent(CategoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c)));
 		}
 
 		public override string ToString()

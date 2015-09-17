@@ -19,6 +19,16 @@ namespace FCHA
 			set { m_underlyingData = value; }
 		}
 
+		public long OwnerPersonId
+		{
+			get { return UnderlyingData.ownerPersonId; }
+		}
+
+		public long AccountId
+		{
+			get { return UnderlyingData.accountId; }
+		}
+
 		public static readonly DependencyProperty NameProperty =
 			DependencyProperty.Register("Name", typeof(string), typeof(AccountViewModel));
 
@@ -93,12 +103,12 @@ namespace FCHA
 
 		public void UpdateUnderlyingData()
 		{
-			if (Owner.UnderlyingData.personId != UnderlyingData.ownerPersonId)
+			if (Owner.PersonId != OwnerPersonId)
 			{
-				m_accountancyApplication.GetPerson(UnderlyingData.ownerPersonId).UserAccounts.Remove(this);
+				m_accountancyApplication.GetPerson(OwnerPersonId).UserAccounts.Remove(this);
 				Owner.UserAccounts.Add(this);
 			}
-			m_underlyingData = new Account(m_underlyingData.accountId, Currency, Owner.UnderlyingData.personId, Name, AccountType);
+			m_underlyingData = new Account(AccountId, Currency, Owner.PersonId, Name, AccountType);
 		}
 
 		public void UpdateAccountState()

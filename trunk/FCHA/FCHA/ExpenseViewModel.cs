@@ -61,6 +61,11 @@ namespace FCHA
 			set { m_underlyingData = value; }
 		}
 
+		public long AccountId
+		{
+			get { return UnderlyingData.accountId; }
+		}
+
 		public ExpenseViewModel(Expense e, AccountancyApplication app)
 		{
 			Account = app.GetAccount(e.accountId);
@@ -74,7 +79,7 @@ namespace FCHA
 
 		public void UpdateUnderlyingData()
 		{
-			m_underlyingData = new Expense(m_underlyingData.expenseId, Account.UnderlyingData.accountId, Amount, Category.UnderlyingData.categoryId, Date, Description);
+			m_underlyingData = new Expense(m_underlyingData.expenseId, Account.AccountId, Amount, Category.CategoryId, Date, Description);
 		}
 	}
 }
