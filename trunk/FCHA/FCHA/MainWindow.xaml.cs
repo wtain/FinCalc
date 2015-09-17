@@ -192,7 +192,6 @@ namespace FCHA
 			SelectedExpense.Date = AccountancyApplication.SelectedDate;
 			SelectedExpense.Category = selectedCategory;
 
-			SelectedExpense.UpdateUnderlyingData();
 			AccountancyApplication.UpdateExpense(SelectedExpense);
 		}
 

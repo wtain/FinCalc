@@ -115,3 +115,7 @@ todo: sort and group expenses + filter
 todo: date format validation
 
 todo: test tricky cases when changing or removing account - what happens to expenses both in database and in view
+
+expense sign - income???
+
+todo: colors for amounts

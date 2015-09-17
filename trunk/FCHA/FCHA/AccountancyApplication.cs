@@ -119,7 +119,6 @@ namespace FCHA
 
 		public PersonViewModel GetPerson(long personId)
 		{
-			// ?? GetPersonFromCache
 			if (!m_personCache.ContainsKey(personId))
 				m_personCache[personId] = new PersonViewModel(m_usersManager.GetUser(personId), this);
 			return m_personCache[personId];
@@ -254,17 +253,26 @@ namespace FCHA
 			m_expensesManager.AddExpense(ref refExpense);
 			expense.UnderlyingData = refExpense;
 			Expenses.Add(expense);
+			expense.Account.UpdateAccountState();
 		}
 
 		public void UpdateExpense(ExpenseViewModel expense)
 		{
+			AccountViewModel oldAccount = null;
+			if (expense.Account.UnderlyingData.accountId != expense.UnderlyingData.accountId)
+				oldAccount = GetAccount(expense.UnderlyingData.accountId);
+			expense.UpdateUnderlyingData();
 			m_expensesManager.UpdateExpense(expense.UnderlyingData);
+			expense.Account.UpdateAccountState();
+			if (null != oldAccount)
+				oldAccount.UpdateAccountState();
 		}
 
 		public void DeleteExpense(ExpenseViewModel expense)
 		{
 			m_expensesManager.DeleteExpense(expense.UnderlyingData);
 			Expenses.Remove(expense);
+			expense.Account.UpdateAccountState();
 		}
 	}
 }

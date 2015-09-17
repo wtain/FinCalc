@@ -1,11 +1,9 @@
 BEGIN TRANSACTION;
-CREATE TABLE "expenses" (
-	`ExpenseId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+CREATE TABLE "AccountBalance" (
+	`BalanceId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`AccountId`	INTEGER NOT NULL,
-	`Amount`	INTEGER NOT NULL,
-	`CategoryId`	INTEGER NOT NULL,
-	`Date`	TEXT NOT NULL,
-	`Description`	TEXT
+	`LastUpdatedDate`	TEXT NOT NULL,
+	`Value`	INTEGER NOT NULL
 );
 CREATE TRIGGER persons_after_delete_trigger
 AFTER DELETE
@@ -19,9 +17,14 @@ ON expenses
 BEGIN
 	UPDATE AccountBalance 
 		 SET 
-			Value=Value - OLD.Amount + NEW.Amount, 
-			LastUpdatedDate = NEW.date
+			Value=Value + OLD.Amount, 
+			LastUpdatedDate = datetime('now')
 		 WHERE AccountId = OLD.AccountId;
+	UPDATE AccountBalance 
+		 SET 
+			Value=Value - NEW.Amount, 
+			LastUpdatedDate = date('now')
+		 WHERE AccountId = NEW.AccountId;
 END;
 CREATE TRIGGER expenses_insert_after_trigger
 AFTER INSERT 
@@ -29,8 +32,8 @@ ON expenses
 BEGIN
 	UPDATE AccountBalance 
 		 SET 
-			Value=Value + NEW.Amount, 
-			LastUpdatedDate = NEW.Date
+			Value=Value - NEW.Amount, 
+			LastUpdatedDate = datetime('now')
 		 WHERE AccountId = NEW.AccountId;
 END;
 CREATE TRIGGER expenses_delete_after_trigger
@@ -39,8 +42,8 @@ ON expenses
 BEGIN
 	UPDATE AccountBalance 
 		 SET 
-			Value=Value - OLD.Amount, 
-			LastUpdatedDate = date('now')
+			Value=Value + OLD.Amount, 
+			LastUpdatedDate = datetime('now')
 		 WHERE AccountId = OLD.AccountId;
 END;
 CREATE TRIGGER categories_view_insert_trigger
@@ -95,7 +98,7 @@ CREATE TRIGGER categories_before_delete_trigger
 BEFORE DELETE 
 ON categories
 BEGIN
-	SELECT RAISE(ABORT, 'Category is referenced in  expenses')
+	SELECT RAISE(ABORT, 'Category is referenced in expenses')
 	WHERE EXISTS (SELECT * FROM expenses WHERE CategoryId=OLD.CategoryId);
 END;
 CREATE TRIGGER accounts_insert_after_trigger
