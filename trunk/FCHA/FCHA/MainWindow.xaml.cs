@@ -202,4 +202,126 @@ namespace FCHA
 			AccountancyApplication.DeleteExpense(SelectedExpense);
 		}
 	}
+
+	public class MoneyAmountTextToColorConverter : IValueConverter
+	{
+		private static MoneyAmountTextToColorConverter m_instance;
+
+		public static MoneyAmountTextToColorConverter Instance
+		{
+			get
+			{
+				if (null == m_instance)
+					m_instance = new MoneyAmountTextToColorConverter();
+				return m_instance;
+			}
+		}
+
+		private Brush GetBrush(bool isNegative)
+		{
+			return isNegative ? Brushes.Red : Brushes.Green;
+		}
+
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			string str = value as string;
+			if (!str.IsNull())
+				return GetBrush(!str.IsEmpty() ? ('-' == str[0]) : false);
+			int v = (int)value;
+			return GetBrush(v < 0);
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			throw new NotImplementedException("ConvertBack");
+		}
+	}
+
+	public static class StringExtensions
+	{
+		public static bool IsNullOrEmpty(this string str)
+		{
+			return string.IsNullOrEmpty(str);
+		}
+
+		public static bool IsNull(this string str)
+		{
+			return null == str;
+		}
+
+		public static bool IsEmpty(this string str)
+		{
+			return string.Empty == str;
+		}
+	}
+
+	public class AccountTypeToImageConverter : IValueConverter
+	{
+		private static AccountTypeToImageConverter m_instance;
+
+		public static AccountTypeToImageConverter Instance
+		{
+			get
+			{
+				if (null == m_instance)
+					m_instance = new AccountTypeToImageConverter();
+				return m_instance;
+			}
+		}
+
+		private ImageSource m_cardImage;
+		private ImageSource m_cashImage;
+		private ImageSource m_depositImage;
+
+		public ImageSource CardImage
+		{
+			get
+			{
+				if (null == m_cardImage)
+					m_cardImage = (ImageSource) Application.Current.FindResource("CreditCardIcon");
+				return m_cardImage;
+			}
+		}
+
+		public ImageSource CashImage
+		{
+			get
+			{
+				if (null == m_cashImage)
+					m_cashImage = (ImageSource)Application.Current.FindResource("CoinsIcon");
+				return m_cashImage;
+			}
+		}
+
+		public ImageSource DepositImage
+		{
+			get
+			{
+				if (null == m_depositImage)
+					m_depositImage = (ImageSource)Application.Current.FindResource("CashRegisterIcon");
+				return m_depositImage;
+			}
+		}
+
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			AccountType type = (AccountType)value;
+			switch (type)
+			{
+				case AccountType.Cash:
+					return CashImage;
+				case AccountType.CreditCard:
+				case AccountType.DebetCard:
+					return CardImage;
+				case AccountType.Deposit:
+					return DepositImage;
+			}
+			return null;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			throw new NotImplementedException("ConvertBack");
+		}
+	}
 }

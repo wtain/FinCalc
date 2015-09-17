@@ -3,6 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Shopping cart.png" x:Key="ShoppingCartIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Credit card.png " x:Key="CreditCardIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Coins.png" x:Key="CoinsIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Cash register.png" x:Key="CashRegisterIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Calculator.png" x:Key="CalculatorIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Bar chart.png" x:Key="BarChartIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/People.png" x:Key="PeopleIcon" />
     </Application.Resources>
 </Application>

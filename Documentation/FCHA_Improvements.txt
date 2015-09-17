@@ -118,3 +118,13 @@ todo: test tricky cases when changing or removing account - what happens to expe
 expense sign - income???
 
 todo: colors for amounts
+
+todo: commands & commandmanager
+
+
+user setting: domestic currency
+
+creditcard state
+
+
+MUI or russify
