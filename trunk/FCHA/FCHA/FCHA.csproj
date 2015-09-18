@@ -39,6 +39,9 @@
   <PropertyGroup>
     <StartupObject>FCHA.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icons\FCHA.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="SQLite.Designer, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,10 +80,16 @@
     <Compile Include="Expense.cs" />
     <Compile Include="ExpensesManager.cs" />
     <Compile Include="ExpenseViewModel.cs" />
+    <Compile Include="OlapBuilder.cs" />
+    <Compile Include="OlapDimensionsTree.cs" />
     <Compile Include="OlapStage.cs" />
+    <Compile Include="OlapView.xaml.cs">
+      <DependentUpon>OlapView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Person.cs" />
     <Compile Include="PersonViewModel.cs" />
     <Compile Include="QueryBuilder.cs" />
+    <Compile Include="TempTable.cs" />
     <Compile Include="UserInfoDialog.xaml.cs">
       <DependentUpon>UserInfoDialog.xaml</DependentUpon>
     </Compile>
@@ -109,6 +118,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="OlapView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserInfoDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -149,6 +162,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\People.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Flag of European Union.png" />
+    <Resource Include="Icons\Flag of Russia.png" />
+    <Resource Include="Icons\Flag of United Kingdom.png" />
+    <Resource Include="Icons\Flag of United States.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\FCHA.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

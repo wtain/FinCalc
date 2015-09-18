@@ -11,6 +11,6 @@ BEGIN
 	UPDATE AccountBalance 
 		 SET 
 			Value=Value - NEW.Amount, 
-			LastUpdatedDate = date('now')
+			LastUpdatedDate = datetime('now')
 		 WHERE AccountId = NEW.AccountId;
 END;

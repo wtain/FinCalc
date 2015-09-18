@@ -3,14 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:FCHA"
         Title="Financial Calculator &amp; Home Accountancy" 
-        Height="350" Width="525" 
+        Height="420" Width="800" 
         Name="winMain"
+        Icon="{StaticResource CoinsIcon}"
         DataContext="{Binding AccountancyApplication, ElementName=winMain}">
-    <Window.Resources>
-        <Style TargetType="TextBlock" x:Key="MoneyAmountTextStyle">
-            <Setter Property="Foreground" Value="{Binding Text, RelativeSource={RelativeSource Self}, Converter={x:Static local:MoneyAmountTextToColorConverter.Instance}}" />
+    <Window.Style>
+        <Style TargetType="FrameworkElement">
+            <Setter Property="Margin" Value="2" />
         </Style>
-    </Window.Resources>
+    </Window.Style>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -119,8 +120,11 @@
                                 </Grid.ColumnDefinitions>
                                 
                                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Currency" />
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Currency, Mode=OneWay}" />
-
+                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                                    <Image Source="{Binding Currency, Mode=OneWay, Converter={x:Static local:CurrencyToImageConverter.Instance}}" Height="24" Width="24" />
+                                    <TextBlock Text="{Binding Currency, Mode=OneWay}" VerticalAlignment="Center" />
+                                </StackPanel>
+                                
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Type" />
                                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AccountType, Mode=OneWay}" />
 
@@ -243,6 +247,9 @@
                             <TextBlock Text="Statistics" />
                         </StackPanel>
                     </TabItem.Header>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
+                        <ContentControl Content="{Binding OlapView}" />
+                    </ScrollViewer>
                 </TabItem>
 
                 <TabItem Name="tiLoanCalculator">

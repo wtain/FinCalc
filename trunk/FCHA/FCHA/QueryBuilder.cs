@@ -8,19 +8,39 @@ namespace FCHA
 {
 	public static class QueryBuilder
 	{
-		public static readonly string DateFormat = "dd-MMM-yyyy";
-		
-		public static string Select(string[] fields, string tableName, params string[] filters)
+		public static readonly string DateFormat = "yyyy-MM-dd";
+
+		private static long tempTableCount = 0;
+
+		public static string GenerateTempTableName()
 		{
-			Debug.Assert(filters.Length % 2 == 0);
+			return string.Format("temptable{0}", tempTableCount++);
+		}
+
+		private static string SelectStatement(string[] fields, string tableName)
+		{
 			StringBuilder sb = new StringBuilder("SELECT ");
 			if (0 == fields.Length)
 				sb.Append("*");
 			else
 				sb.Append(string.Join<string>(", ", fields));
 			sb.AppendFormat(" FROM {0}", tableName);
+			return sb.ToString();
+		}
+		
+		public static string Select(string[] fields, string tableName, params string[] filters)
+		{
+			StringBuilder sb = new StringBuilder(SelectStatement(fields, tableName));
+			Debug.Assert(filters.Length % 2 == 0);
 			if (0 != filters.Length)
 				sb.AppendFormat(" WHERE {0}", FiltersCondition(filters));
+			return sb.ToString();
+		}
+
+		public static string Select(string[] fields, string tableName, IEnumerable<KeyValuePair<string, string>> filters)
+		{
+			StringBuilder sb = new StringBuilder(SelectStatement(fields, tableName));
+			sb.Append(WhereClause(filters));
 			return sb.ToString();
 		}
 
@@ -85,23 +105,58 @@ namespace FCHA
 			return sb.ToString();
 		}
 
+		public static string WhereClause(IEnumerable<KeyValuePair<string, string>> filters)
+		{
+			StringBuilder sb = new StringBuilder();
+			int i = 0;
+			foreach (var filter in filters)
+			{
+				if (0 != i)
+					sb.Append(" AND ");
+				else
+					sb.Append(" WHERE ");
+				sb.AppendFormat("{0}={1}", filter.Key, filter.Value);
+				++i;
+			}
+			return sb.ToString();
+		}
+
 		public static string BuildOlapStage(string tableName, OlapStage stage)
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.Append(Select(stage.aggregations.Union(stage.left).Union(stage.top).ToArray(), tableName));
 			if (stage.left.Length > 0 || stage.top.Length > 0)
-				sb.AppendFormat("GROUP BY {0}", string.Join(", ", stage.left.Union(stage.top)));
+				sb.AppendFormat(" GROUP BY {0}", string.Join(", ", stage.left.Union(stage.top)));
 			return sb.ToString();
 		}
 
-		public static string BuildOlapLeftDimensions(string tableName, OlapStage stage)
+		public static string BuildOlapDimensions(string tableName, string column, LinkedList<KeyValuePair<string, string>> filters)
 		{
-			return string.Format("SELECT DISTINCT {0} FROM {1}", string.Join(", ", stage.left), tableName);
+			return string.Format("SELECT DISTINCT {0} FROM {1} {2}", column, tableName, WhereClause(filters.ToArray()));
 		}
 
-		public static string BuildOlapTopDimensions(string tableName, OlapStage stage)
+		public static string CreateTempTableAsSelect(string tableName, string select)
 		{
-			return string.Format("SELECT DISTINCT {0} FROM {1}", string.Join(", ", stage.top), tableName);
+			return string.Format("CREATE TEMP TABLE {0} AS {1}", tableName, select);
+		}
+
+		public static string DropTable(string tableName)
+		{
+			return string.Format("DROP TABLE {0}", tableName);
+		}
+
+		public static string SelectJoin(string table1, string table2, string key1, string key2, string[] columns1, string[] columns2)
+		{
+			StringBuilder sb = new StringBuilder("SELECT ");
+			
+			sb.AppendFormat("{0}, {1}", 
+					string.Join(", ", columns1.Select(c => string.Format("t1.{0}", c))),
+					string.Join(", ", columns2.Select(c => string.Format("t2.{0}", c)))
+				);
+
+			sb.AppendFormat(" FROM {0} t1 LEFT JOIN {1} t2 ON t1.{2}=t2.{3}", table1, table2, key1, key2);
+
+			return sb.ToString();
 		}
 	}
 }

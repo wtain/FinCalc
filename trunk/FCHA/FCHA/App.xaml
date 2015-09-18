@@ -1,6 +1,7 @@
 ﻿<Application x:Class="FCHA.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:FCHA"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Shopping cart.png" x:Key="ShoppingCartIcon" />
@@ -10,5 +11,13 @@
         <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Calculator.png" x:Key="CalculatorIcon" />
         <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Bar chart.png" x:Key="BarChartIcon" />
         <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/People.png" x:Key="PeopleIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Flag of European Union.png" x:Key="EURIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Flag of Russia.png" x:Key="RUBIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Flag of United Kingdom.png" x:Key="GBPIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Flag of United States.png" x:Key="USDIcon" />
+
+        <Style TargetType="TextBlock" x:Key="MoneyAmountTextStyle">
+            <Setter Property="Foreground" Value="{Binding Text, RelativeSource={RelativeSource Self}, Converter={x:Static local:MoneyAmountTextToColorConverter.Instance}}" />
+        </Style>
     </Application.Resources>
 </Application>

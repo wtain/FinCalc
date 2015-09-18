@@ -128,3 +128,19 @@ creditcard state
 
 
 MUI or russify
+
+hierarchical requests for categories in olap
+
+virtualization
+asynchronization
+
+olap building - add ordering and assume it - iterate over aggregated temptable data - each line is a cell in OLAP view
+
++ totals
++ multidimensional
+
+App.Current.FindResource(xxx) -> App.Current.XXX
+
+lastupdateddate must be consistent either always date or datetime
+
+UpdateStatistics

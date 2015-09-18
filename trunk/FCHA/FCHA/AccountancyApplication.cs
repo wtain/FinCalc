@@ -44,6 +44,9 @@ namespace FCHA
 		public static readonly DependencyProperty SelectedAccountProperty =
 			DependencyProperty.Register("SelectedAccount", typeof(AccountViewModel), typeof(AccountancyApplication));
 
+		public static readonly DependencyProperty OlapViewProperty =
+			DependencyProperty.Register("OlapView", typeof(OlapView), typeof(AccountancyApplication));
+
 		public CategoryViewModel VirtualRoot
 		{
 			get { return (CategoryViewModel)GetValue(VirtualRootProperty); }
@@ -91,6 +94,12 @@ namespace FCHA
 			get { return (AccountViewModel)GetValue(SelectedAccountProperty); }
 			set { SetValue(SelectedAccountProperty, value); }
 		}
+
+		public OlapView OlapView
+		{
+			get { return (OlapView)GetValue(OlapViewProperty); }
+			set { SetValue(OlapViewProperty, value); }
+		}
 		
 		public AccountancyApplication(SQLiteConnection connection)
 		{
@@ -115,6 +124,7 @@ namespace FCHA
 				if (SelectedUser.UserAccounts.Count > 0)
 					SelectedAccount = SelectedUser.UserAccounts[0];
 			}
+			OlapView = new OlapView(m_connection, "ExpenseByCategory", new OlapStage("Date", "Category", "Amount"));
 		}
 
 		public PersonViewModel GetPerson(long personId)
@@ -159,7 +169,7 @@ namespace FCHA
 		public void AddChildCategory(CategoryViewModel category, string name)
 		{
 			long catId = m_categoriesManager.AddCategory(name, category.CategoryId);
-			Category c = new Category(name, catId);
+			Category c = new Category(name, catId, category.CategoryId);
 			category.Children.Add(new CategoryViewModel(m_categoriesManager, category, c));
 			Categories.Add(new CategoryViewModel(c));
 		}
