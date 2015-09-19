@@ -15,16 +15,22 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="24" />
+            <RowDefinition Height="48" />
         </Grid.RowDefinitions>
         
         <TabControl Grid.Row="0">
             <TabControl.Items>
-                <TabItem Name="tiCategories" Header="Categories">
+                <TabItem Name="tiCategories">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{StaticResource CategoriesIcon}" Width="24" Height="24" />
+                            <TextBlock Text="Categories" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition />
-                            <RowDefinition Height="24" />
+                            <RowDefinition Height="48" />
                         </Grid.RowDefinitions>
 
                         <TreeView Grid.Row="0" 
@@ -37,10 +43,30 @@
                         </TreeView>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <Button Name="btnAdd" Click="btnAdd_Click" Content="Add" />
-                            <Button Name="btnAddChild" Click="btnAddChild_Click" Content="Add child" />
-                            <Button Name="btnRename" Click="btnRename_Click" Content="Rename" />
-                            <Button Name="btnRemove" Click="btnRemove_Click" Content="Remove" />
+                            <Button Name="btnAdd" Click="btnAdd_Click">
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="{StaticResource AddIcon}" Width="24" Height="24" />
+                                    <TextBlock Text="Add" />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="btnAddChild" Click="btnAddChild_Click">
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="{StaticResource AddChildIcon}" Width="24" Height="24" />
+                                    <TextBlock Text="Add child" />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="btnRename" Click="btnRename_Click">
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="{StaticResource UpdateIcon}" Width="24" Height="24" />
+                                    <TextBlock Text="Rename" />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="btnRemove" Click="btnRemove_Click">
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="{StaticResource DelIcon}" Width="24" Height="24" />
+                                    <TextBlock Text="Remove" />
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                     </Grid>                    
                 </TabItem>
@@ -48,24 +74,39 @@
                 <TabItem Name="tiUsers">
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource PeopleIcon}" Width="16" Height="16" />
-                            <TextBlock Text="Users" />
+                            <Image Source="{StaticResource PeopleIcon}" Width="24" Height="24" />
+                            <TextBlock Text="Users" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="24" />
+                            <RowDefinition Height="48" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <ComboBox Name="cboUsers" Width="150" 
+                            <ComboBox Name="cboUsers" Width="150" Height="24"
                                       ItemsSource="{Binding Users, Mode=OneWay}"
                                       SelectedItem="{Binding SelectedUser}"
                                       DisplayMemberPath="Name" />
-                            <Button Name="btnAddUser" Content="Add..." Click="btnAddUser_Click" />
-                            <Button Name="btnEditUser" Content="Edit..." Click="btnEditUser_Click" />
-                            <Button Name="btnRemoveUser" Content="Remove" Click="btnRemoveUser_Click" />
+                            <Button Name="btnAddUser" Click="btnAddUser_Click">
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="{StaticResource AddIcon}" Width="24" Height="24" />
+                                    <TextBlock Text="Add..." />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="btnEditUser" Click="btnEditUser_Click">
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="{StaticResource EditIcon}" Width="24" Height="24" />
+                                    <TextBlock Text="Edit..." />
+                                </StackPanel>
+                            </Button>
+                            <Button Name="btnRemoveUser" Click="btnRemoveUser_Click">
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="{StaticResource DelIcon}" Width="24" Height="24" />
+                                    <TextBlock Text="Remove" />
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
 
                         <Grid Grid.Row="1">
@@ -78,7 +119,7 @@
                             <Grid Grid.Column="0" Name="grdAccounts" Tag="{Binding SelectedAccount, Mode=TwoWay}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
-                                    <RowDefinition Height="24" />
+                                    <RowDefinition Height="48" />
                                 </Grid.RowDefinitions>
 
                                 <ListView Grid.Row="0" Name="listAccounts" IsSynchronizedWithCurrentItem="True"
@@ -89,17 +130,32 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="{Binding AccountType, Converter={x:Static local:AccountTypeToImageConverter.Instance}}" Height="16" Width="16" />
-                                                <TextBlock Text="{Binding Name}" />
+                                                <Image Source="{Binding AccountType, Converter={x:Static local:AccountTypeToImageConverter.Instance}}" Height="24" Width="24" />
+                                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
 
                                 <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                    <Button Name="btnAccountAdd" Content="Add..." Click="btnAccountAdd_Click" />
-                                    <Button Name="btnAccountChange" Content="Change..." Click="btnAccountChange_Click" />
-                                    <Button Name="btnAccountRemove" Content="Remove..." Click="btnAccountRemove_Click" />
+                                    <Button Name="btnAccountAdd" Click="btnAccountAdd_Click">
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="{StaticResource AddIcon}" Width="24" Height="24" />
+                                            <TextBlock Text="Add..." />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Name="btnAccountChange" Click="btnAccountChange_Click">
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="{StaticResource EditIcon}" Width="24" Height="24" />
+                                            <TextBlock Text="Change..." />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Name="btnAccountRemove" Click="btnAccountRemove_Click">
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="{StaticResource DelIcon}" Width="24" Height="24" />
+                                            <TextBlock Text="Remove..." />
+                                        </StackPanel>
+                                    </Button>
                                 </StackPanel>
                             </Grid>
 
@@ -141,26 +197,26 @@
                 <TabItem Name="tiExpenses">
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource CoinsIcon}" Width="16" Height="16" />
-                            <TextBlock Text="Expenses" />
+                            <Image Source="{StaticResource CoinsIcon}" Width="24" Height="24" />
+                            <TextBlock Text="Expenses" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="24" />
+                            <RowDefinition Height="48" />
                             <RowDefinition />
                             <RowDefinition Height="48" />
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Tag="{Binding SelectedAccount, Mode=TwoWay}" Name="spExpenses">
-                            <DatePicker SelectedDate="{Binding SelectedDate}" />
+                            <DatePicker SelectedDate="{Binding SelectedDate}" Height="24" />
 
-                            <ComboBox Name="cboExpenseUsers" Width="150" 
+                            <ComboBox Name="cboExpenseUsers" Width="150" Height="24"
                                       ItemsSource="{Binding Users, Mode=OneWay}" 
                                       SelectedItem="{Binding SelectedUser}"
                                       DisplayMemberPath="Name" />
 
-                            <ComboBox Name="cboExpenseAccounts" Width="150" 
+                            <ComboBox Name="cboExpenseAccounts" Width="150" Height="24"
                                                                 DataContext="{Binding SelectedUser}"
                                                                 ItemsSource="{Binding UserAccounts}"
                                                                 SelectedItem="{Binding (Control.Tag), ElementName=spExpenses, Mode=TwoWay}"
@@ -175,8 +231,8 @@
                                   ItemsSource="{Binding Expenses}"
                                   Name="dgExpenses">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Source Account" Binding="{Binding Account}" />
-                                <DataGridTemplateColumn Header="Account Owner">
+                                <DataGridTextColumn Header="Source Account" Binding="{Binding Account}" SortMemberPath="Account.Name" />
+                                <DataGridTemplateColumn Header="Account Owner" SortMemberPath="Account.Owner.Name">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock DataContext="{Binding Account}"
@@ -184,15 +240,15 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd-MMM-yyyy}" />
-                                <DataGridTemplateColumn Header="Amount">
+                                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd-MMM-yyyy}" SortMemberPath="Date" />
+                                <DataGridTemplateColumn Header="Amount" SortMemberPath="Amount">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Amount}" Style="{StaticResource MoneyAmountTextStyle}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Currency">
+                                <DataGridTemplateColumn Header="Currency" SortMemberPath="Account.Currency">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock DataContext="{Binding Account}"
@@ -200,8 +256,8 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Category" Binding="{Binding Category}" />
-                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+                                <DataGridTextColumn Header="Category" Binding="{Binding Category}" SortMemberPath="Category.Name" />
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" CanUserSort="False" />
                             </DataGrid.Columns>
                         </DataGrid>
                         
@@ -232,9 +288,24 @@
                                      Text="{Binding (Selector.SelectedItem).Description, ElementName=dgExpenses, Mode=OneWay}" />
                             
                             <StackPanel Grid.Column="3" Grid.RowSpan="2" Orientation="Horizontal">
-                                <Button Name="btnExpenseAdd" Content="Add" Click="btnExpenseAdd_Click" />
-                                <Button Name="btnExpenseChange" Content="Change" Click="btnExpenseChange_Click" />
-                                <Button Name="btnExpenseRemove" Content="Remove" Click="btnExpenseRemove_Click" />
+                                <Button Name="btnExpenseAdd" Click="btnExpenseAdd_Click">
+                                    <StackPanel Orientation="Vertical">
+                                        <Image Source="{StaticResource AddIcon}" Width="24" Height="24" />
+                                        <TextBlock Text="Add" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Name="btnExpenseChange" Click="btnExpenseChange_Click">
+                                    <StackPanel Orientation="Vertical">
+                                        <Image Source="{StaticResource UpdateIcon}" Width="24" Height="24" />
+                                        <TextBlock Text="Change" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Name="btnExpenseRemove" Click="btnExpenseRemove_Click">
+                                    <StackPanel Orientation="Vertical">
+                                        <Image Source="{StaticResource DelIcon}" Width="24" Height="24" />
+                                        <TextBlock Text="Remove" />
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -243,8 +314,8 @@
                 <TabItem Name="tiStatistics">
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource BarChartIcon}" Width="16" Height="16" />
-                            <TextBlock Text="Statistics" />
+                            <Image Source="{StaticResource BarChartIcon}" Width="24" Height="24" />
+                            <TextBlock Text="Statistics" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
@@ -255,20 +326,37 @@
                 <TabItem Name="tiLoanCalculator">
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="{StaticResource CalculatorIcon}" Width="16" Height="16" />
-                            <TextBlock Text="Loan calculator" />
+                            <Image Source="{StaticResource CalculatorIcon}" Width="24" Height="24" />
+                            <TextBlock Text="Loan calculator" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
                 </TabItem>
 
-                <TabItem Name="tiLiveInfo" Header="Live info">
+                <TabItem Name="tiLiveInfo">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{StaticResource LiveIcon}" Width="24" Height="24" />
+                            <TextBlock Text="Live info" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </TabItem.Header>
                 </TabItem>
             </TabControl.Items>
         </TabControl>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Stretch">
-            <Button Name="btnExit" Click="btnExit_Click" Content="Exit"/>
-            <TextBlock Text="{Binding DatabaseFileName, ElementName=winMain}" VerticalAlignment="Center" />
-        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" Text="{Binding DatabaseFileName, ElementName=winMain}" VerticalAlignment="Center" />
+
+            <Button Grid.Column="1" Name="btnExit" Click="btnExit_Click" Width="100" HorizontalAlignment="Right">
+                <StackPanel Orientation="Vertical">
+                    <Image Source="{StaticResource ShutdownIcon}" Width="24" Height="24" />
+                    <TextBlock Text="Exit" />
+                </StackPanel>
+            </Button>
+        </Grid>
     </Grid>
 </Window>

@@ -172,6 +172,22 @@
   <ItemGroup>
     <Resource Include="Icons\FCHA.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Categories.png" />
+    <Resource Include="Icons\Del.png" />
+    <Resource Include="Icons\Edit.png" />
+    <Resource Include="Icons\Live.png" />
+    <Resource Include="Icons\Shutdown.png" />
+    <Resource Include="Icons\Update.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Add.png" />
+    <Resource Include="Icons\AddChild.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Cancel.png" />
+    <Resource Include="Icons\Ok.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

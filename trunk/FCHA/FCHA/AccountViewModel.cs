@@ -113,6 +113,8 @@ namespace FCHA
 
 		public void UpdateAccountState()
 		{
+			if (0 == AccountId)
+				return;
 			AccountBalance state = m_accountancyApplication.GetAccountState(this);
 			Balance = state.balance;
 			LastUpdated = state.lastUpdated;

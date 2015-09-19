@@ -11,8 +11,18 @@
         
         <TextBox Name="txtValue" Grid.Column="0" Text="{Binding Mode=TwoWay, Path=Value, ElementName=dlgInputBox}" />
         
-        <Button Grid.Column="1" Content="OK" Name="btnOK" Click="btnOK_Click" IsDefault="True" />
+        <Button Grid.Column="1" Name="btnOK" Click="btnOK_Click" IsDefault="True">
+            <StackPanel Orientation="Vertical">
+                <Image Source="{StaticResource OkIcon}" Width="16" Height="16" />
+                <TextBlock Text="OK" />
+            </StackPanel>
+        </Button>
 
-        <Button Grid.Column="2" Content="Cancel" Name="btnCancel" Click="btnCancel_Click" IsCancel="True" />
+        <Button Grid.Column="2" Name="btnCancel" Click="btnCancel_Click" IsCancel="True">
+            <StackPanel Orientation="Vertical">
+                <Image Source="{StaticResource CancelIcon}" Width="16" Height="16" />
+                <TextBlock Text="Cancel" />
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>

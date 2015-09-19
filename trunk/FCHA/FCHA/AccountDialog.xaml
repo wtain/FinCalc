@@ -32,7 +32,18 @@
         <TextBlock Grid.Column="0" Grid.Row="3" Text="Currency:" />
         <ComboBox Grid.Column="1" Grid.Row="3" SelectedValue="{Binding AccountInfo.Currency, ElementName=winAccountDlg}" ItemsSource="{Binding Source={x:Static local:AccountDialog.Currencies}}" />
 
-        <Button Grid.Column="0" Grid.Row="4" Name="btnOK" IsDefault="True" Click="btnOK_Click" Content="OK" />
-        <Button Grid.Column="1" Grid.Row="4" Name="btnCancel" IsCancel="True"  Click="btnCancel_Click" Content="Cancel" />
+        <Button Grid.Column="0" Grid.Row="4" Name="btnOK" IsDefault="True" Click="btnOK_Click">
+            <StackPanel Orientation="Vertical">
+                <Image Source="{StaticResource OkIcon}" Width="16" Height="16" />
+                <TextBlock Text="OK" />
+            </StackPanel>
+        </Button>
+        
+        <Button Grid.Column="1" Grid.Row="4" Name="btnCancel" IsCancel="True"  Click="btnCancel_Click">
+            <StackPanel Orientation="Vertical">
+                <Image Source="{StaticResource CancelIcon}" Width="16" Height="16" />
+                <TextBlock Text="Cancel" />
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>

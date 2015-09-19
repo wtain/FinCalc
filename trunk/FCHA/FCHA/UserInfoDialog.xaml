@@ -19,8 +19,19 @@
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Full name:" />
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FullName}" TabIndex="2" Name="txtFullName" GotFocus="txtFullName_GotFocus" />
-        
-        <Button Grid.Row="2" Grid.Column="0" Content="OK" IsDefault="True" Name="btnOK" Click="btnOK_Click" TabIndex="3" />
-        <Button Grid.Row="2" Grid.Column="1" Content="Cancel" IsCancel="True" Name="btnCancel" Click="btnCancel_Click" TabIndex="4" />
+
+        <Button Grid.Row="2" Grid.Column="0" IsDefault="True" Name="btnOK" Click="btnOK_Click" TabIndex="3">
+            <StackPanel Orientation="Vertical">
+                <Image Source="{StaticResource OkIcon}" Width="16" Height="16" />
+                <TextBlock Text="OK" />
+            </StackPanel>
+        </Button>
+
+        <Button Grid.Row="2" Grid.Column="1" IsCancel="True" Name="btnCancel" Click="btnCancel_Click" TabIndex="4">
+            <StackPanel Orientation="Vertical">
+                <Image Source="{StaticResource CancelIcon}" Width="16" Height="16" />
+                <TextBlock Text="Cancel" />
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>

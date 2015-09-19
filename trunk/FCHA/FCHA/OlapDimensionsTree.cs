@@ -49,23 +49,28 @@ namespace FCHA
 
 		public delegate void LeavesIterationCallback(OlapDimensionsTree node, LinkedList<KeyValuePair<string, string>> filters);
 
-		public void IterateLeaves(LeavesIterationCallback cb)
+		public int IterateLeaves(LeavesIterationCallback cb)
 		{
 			LinkedList<KeyValuePair<string, string>> filters = new LinkedList<KeyValuePair<string, string>>();
-			IterateLeaves(cb, filters);
+			return IterateLeaves(cb, filters);
 		}
 
-		public void IterateLeaves(LeavesIterationCallback cb, LinkedList<KeyValuePair<string, string>> filters)
+		public int IterateLeaves(LeavesIterationCallback cb, LinkedList<KeyValuePair<string, string>> filters)
 		{
+			int rv = 0;
 			if (!name.IsEmpty())
 				filters.AddLast(new LinkedListNode<KeyValuePair<string, string>>(new KeyValuePair<string,string>(name, QueryBuilder.DecorateString(value))));
 			if (IsLeave)
+			{
 				cb(this, filters);
+				++rv;
+			}
 			else
 				foreach (OlapDimensionsTree node in children)
-					node.IterateLeaves(cb, filters);
+					rv += node.IterateLeaves(cb, filters);
 			if (!name.IsEmpty())
 				filters.RemoveLast();
+			return rv;
 		}
 	}
 }

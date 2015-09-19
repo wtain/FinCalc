@@ -136,11 +136,25 @@ asynchronization
 
 olap building - add ordering and assume it - iterate over aggregated temptable data - each line is a cell in OLAP view
 
-+ totals
 + multidimensional
 
-App.Current.FindResource(xxx) -> App.Current.XXX
 
 lastupdateddate must be consistent either always date or datetime
 
-UpdateStatistics
+solid grid lines?
+
+better refresh for olap view
+
+enable/disable for buttons
+
+! structure new thoughts
+
+styles for add/change/remove buttons
+
+for reporting - convert currencies
+
+cashflows -> expenses
+
+negate??
+
+currency exchange

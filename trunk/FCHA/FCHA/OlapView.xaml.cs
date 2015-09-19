@@ -20,6 +20,10 @@ namespace FCHA
 	/// </summary>
 	public partial class OlapView : UserControl
 	{
+		private SQLiteConnection m_conn;
+		private string m_tableName;
+		private OlapStage m_stage;
+
 		public static readonly DependencyProperty OlapViewPanelProperty =
 			DependencyProperty.Register("OlapViewPanel", typeof(Panel), typeof(OlapView));
 
@@ -31,8 +35,16 @@ namespace FCHA
 
 		public OlapView(SQLiteConnection conn, string tableName, OlapStage stage)
 		{
-			OlapViewPanel = OlapBuilder.BuildOlapView(conn, tableName, stage);
+			m_conn = conn;
+			m_tableName = tableName;
+			m_stage = stage;
+			RefreshView();
 			InitializeComponent();
+		}
+
+		public void RefreshView()
+		{
+			OlapViewPanel = OlapBuilder.BuildOlapView(m_conn, m_tableName, m_stage);
 		}
 	}
 }

@@ -264,6 +264,7 @@ namespace FCHA
 			expense.UnderlyingData = refExpense;
 			Expenses.Add(expense);
 			expense.Account.UpdateAccountState();
+			OlapView.RefreshView();
 		}
 
 		public void UpdateExpense(ExpenseViewModel expense)
@@ -276,6 +277,7 @@ namespace FCHA
 			expense.Account.UpdateAccountState();
 			if (null != oldAccount)
 				oldAccount.UpdateAccountState();
+			OlapView.RefreshView();
 		}
 
 		public void DeleteExpense(ExpenseViewModel expense)
@@ -283,6 +285,7 @@ namespace FCHA
 			m_expensesManager.DeleteExpense(expense.UnderlyingData);
 			Expenses.Remove(expense);
 			expense.Account.UpdateAccountState();
+			OlapView.RefreshView();
 		}
 	}
 }
