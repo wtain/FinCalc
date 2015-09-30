@@ -70,18 +70,19 @@ namespace FCHA
 
 				bool bLeftTotals = true;
 				bool bTopTotals = true;
+				bool bGrandTotals = true;
 				
 				Grid grid = new Grid();
 				grid.ShowGridLines = true;
 
 				foreach (var d in stage.left)
 					grid.ColumnDefinitions.Add(CreateColumn());
-				if (bLeftTotals)
+				if (bLeftTotals || bGrandTotals)
 					grid.ColumnDefinitions.Add(CreateColumn());
 
 				foreach (var d in stage.top)
 					grid.RowDefinitions.Add(CreateRow());
-				if (bTopTotals)
+				if (bTopTotals || bGrandTotals)
 					grid.RowDefinitions.Add(CreateRow());
 
 				leftTree.IterateLeaves((n, f) => grid.RowDefinitions.Add(CreateRow()));
@@ -102,6 +103,7 @@ namespace FCHA
 
 				long[] leftTotals = new long[nLeftTotals];
 				long[] topTotals = new long[nTopTotals];
+				long grandTotals = 0;
 
 				row = nStartRow;
 				leftTree.IterateLeaves((leftValue, leftFilters) =>
@@ -112,8 +114,12 @@ namespace FCHA
 						long val = olapStage.SelectData(leftFilters, topFilters, stage.aggregations[0]);
 						if (0 != val)
 						{
-							leftTotals[row - nStartRow] = leftTotals[row - nStartRow] + val;
-							topTotals[column - nStartColumn] = topTotals[column - nStartColumn] + val;
+							if (bLeftTotals)
+								leftTotals[row - nStartRow] = leftTotals[row - nStartRow] + val;
+							if (bTopTotals)
+								topTotals[column - nStartColumn] = topTotals[column - nStartColumn] + val;
+							if (bGrandTotals)
+								grandTotals += val;
 							grid.Children.Add(CreateCell(row, column, val.ToString(), false));
 						}
 						++column;
@@ -128,6 +134,9 @@ namespace FCHA
 				if (bTopTotals)
 					for (column = 0; column < nTopTotals; ++column)
 						grid.Children.Add(CreateCell(nStartRow + nLeftTotals, nStartColumn + column, topTotals[column].ToString(), false));
+
+				if (bGrandTotals)
+					grid.Children.Add(CreateCell(nStartRow + nLeftTotals, nStartColumn + nTopTotals, grandTotals.ToString(), false));
 
 				return grid;
 			}

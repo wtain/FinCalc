@@ -172,3 +172,7 @@ Function for sqlite for setting drill down level for categories?
 
 Not necessary to use udfs.
 Just use selected category as root.
+
+
+System.EntryPointNotFoundException crossed a native/managed boundary
+?
