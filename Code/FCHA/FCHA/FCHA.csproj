@@ -74,12 +74,12 @@
       <DependentUpon>AccountDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="AccountsManager.cs" />
-    <Compile Include="AccountViewModel.cs" />
+    <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="DataTypes\Category.cs" />
-    <Compile Include="CategoryViewModel.cs" />
+    <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="DataTypes\Expense.cs" />
     <Compile Include="ExpensesManager.cs" />
-    <Compile Include="ExpenseViewModel.cs" />
+    <Compile Include="ViewModels\ExpenseViewModel.cs" />
     <Compile Include="OlapBuilder.cs" />
     <Compile Include="OlapDimensionsTree.cs" />
     <Compile Include="OlapStage.cs" />
@@ -87,7 +87,7 @@
       <DependentUpon>OlapView.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataTypes\Person.cs" />
-    <Compile Include="PersonViewModel.cs" />
+    <Compile Include="ViewModels\PersonViewModel.cs" />
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="TempTable.cs" />
     <Compile Include="Dialogs\UserInfoDialog.xaml.cs">
