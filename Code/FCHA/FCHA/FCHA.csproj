@@ -73,12 +73,12 @@
     <Compile Include="Dialogs\AccountDialog.xaml.cs">
       <DependentUpon>AccountDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AccountsManager.cs" />
+    <Compile Include="Managers\AccountsManager.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="DataTypes\Category.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="DataTypes\Expense.cs" />
-    <Compile Include="ExpensesManager.cs" />
+    <Compile Include="Managers\ExpensesManager.cs" />
     <Compile Include="ViewModels\ExpenseViewModel.cs" />
     <Compile Include="OlapBuilder.cs" />
     <Compile Include="OlapDimensionsTree.cs" />
@@ -93,7 +93,7 @@
     <Compile Include="Dialogs\UserInfoDialog.xaml.cs">
       <DependentUpon>UserInfoDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UsersManager.cs" />
+    <Compile Include="Managers\UsersManager.cs" />
     <Page Include="Dialogs\AccountDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -110,7 +110,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CategoriesManager.cs" />
+    <Compile Include="Managers\CategoriesManager.cs" />
     <Compile Include="Dialogs\InputDialog.xaml.cs">
       <DependentUpon>InputDialog.xaml</DependentUpon>
     </Compile>
