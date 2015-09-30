@@ -47,7 +47,15 @@ namespace FCHA
 		public static readonly DependencyProperty OlapViewProperty =
 			DependencyProperty.Register("OlapView", typeof(OlapView), typeof(AccountancyApplication));
 
-		public CategoryViewModel VirtualRoot
+        public static readonly DependencyProperty LiveSourceProperty
+            = DependencyProperty.Register("LiveSource", typeof(CbrClient), typeof(MainWindow));
+
+        public CbrClient LiveSource
+        {
+            get { return (CbrClient)GetValue(LiveSourceProperty); }
+            private set { SetValue(LiveSourceProperty, value); }
+        }
+        public CategoryViewModel VirtualRoot
 		{
 			get { return (CategoryViewModel)GetValue(VirtualRootProperty); }
 			private set { SetValue(VirtualRootProperty, value); }
@@ -125,7 +133,9 @@ namespace FCHA
 					SelectedAccount = SelectedUser.UserAccounts[0];
 			}
 			OlapView = new OlapView(m_connection, "ExpenseByCategory", new OlapStage("Date", "Category", "Amount"));
-		}
+
+            LiveSource = new CbrClient();
+        }
 
 		public PersonViewModel GetPerson(long personId)
 		{

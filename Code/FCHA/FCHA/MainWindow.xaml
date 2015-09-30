@@ -339,6 +339,45 @@
                             <TextBlock Text="Live info" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
+
+                    <Grid DataContext="{Binding LiveSource}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <DatePicker Name="dtPick" Grid.Row="0" SelectedDate="{Binding SelectedDate}" />
+
+                        <ListView Grid.Row="1" ItemsSource="{Binding FXRates}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn>
+                                        <GridViewColumn.Header>
+                                            <TextBlock Text="CCY" />
+                                        </GridViewColumn.Header>
+
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding CCY}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn>
+                                        <GridViewColumn.Header>
+                                            <TextBlock Text="Rate" />
+                                        </GridViewColumn.Header>
+
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Rate}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
                 </TabItem>
             </TabControl.Items>
         </TabControl>

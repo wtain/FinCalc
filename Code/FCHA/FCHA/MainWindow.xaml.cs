@@ -36,7 +36,7 @@ namespace FCHA
 			private set { SetValue(AccountancyApplicationProperty, value); }
 		}
 
-		public static readonly DependencyProperty DatabaseFileNameProperty =
+        public static readonly DependencyProperty DatabaseFileNameProperty =
 			DependencyProperty.Register("DatabaseFileName", typeof(string), typeof(MainWindow));
 
 		public string DatabaseFileName

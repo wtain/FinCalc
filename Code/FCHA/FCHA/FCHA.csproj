@@ -50,6 +50,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -67,6 +70,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CbrClient\CbrClient.cs" />
+    <Compile Include="CbrClient\FxRate.cs" />
     <Compile Include="DataTypes\Account.cs" />
     <Compile Include="AccountancyApplication.cs" />
     <Compile Include="DataTypes\AccountBalance.cs" />
@@ -74,6 +79,11 @@
       <DependentUpon>AccountDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Managers\AccountsManager.cs" />
+    <Compile Include="Service References\CBR\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="DataTypes\Category.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
@@ -146,11 +156,14 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <None Include="Properties\DataSources\System.Xml.XmlNode.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Service References\CBR\DailyInfo.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\Bar chart.png" />
@@ -187,6 +200,24 @@
   <ItemGroup>
     <Resource Include="Icons\Cancel.png" />
     <Resource Include="Icons\Ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\CBR\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CBR\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CBR\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CBR\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
