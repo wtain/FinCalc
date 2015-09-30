@@ -176,3 +176,9 @@ Just use selected category as root.
 
 System.EntryPointNotFoundException crossed a native/managed boundary
 ?
+
+
+Error handling
+
+
+git mv *ViewModel.cs ViewModels/
