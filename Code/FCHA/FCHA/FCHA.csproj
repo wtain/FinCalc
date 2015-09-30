@@ -67,17 +67,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Account.cs" />
+    <Compile Include="DataTypes\Account.cs" />
     <Compile Include="AccountancyApplication.cs" />
-    <Compile Include="AccountBalance.cs" />
+    <Compile Include="DataTypes\AccountBalance.cs" />
     <Compile Include="Dialogs\AccountDialog.xaml.cs">
       <DependentUpon>AccountDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="AccountsManager.cs" />
     <Compile Include="AccountViewModel.cs" />
-    <Compile Include="Category.cs" />
+    <Compile Include="DataTypes\Category.cs" />
     <Compile Include="CategoryViewModel.cs" />
-    <Compile Include="Expense.cs" />
+    <Compile Include="DataTypes\Expense.cs" />
     <Compile Include="ExpensesManager.cs" />
     <Compile Include="ExpenseViewModel.cs" />
     <Compile Include="OlapBuilder.cs" />
@@ -86,7 +86,7 @@
     <Compile Include="OlapView.xaml.cs">
       <DependentUpon>OlapView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Person.cs" />
+    <Compile Include="DataTypes\Person.cs" />
     <Compile Include="PersonViewModel.cs" />
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="TempTable.cs" />
