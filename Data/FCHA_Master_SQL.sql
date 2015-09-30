@@ -34,11 +34,9 @@ CREATE TABLE "accounts" (
 );
 CREATE TABLE "Cashflows" (
 	`FlowId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`SourceAccountId`	INTEGER NOT NULL,
-	`TargetAccountId`	INTEGER NOT NULL,
-	`Amount`	INTEGER NOT NULL,
-	`ConversionFactor`	REAL NOT NULL,
-	`FlowDate`	TEXT NOT NULL
+	`SourceExpenseId`	INTEGER NOT NULL,
+	`TargetExpenseId`	INTEGER NOT NULL,
+	`ConversionFactor`	REAL NOT NULL
 );
 CREATE TABLE "AccountBalance" (
 	`BalanceId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -59,7 +57,7 @@ BEGIN
 	UPDATE AccountBalance 
 		 SET 
 			Value=Value + OLD.Amount, 
-			LastUpdatedDate = datetime('now')
+			LastUpdatedDate = date('now')
 		 WHERE AccountId = OLD.AccountId;
 	UPDATE AccountBalance 
 		 SET 
@@ -74,7 +72,7 @@ BEGIN
 	UPDATE AccountBalance 
 		 SET 
 			Value=Value - NEW.Amount, 
-			LastUpdatedDate = datetime('now')
+			LastUpdatedDate = date('now')
 		 WHERE AccountId = NEW.AccountId;
 END;
 CREATE TRIGGER expenses_delete_after_trigger
@@ -84,7 +82,7 @@ BEGIN
 	UPDATE AccountBalance 
 		 SET 
 			Value=Value + OLD.Amount, 
-			LastUpdatedDate = datetime('now')
+			LastUpdatedDate = date('now')
 		 WHERE AccountId = OLD.AccountId;
 END;
 CREATE TRIGGER categories_view_insert_trigger
