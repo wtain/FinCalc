@@ -5,6 +5,9 @@ http://ecson.ru/detail/post/kak-rasschitat-kredit/
 sqlite hierarchival query
 https://www.sqlite.org/lang_with.html
 
+sqlite UDFs
+http://stackoverflow.com/questions/172735/create-use-user-defined-functions-in-system-data-sqlite
+
 ПСК
 http://www.banki.ru/wikibank/polnaya_stoimost_kredita/
 http://habrahabr.ru/post/233987/

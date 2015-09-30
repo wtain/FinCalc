@@ -158,3 +158,17 @@ cashflows -> expenses
 negate??
 
 currency exchange
+
+list of items to buy
+task tracker
+
+
+http://stackoverflow.com/questions/172735/create-use-user-defined-functions-in-system-data-sqlite
+
+
+Flow = 2 expenses
+
+Function for sqlite for setting drill down level for categories?
+
+Not necessary to use udfs.
+Just use selected category as root.
