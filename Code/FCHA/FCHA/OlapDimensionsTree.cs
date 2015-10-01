@@ -10,21 +10,23 @@ namespace FCHA
 		public string name;
 		public string value;
 		public int weight;
+        public OlapDimensionsTree parent;
 
-		public List<OlapDimensionsTree> children; // todo: use linkedlist
+        public List<OlapDimensionsTree> children; // todo: use linkedlist
 
 		public OlapDimensionsTree()
-			: this(string.Empty, string.Empty)
+			: this(string.Empty, string.Empty, null)
 		{
 
 		}
 
-		public OlapDimensionsTree(string name, string value)
+		public OlapDimensionsTree(string name, string value, OlapDimensionsTree parent)
 		{
 			this.name = name;
 			this.value = value;
 			this.children = new List<OlapDimensionsTree>();
 			this.weight = 1;
+            this.parent = parent;
 		}
 
 		public void CalculateWeight()
@@ -47,7 +49,17 @@ namespace FCHA
 			get { return 1 + (!IsLeave ? children.Select(c => c.Height).Max() : 0); }
 		}
 
-		public delegate void LeavesIterationCallback(OlapDimensionsTree node, LinkedList<KeyValuePair<string, string>> filters);
+        public bool IsVirtualRoot
+        {
+            get { return name.IsNullOrEmpty(); }
+        }
+
+        public bool IsRoot
+        {
+            get { return null == parent; }
+        }
+
+        public delegate void LeavesIterationCallback(OlapDimensionsTree node, LinkedList<KeyValuePair<string, string>> filters);
 
 		public int IterateLeaves(LeavesIterationCallback cb)
 		{
@@ -72,5 +84,15 @@ namespace FCHA
 				filters.RemoveLast();
 			return rv;
 		}
-	}
+
+        public override string ToString()
+        {
+            if (IsRoot)
+                return string.Empty;
+            string self = string.Format("{0}={1}", name, value);
+            if (parent.IsRoot)
+                return self;
+            return string.Format("{0}, {1}", parent.ToString(), self);
+        }
+    }
 }

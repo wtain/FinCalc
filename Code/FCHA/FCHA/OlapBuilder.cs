@@ -18,7 +18,7 @@ namespace FCHA
 			string col = columns[index];
 			foreach (string value in olapStage.GetColumnValues(col, filters))
 			{
-				OlapDimensionsTree node = new OlapDimensionsTree(col, value);
+				OlapDimensionsTree node = new OlapDimensionsTree(col, value, root);
 				root.children.Add(node);
 				filters.AddLast(new LinkedListNode<KeyValuePair<string, string>>(new KeyValuePair<string, string>(col, value)));
 				BuildTreeRecursive(olapStage, node, filters, columns, index + 1);
@@ -35,7 +35,7 @@ namespace FCHA
 			return root;
 		}
 
-		private static TextBlock CreateCell(int row, int column, string value, bool isHeader)
+		private static TextBlock CreateCell(int row, int column, string value, bool isHeader, OlapCellInfo tag)
 		{
 			TextBlock cell = new TextBlock();
 			cell.Text = value;
@@ -43,10 +43,16 @@ namespace FCHA
 			cell.VerticalAlignment = VerticalAlignment.Center;
 			cell.SetValue(Grid.RowProperty, row);
 			cell.SetValue(Grid.ColumnProperty, column);
+            cell.Tag = tag;
 			cell.Height = 24;
-			if (!isHeader)
-				cell.Style = App.MoneyAmountTextStyle;
-			return cell;
+            cell.MouseLeftButtonDown += (s, e) => 
+            {
+                if (null != tag)
+                    MessageBox.Show(tag.ToString());
+            };
+            if (!isHeader)
+                cell.Style = App.CellStyle;
+            return cell;
 		}
 
 		private static RowDefinition CreateRow()
@@ -95,11 +101,11 @@ namespace FCHA
 				// ... ttt
 				int row = nStartRow;
 				int column = nStartColumn - 1;
-				int nLeftTotals = leftTree.IterateLeaves((n, f) => grid.Children.Add(CreateCell(row++, column, n.value, true)));
+				int nLeftTotals = leftTree.IterateLeaves((n, f) => grid.Children.Add(CreateCell(row++, column, n.value, true, new OlapCellInfo(n, null))));
 
 				row = nStartRow - 1;
 				column = nStartColumn;
-				int nTopTotals = topTree.IterateLeaves((n, f) => grid.Children.Add(CreateCell(row, column++, n.value, true)));
+				int nTopTotals = topTree.IterateLeaves((n, f) => grid.Children.Add(CreateCell(row, column++, n.value, true, new OlapCellInfo(null, n))));
 
 				long[] leftTotals = new long[nLeftTotals];
 				long[] topTotals = new long[nTopTotals];
@@ -120,7 +126,7 @@ namespace FCHA
 								topTotals[column - nStartColumn] = topTotals[column - nStartColumn] + val;
 							if (bGrandTotals)
 								grandTotals += val;
-							grid.Children.Add(CreateCell(row, column, val.ToString(), false));
+							grid.Children.Add(CreateCell(row, column, val.ToString(), false, new OlapCellInfo(leftValue, topValue)));
 						}
 						++column;
 					});
@@ -129,14 +135,14 @@ namespace FCHA
 
 				if (bLeftTotals)
 					for (row = 0; row < nLeftTotals; ++row)
-						grid.Children.Add(CreateCell(nStartRow + row, nStartColumn + nTopTotals, leftTotals[row].ToString(), false));
+						grid.Children.Add(CreateCell(nStartRow + row, nStartColumn + nTopTotals, leftTotals[row].ToString(), false, null)); // todo:
 
 				if (bTopTotals)
 					for (column = 0; column < nTopTotals; ++column)
-						grid.Children.Add(CreateCell(nStartRow + nLeftTotals, nStartColumn + column, topTotals[column].ToString(), false));
+						grid.Children.Add(CreateCell(nStartRow + nLeftTotals, nStartColumn + column, topTotals[column].ToString(), false, null)); // todo:
 
 				if (bGrandTotals)
-					grid.Children.Add(CreateCell(nStartRow + nLeftTotals, nStartColumn + nTopTotals, grandTotals.ToString(), false));
+					grid.Children.Add(CreateCell(nStartRow + nLeftTotals, nStartColumn + nTopTotals, grandTotals.ToString(), false, null));
 
 				return grid;
 			}

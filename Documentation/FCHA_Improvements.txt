@@ -182,3 +182,9 @@ Error handling
 
 
 git mv *ViewModel.cs ViewModels/
+
+
+Icons for categories? Allow user to select them. Carry a base of icons. Separately from sqlite?
+
+
+todo: indexes for tables

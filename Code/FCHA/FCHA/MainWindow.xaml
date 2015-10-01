@@ -318,9 +318,37 @@
                             <TextBlock Text="Statistics" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
-                        <ContentControl Content="{Binding OlapView}" />
-                    </ScrollViewer>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <ComboBox Grid.Row="0" 
+                                  ItemsSource="{Binding Reports}"
+                                  SelectedItem="{Binding SelectedReport}" 
+                                  IsSynchronizedWithCurrentItem="True">
+                            <ComboBox.ItemTemplateSelector>
+                                <local:ComboBoxItemTemplateSelector>
+                                    <local:ComboBoxItemTemplateSelector.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding StageName}" />
+                                        </DataTemplate>
+                                    </local:ComboBoxItemTemplateSelector.ItemTemplate>
+                                    <local:ComboBoxItemTemplateSelector.SelectedItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding AccountancyApplication.SelectedReport.StageName, ElementName=winMain}" />
+                                        </DataTemplate>
+                                    </local:ComboBoxItemTemplateSelector.SelectedItemTemplate>
+                                </local:ComboBoxItemTemplateSelector>
+                            </ComboBox.ItemTemplateSelector>
+                        </ComboBox>
+
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
+                            <ContentControl Content="{Binding SelectedReport}" />
+                            <!-- , Converter={x:Static local:SelectedReportToOlapViewConverter.Instance} -->
+                        </ScrollViewer>
+                    </Grid>
                 </TabItem>
 
                 <TabItem Name="tiLoanCalculator">

@@ -13,8 +13,9 @@ namespace FCHA
 	public partial class App : Application
 	{
 		private static Style m_MoneyAmountTextStyle;
+		private static Style m_CellStyle;
 
-		public static Style MoneyAmountTextStyle
+        public static Style MoneyAmountTextStyle
 		{
 			get
 			{
@@ -23,5 +24,16 @@ namespace FCHA
 				return m_MoneyAmountTextStyle;
 			}
 		}
-	}
+
+        public static Style CellStyle
+        {
+            get
+            {
+                if (null == m_CellStyle)
+                    m_CellStyle = (Style)Current.FindResource("CellStyle");
+                return m_CellStyle;
+            }
+        }
+        
+    }
 }

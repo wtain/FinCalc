@@ -44,8 +44,12 @@ namespace FCHA
 		public static readonly DependencyProperty SelectedAccountProperty =
 			DependencyProperty.Register("SelectedAccount", typeof(AccountViewModel), typeof(AccountancyApplication));
 
-		public static readonly DependencyProperty OlapViewProperty =
-			DependencyProperty.Register("OlapView", typeof(OlapView), typeof(AccountancyApplication));
+		public static readonly DependencyProperty SelectedReportProperty =
+			DependencyProperty.Register("SelectedReport", typeof(OlapView), typeof(AccountancyApplication), 
+                new PropertyMetadata(OnSelectedReportChanged));
+
+        public static readonly DependencyProperty ReportsProperty =
+            DependencyProperty.Register("Reports", typeof(ObservableCollection<OlapView>), typeof(AccountancyApplication));
 
         public static readonly DependencyProperty LiveSourceProperty
             = DependencyProperty.Register("LiveSource", typeof(CbrClient), typeof(MainWindow));
@@ -103,13 +107,19 @@ namespace FCHA
 			set { SetValue(SelectedAccountProperty, value); }
 		}
 
-		public OlapView OlapView
-		{
-			get { return (OlapView)GetValue(OlapViewProperty); }
-			set { SetValue(OlapViewProperty, value); }
+		public OlapView SelectedReport
+        {
+			get { return (OlapView)GetValue(SelectedReportProperty); }
+			set { SetValue(SelectedReportProperty, value); }
 		}
-		
-		public AccountancyApplication(SQLiteConnection connection)
+
+        public ObservableCollection<OlapView> Reports
+        {
+            get { return (ObservableCollection<OlapView>)GetValue(ReportsProperty); }
+            set { SetValue(ReportsProperty, value); }
+        }
+
+        public AccountancyApplication(SQLiteConnection connection)
 		{
 			m_connection = connection;
 			m_categoriesManager = new CategoriesManager(m_connection);
@@ -132,12 +142,27 @@ namespace FCHA
 				if (SelectedUser.UserAccounts.Count > 0)
 					SelectedAccount = SelectedUser.UserAccounts[0];
 			}
-			OlapView = new OlapView(m_connection, "ExpenseByCategory", new OlapStage("Date", "Category", "Amount"));
+
+            Reports = new ObservableCollection<OlapView>();
+            Reports.Add(new OlapView("Expense by Date & Category", m_connection, "ExpenseByCategory", new OlapStage("Date", "Category", "Amount")));
+            Reports.Add(new OlapView("Expense by Month & Category", m_connection, "ExpenseByCategoryAndMonth", new OlapStage("Month", "Category", "Amount")));
+            Reports.Add(new OlapView("Expense by Month & Top Category", m_connection, "ExpenseByTopLevelCategoryAndMonth", new OlapStage("Month", "Category", "Amount")));
+            
+
+            if (Reports.Count > 0)
+                SelectedReport = Reports[0];
 
             LiveSource = new CbrClient();
         }
 
-		public PersonViewModel GetPerson(long personId)
+        private static void OnSelectedReportChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            if (null == e.NewValue)
+                return;
+            ((OlapView)e.NewValue).RefreshView();
+        }
+
+        public PersonViewModel GetPerson(long personId)
 		{
 			if (!m_personCache.ContainsKey(personId))
 				m_personCache[personId] = new PersonViewModel(m_usersManager.GetUser(personId), this);
@@ -274,7 +299,7 @@ namespace FCHA
 			expense.UnderlyingData = refExpense;
 			Expenses.Add(expense);
 			expense.Account.UpdateAccountState();
-			OlapView.RefreshView();
+            SelectedReport.RefreshView();
 		}
 
 		public void UpdateExpense(ExpenseViewModel expense)
@@ -287,7 +312,7 @@ namespace FCHA
 			expense.Account.UpdateAccountState();
 			if (null != oldAccount)
 				oldAccount.UpdateAccountState();
-			OlapView.RefreshView();
+            SelectedReport.RefreshView();
 		}
 
 		public void DeleteExpense(ExpenseViewModel expense)
@@ -295,7 +320,7 @@ namespace FCHA
 			m_expensesManager.DeleteExpense(expense.UnderlyingData);
 			Expenses.Remove(expense);
 			expense.Account.UpdateAccountState();
-			OlapView.RefreshView();
+            SelectedReport.RefreshView();
 		}
 	}
 }

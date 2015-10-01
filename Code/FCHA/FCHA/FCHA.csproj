@@ -70,8 +70,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AccountTypeToImageConverter.cs" />
     <Compile Include="CbrClient\CbrClient.cs" />
     <Compile Include="CbrClient\FxRate.cs" />
+    <Compile Include="ComboBoxItemTemplateSelector.cs" />
+    <Compile Include="CurrencyToImageConverter.cs" />
     <Compile Include="DataTypes\Account.cs" />
     <Compile Include="AccountancyApplication.cs" />
     <Compile Include="DataTypes\AccountBalance.cs" />
@@ -79,11 +82,13 @@
       <DependentUpon>AccountDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Managers\AccountsManager.cs" />
+    <Compile Include="OlapCellInfo.cs" />
     <Compile Include="Service References\CBR\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="DataTypes\Category.cs" />
     <Compile Include="ViewModels\CategoryViewModel.cs" />
