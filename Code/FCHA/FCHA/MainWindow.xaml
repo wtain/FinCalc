@@ -7,9 +7,22 @@
         Name="winMain"
         Icon="{StaticResource CoinsIcon}"
         DataContext="{Binding AccountancyApplication, ElementName=winMain}">
+    <Window.Resources>
+        <Style x:Key="Margin">
+            <Setter Property="Control.Margin" Value="2" />
+        </Style>
+    </Window.Resources>
     <Window.Style>
-        <Style TargetType="FrameworkElement">
-            <Setter Property="Margin" Value="2" />
+        <Style>
+            <Style.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource Margin}" />
+                <Style TargetType="Button" BasedOn="{StaticResource Margin}" />
+                <Style TargetType="TextBox" BasedOn="{StaticResource Margin}" />
+                <Style TargetType="ListView" BasedOn="{StaticResource Margin}" />
+                <Style TargetType="ComboBox" BasedOn="{StaticResource Margin}" />
+                <Style TargetType="DatePicker" BasedOn="{StaticResource Margin}" />
+                <Style TargetType="TabControl" BasedOn="{StaticResource Margin}" />
+            </Style.Resources>
         </Style>
     </Window.Style>
     <Grid>
@@ -358,6 +371,43 @@
                             <TextBlock Text="Loan calculator" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                    
+                        <UniformGrid Columns="2" Grid.Row="0">
+                            <TextBlock Text="Notional" />
+                            <TextBox />
+
+                            <TextBlock Text="Interest rate" />
+                            <TextBox />
+
+                            <TextBlock Text="Duration" />
+                            <TextBox />
+
+                            <TextBlock Text="Calendar" />
+                            <TextBox />
+
+                            <TextBlock Text="Currency" />
+                            <ComboBox />
+                        </UniformGrid>
+
+                        <TextBlock Text="Schedules" Grid.Row="1" />
+
+                        <ListView Grid.Row="2" />
+
+                        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="2">
+                            <Button Content="Calculate" />
+                            <Button Content="Additional payment" />
+                        </StackPanel>
+                        
+                    </Grid>
                 </TabItem>
 
                 <TabItem Name="tiLiveInfo">

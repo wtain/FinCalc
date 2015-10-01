@@ -188,3 +188,8 @@ Icons for categories? Allow user to select them. Carry a base of icons. Separate
 
 
 todo: indexes for tables
+
+
+Drag & Drop
+
+user controls
