@@ -1,0 +1,76 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:FCHA"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+
+    <s:String x:Key="ApplicationName">Financial Calculator &amp; Home Accountancy</s:String>
+
+    <s:String x:Key="Categories">Categories</s:String>
+    <s:String x:Key="UsersAndAccounts">Users &amp; Accounts</s:String>
+    <s:String x:Key="Expenses">Expenses</s:String>
+    <s:String x:Key="Statistics">Statistics</s:String>
+    <s:String x:Key="LoanCalculator">Loan Calculator</s:String>
+    <s:String x:Key="LiveInfo">Live Info</s:String>
+    <s:String x:Key="Settings">Settings</s:String>
+
+    <s:String x:Key="EditDots">Edit...</s:String>
+    <s:String x:Key="Add">Add</s:String>
+    <s:String x:Key="AddDots">Add...</s:String>
+    <s:String x:Key="AddChild">Add Child</s:String>
+    <s:String x:Key="ChangeDots">Change...</s:String>
+    <s:String x:Key="Remove">Remove</s:String>
+    <s:String x:Key="Change">Change</s:String>
+    <s:String x:Key="Rename">Rename</s:String>
+    <s:String x:Key="TransferDots">Transfer...</s:String>
+
+    <s:String x:Key="Type">Type</s:String>
+    <s:String x:Key="Balance">Balance</s:String>
+    <s:String x:Key="LastUpdated">Last updated</s:String>
+
+    <s:String x:Key="SourceAccount">Source Account</s:String>
+    <s:String x:Key="AccountOwner">Account Owner</s:String>
+    <s:String x:Key="Date">Date</s:String>
+    <s:String x:Key="Amount">Amount</s:String>
+    <s:String x:Key="Currency">Currency</s:String>
+    <s:String x:Key="Category">Category</s:String>
+    <s:String x:Key="Description">Description</s:String>
+
+    <s:String x:Key="Notional">Notional</s:String>
+    <s:String x:Key="InterestRate">Interest Rate</s:String>
+    <s:String x:Key="Duration">Duration</s:String>
+    <s:String x:Key="Calendar">Calendar</s:String>
+    <s:String x:Key="Schedules">Schedules</s:String>
+    
+    <s:String x:Key="Calculate">Calculate</s:String>
+    <s:String x:Key="AdditionalPayment">Additional Payment</s:String>
+
+    <s:String x:Key="CCY">CCY</s:String>
+    <s:String x:Key="Rate">Rate</s:String>
+
+    <s:String x:Key="Exit">Exit</s:String>
+
+    <s:String x:Key="StatementDots">Statement...</s:String>
+
+    <s:String x:Key="AccountInformation">Account Information</s:String>
+    <s:String x:Key="OK">OK</s:String>
+    <s:String x:Key="Cancel">Cancel</s:String>
+
+    <s:String x:Key="InputString">Input String</s:String>
+
+    <s:String x:Key="Transfer">Transfer</s:String>
+    <s:String x:Key="TransferAndConvert">Transfer &amp; Convert</s:String>
+    <s:String x:Key="TargetAccount">Target Account</s:String>
+    <s:String x:Key="TransferAmount">Transfer Amount</s:String>
+    <s:String x:Key="ConversionRatio">Conversion Ratio</s:String>
+
+    <s:String x:Key="UserName">User Name</s:String>
+    <s:String x:Key="FullName">Full Name</s:String>
+    <s:String x:Key="UserInfo">User Info</s:String>
+
+    <s:String x:Key="AccountName">Account Name</s:String>
+
+    <s:String x:Key="ExpenseByCategory">Expense by Date &amp; Category</s:String>
+    <s:String x:Key="ExpenseByCategoryAndMonth">Expense by Month &amp; Category</s:String>
+    <s:String x:Key="ExpenseByTopLevelCategoryAndMonth">Expense by Month &amp; Top Category</s:String>
+
+</ResourceDictionary>

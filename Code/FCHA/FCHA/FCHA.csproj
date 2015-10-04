@@ -43,6 +43,10 @@
     <ApplicationIcon>Icons\FCHA.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SQLite.Designer, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\System.Data.SQLite\2010\bin\SQLite.Designer.dll</HintPath>
@@ -71,9 +75,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AccountTypeToImageConverter.cs" />
+    <Compile Include="Calendar.cs" />
     <Compile Include="CbrClient\CbrClient.cs" />
     <Compile Include="CbrClient\FxRate.cs" />
     <Compile Include="ComboBoxItemTemplateSelector.cs" />
+    <Compile Include="Controls\AccountControl.xaml.cs">
+      <DependentUpon>AccountControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CurrencyToImageConverter.cs" />
     <Compile Include="DataTypes\Account.cs" />
     <Compile Include="AccountancyApplication.cs" />
@@ -81,7 +89,11 @@
     <Compile Include="Dialogs\AccountDialog.xaml.cs">
       <DependentUpon>AccountDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\MoneyTransferDialog.xaml.cs">
+      <DependentUpon>MoneyTransferDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Managers\AccountsManager.cs" />
+    <Compile Include="MoneyAmountTextToColorConverter.cs" />
     <Compile Include="OlapCellInfo.cs" />
     <Compile Include="Service References\CBR\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -109,11 +121,19 @@
       <DependentUpon>UserInfoDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Managers\UsersManager.cs" />
+    <Page Include="Controls\AccountControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\AccountDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\InputDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\MoneyTransferDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -141,6 +161,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\GUIStrings_ru-RU.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\GUIStrings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -161,6 +189,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
     <None Include="Properties\DataSources\System.Xml.XmlNode.datasource" />
     <None Include="Properties\Settings.settings">
@@ -175,6 +204,7 @@
     <Resource Include="Icons\Calculator.png" />
     <Resource Include="Icons\Cash register.png" />
     <Resource Include="Icons\Coins.png" />
+    <Resource Include="Icons\Conversion.png" />
     <Resource Include="Icons\Credit card.png" />
     <Resource Include="Icons\Shopping cart.png" />
   </ItemGroup>
@@ -223,6 +253,21 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Transfer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Money.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Lightning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

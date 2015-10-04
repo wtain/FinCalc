@@ -2,42 +2,36 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:FCHA"
-        Title="Financial Calculator &amp; Home Accountancy" 
+        Title="{DynamicResource ApplicationName}" 
         Height="420" Width="800" 
         Name="winMain"
         Icon="{StaticResource CoinsIcon}"
-        DataContext="{Binding AccountancyApplication, ElementName=winMain}">
-    <Window.Resources>
-        <Style x:Key="Margin">
-            <Setter Property="Control.Margin" Value="2" />
-        </Style>
-    </Window.Resources>
-    <Window.Style>
-        <Style>
-            <Style.Resources>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource Margin}" />
-                <Style TargetType="Button" BasedOn="{StaticResource Margin}" />
-                <Style TargetType="TextBox" BasedOn="{StaticResource Margin}" />
-                <Style TargetType="ListView" BasedOn="{StaticResource Margin}" />
-                <Style TargetType="ComboBox" BasedOn="{StaticResource Margin}" />
-                <Style TargetType="DatePicker" BasedOn="{StaticResource Margin}" />
-                <Style TargetType="TabControl" BasedOn="{StaticResource Margin}" />
-            </Style.Resources>
-        </Style>
-    </Window.Style>
+        DataContext="{Binding AccountancyApplication, ElementName=winMain}"
+        Style="{StaticResource AllControlsMargin}">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="24" />
             <RowDefinition />
             <RowDefinition Height="48" />
         </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Name="btnLanguageRussian" Click="btnLanguageRussian_Click">
+                <Image Source="{StaticResource RUBIcon}" Width="12" Height="12" ToolTip="Русский" />
+            </Button>
+
+            <Button Name="btnLanguageEnglish" Click="btnLanguageEnglish_Click" ToolTip="English">
+                <Image Source="{StaticResource USDIcon}" Width="12" Height="12" />
+            </Button>
+        </StackPanel>
         
-        <TabControl Grid.Row="0">
+        <TabControl Grid.Row="1">
             <TabControl.Items>
                 <TabItem Name="tiCategories">
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{StaticResource CategoriesIcon}" Width="24" Height="24" />
-                            <TextBlock Text="Categories" VerticalAlignment="Center" />
+                            <TextBlock Text="{DynamicResource Categories}" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid>
@@ -59,25 +53,25 @@
                             <Button Name="btnAdd" Click="btnAdd_Click">
                                 <StackPanel Orientation="Vertical">
                                     <Image Source="{StaticResource AddIcon}" Width="24" Height="24" />
-                                    <TextBlock Text="Add" />
+                                    <TextBlock Text="{DynamicResource Add}" />
                                 </StackPanel>
                             </Button>
                             <Button Name="btnAddChild" Click="btnAddChild_Click">
                                 <StackPanel Orientation="Vertical">
                                     <Image Source="{StaticResource AddChildIcon}" Width="24" Height="24" />
-                                    <TextBlock Text="Add child" />
+                                    <TextBlock Text="{DynamicResource AddChild}" />
                                 </StackPanel>
                             </Button>
                             <Button Name="btnRename" Click="btnRename_Click">
                                 <StackPanel Orientation="Vertical">
                                     <Image Source="{StaticResource UpdateIcon}" Width="24" Height="24" />
-                                    <TextBlock Text="Rename" />
+                                    <TextBlock Text="{DynamicResource Rename}" />
                                 </StackPanel>
                             </Button>
                             <Button Name="btnRemove" Click="btnRemove_Click">
                                 <StackPanel Orientation="Vertical">
                                     <Image Source="{StaticResource DelIcon}" Width="24" Height="24" />
-                                    <TextBlock Text="Remove" />
+                                    <TextBlock Text="{DynamicResource Remove}" />
                                 </StackPanel>
                             </Button>
                         </StackPanel>
@@ -88,7 +82,7 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{StaticResource PeopleIcon}" Width="24" Height="24" />
-                            <TextBlock Text="Users" VerticalAlignment="Center" />
+                            <TextBlock Text="{DynamicResource UsersAndAccounts}" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid>
@@ -105,19 +99,19 @@
                             <Button Name="btnAddUser" Click="btnAddUser_Click">
                                 <StackPanel Orientation="Vertical">
                                     <Image Source="{StaticResource AddIcon}" Width="24" Height="24" />
-                                    <TextBlock Text="Add..." />
+                                    <TextBlock Text="{DynamicResource AddDots}" />
                                 </StackPanel>
                             </Button>
                             <Button Name="btnEditUser" Click="btnEditUser_Click">
                                 <StackPanel Orientation="Vertical">
                                     <Image Source="{StaticResource EditIcon}" Width="24" Height="24" />
-                                    <TextBlock Text="Edit..." />
+                                    <TextBlock Text="{DynamicResource EditDots}" />
                                 </StackPanel>
                             </Button>
                             <Button Name="btnRemoveUser" Click="btnRemoveUser_Click">
                                 <StackPanel Orientation="Vertical">
                                     <Image Source="{StaticResource DelIcon}" Width="24" Height="24" />
-                                    <TextBlock Text="Remove" />
+                                    <TextBlock Text="{DynamicResource Remove}" />
                                 </StackPanel>
                             </Button>
                         </StackPanel>
@@ -154,19 +148,25 @@
                                     <Button Name="btnAccountAdd" Click="btnAccountAdd_Click">
                                         <StackPanel Orientation="Vertical">
                                             <Image Source="{StaticResource AddIcon}" Width="24" Height="24" />
-                                            <TextBlock Text="Add..." />
+                                            <TextBlock Text="{DynamicResource AddDots}" />
                                         </StackPanel>
                                     </Button>
                                     <Button Name="btnAccountChange" Click="btnAccountChange_Click">
                                         <StackPanel Orientation="Vertical">
                                             <Image Source="{StaticResource EditIcon}" Width="24" Height="24" />
-                                            <TextBlock Text="Change..." />
+                                            <TextBlock Text="{DynamicResource ChangeDots}" />
                                         </StackPanel>
                                     </Button>
                                     <Button Name="btnAccountRemove" Click="btnAccountRemove_Click">
                                         <StackPanel Orientation="Vertical">
                                             <Image Source="{StaticResource DelIcon}" Width="24" Height="24" />
-                                            <TextBlock Text="Remove..." />
+                                            <TextBlock Text="{DynamicResource Remove}" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Name="btnAccountTransfer" Click="btnAccountTransfer_Click">
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="{StaticResource ConversionIcon}" Width="24" Height="24" />
+                                            <TextBlock Text="{DynamicResource TransferDots}" />
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
@@ -187,20 +187,20 @@
                                     <ColumnDefinition />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Currency" />
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource Currency}" />
                                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                                     <Image Source="{Binding Currency, Mode=OneWay, Converter={x:Static local:CurrencyToImageConverter.Instance}}" Height="24" Width="24" />
                                     <TextBlock Text="{Binding Currency, Mode=OneWay}" VerticalAlignment="Center" />
                                 </StackPanel>
                                 
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Type" />
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource Type}" />
                                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AccountType, Mode=OneWay}" />
 
-                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Balance" />
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource Balance}" />
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Balance, Mode=OneWay}" Style="{StaticResource MoneyAmountTextStyle}" />
 
-                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Last updated" />
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="{DynamicResource LastUpdated}" />
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding LastUpdated, Mode=OneWay, StringFormat=dd-MMM-yyyy}" />
                             </Grid>
                         </Grid>
@@ -211,7 +211,7 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{StaticResource CoinsIcon}" Width="24" Height="24" />
-                            <TextBlock Text="Expenses" VerticalAlignment="Center" />
+                            <TextBlock Text="{DynamicResource Expenses}" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid>
@@ -244,8 +244,8 @@
                                   ItemsSource="{Binding Expenses}"
                                   Name="dgExpenses">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Source Account" Binding="{Binding Account}" SortMemberPath="Account.Name" />
-                                <DataGridTemplateColumn Header="Account Owner" SortMemberPath="Account.Owner.Name">
+                                <DataGridTextColumn Header="{DynamicResource SourceAccount}" Binding="{Binding Account}" SortMemberPath="Account.Name" />
+                                <DataGridTemplateColumn Header="{DynamicResource AccountOwner}" SortMemberPath="Account.Owner.Name">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock DataContext="{Binding Account}"
@@ -253,15 +253,15 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=dd-MMM-yyyy}" SortMemberPath="Date" />
-                                <DataGridTemplateColumn Header="Amount" SortMemberPath="Amount">
+                                <DataGridTextColumn Header="{DynamicResource Date}" Binding="{Binding Date, StringFormat=dd-MMM-yyyy}" SortMemberPath="Date" />
+                                <DataGridTemplateColumn Header="{DynamicResource Amount}" SortMemberPath="Amount">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Amount}" Style="{StaticResource MoneyAmountTextStyle}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Currency" SortMemberPath="Account.Currency">
+                                <DataGridTemplateColumn Header="{DynamicResource Currency}" SortMemberPath="Account.Currency">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock DataContext="{Binding Account}"
@@ -269,8 +269,8 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Category" Binding="{Binding Category}" SortMemberPath="Category.Name" />
-                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" CanUserSort="False" />
+                                <DataGridTextColumn Header="{DynamicResource Category}" Binding="{Binding Category}" SortMemberPath="Category.Name" />
+                                <DataGridTextColumn Header="{DynamicResource Description}" Binding="{Binding Description}" CanUserSort="False" />
                             </DataGrid.Columns>
                         </DataGrid>
                         
@@ -286,17 +286,17 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Amount" />
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource Amount}" />
                             <TextBox Grid.Row="1" Grid.Column="0" Name="txtExpenseAmount" TextAlignment="Right"
                                      Text="{Binding (Selector.SelectedItem).Amount, ElementName=dgExpenses, Mode=OneWay}" />
 
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="Category" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{DynamicResource Category}" />
                             <ComboBox Grid.Row="1" Grid.Column="1" IsEditable="True" Name="cboExpenseCategory"
                                       ItemsSource="{Binding Categories}" DisplayMemberPath="Name" 
                                       SelectedItem="{Binding (Selector.SelectedItem).Category, ElementName=dgExpenses, Mode=OneWay}" />
 
-                            <TextBlock Grid.Row="0" Grid.Column="2" Text="Description" />
+                            <TextBlock Grid.Row="0" Grid.Column="2" Text="{DynamicResource Description}" />
                             <TextBox Grid.Row="1" Grid.Column="2" Name="txtExpenseDescription" 
                                      Text="{Binding (Selector.SelectedItem).Description, ElementName=dgExpenses, Mode=OneWay}" />
                             
@@ -304,19 +304,19 @@
                                 <Button Name="btnExpenseAdd" Click="btnExpenseAdd_Click">
                                     <StackPanel Orientation="Vertical">
                                         <Image Source="{StaticResource AddIcon}" Width="24" Height="24" />
-                                        <TextBlock Text="Add" />
+                                        <TextBlock Text="{DynamicResource Add}" />
                                     </StackPanel>
                                 </Button>
                                 <Button Name="btnExpenseChange" Click="btnExpenseChange_Click">
                                     <StackPanel Orientation="Vertical">
                                         <Image Source="{StaticResource UpdateIcon}" Width="24" Height="24" />
-                                        <TextBlock Text="Change" />
+                                        <TextBlock Text="{DynamicResource Change}" />
                                     </StackPanel>
                                 </Button>
                                 <Button Name="btnExpenseRemove" Click="btnExpenseRemove_Click">
                                     <StackPanel Orientation="Vertical">
                                         <Image Source="{StaticResource DelIcon}" Width="24" Height="24" />
-                                        <TextBlock Text="Remove" />
+                                        <TextBlock Text="{DynamicResource Remove}" />
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
@@ -328,7 +328,7 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{StaticResource BarChartIcon}" Width="24" Height="24" />
-                            <TextBlock Text="Statistics" VerticalAlignment="Center" />
+                            <TextBlock Text="{DynamicResource Statistics}" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid>
@@ -368,7 +368,7 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{StaticResource CalculatorIcon}" Width="24" Height="24" />
-                            <TextBlock Text="Loan calculator" VerticalAlignment="Center" />
+                            <TextBlock Text="{DynamicResource LoanCalculator}" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
 
@@ -382,29 +382,39 @@
                         </Grid.RowDefinitions>
                     
                         <UniformGrid Columns="2" Grid.Row="0">
-                            <TextBlock Text="Notional" />
+                            <TextBlock Text="{DynamicResource Notional}" />
                             <TextBox />
 
-                            <TextBlock Text="Interest rate" />
+                            <TextBlock Text="{DynamicResource InterestRate}" />
                             <TextBox />
 
-                            <TextBlock Text="Duration" />
+                            <TextBlock Text="{DynamicResource Duration}" />
                             <TextBox />
 
-                            <TextBlock Text="Calendar" />
+                            <TextBlock Text="{DynamicResource Calendar}" />
                             <TextBox />
 
-                            <TextBlock Text="Currency" />
+                            <TextBlock Text="{DynamicResource Currency}" />
                             <ComboBox />
                         </UniformGrid>
 
-                        <TextBlock Text="Schedules" Grid.Row="1" />
+                        <TextBlock Text="{DynamicResource Schedules}" Grid.Row="1" />
 
                         <ListView Grid.Row="2" />
 
                         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="2">
-                            <Button Content="Calculate" />
-                            <Button Content="Additional payment" />
+                            <Button>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="{StaticResource LightningIcon}" Width="24" Height="24" />
+                                    <TextBlock Text="{DynamicResource Calculate}" />
+                                </StackPanel>
+                            </Button>
+                            <Button>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Source="{StaticResource MoneyIcon}" Width="24" Height="24" />
+                                    <TextBlock Text="{DynamicResource AdditionalPayment}" />
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                         
                     </Grid>
@@ -414,7 +424,7 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{StaticResource LiveIcon}" Width="24" Height="24" />
-                            <TextBlock Text="Live info" VerticalAlignment="Center" />
+                            <TextBlock Text="{DynamicResource LiveInfo}" VerticalAlignment="Center" />
                         </StackPanel>
                     </TabItem.Header>
 
@@ -431,7 +441,7 @@
                                 <GridView>
                                     <GridViewColumn>
                                         <GridViewColumn.Header>
-                                            <TextBlock Text="CCY" />
+                                            <TextBlock Text="{DynamicResource CCY}" />
                                         </GridViewColumn.Header>
 
                                         <GridViewColumn.CellTemplate>
@@ -443,7 +453,7 @@
 
                                     <GridViewColumn>
                                         <GridViewColumn.Header>
-                                            <TextBlock Text="Rate" />
+                                            <TextBlock Text="{DynamicResource Rate}" />
                                         </GridViewColumn.Header>
 
                                         <GridViewColumn.CellTemplate>
@@ -457,10 +467,19 @@
                         </ListView>
                     </Grid>
                 </TabItem>
+
+                <TabItem Name="tiSettings">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{StaticResource SettingsIcon}" Width="24" Height="24" />
+                            <TextBlock Text="{DynamicResource Settings}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </TabItem.Header>
+                </TabItem>
             </TabControl.Items>
         </TabControl>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition />
@@ -470,8 +489,8 @@
 
             <Button Grid.Column="1" Name="btnExit" Click="btnExit_Click" Width="100" HorizontalAlignment="Right">
                 <StackPanel Orientation="Vertical">
-                    <Image Source="{StaticResource ShutdownIcon}" Width="24" Height="24" />
-                    <TextBlock Text="Exit" />
+                    <Image Source="{StaticResource ExitIcon}" Width="24" Height="24" />
+                    <TextBlock Text="{DynamicResource Exit}" />
                 </StackPanel>
             </Button>
         </Grid>

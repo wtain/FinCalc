@@ -23,9 +23,11 @@ namespace FCHA
 		private SQLiteConnection m_conn;
 		private string m_tableName;
 		private OlapStage m_stage;
-        private string m_name;
 
-		public static readonly DependencyProperty OlapViewPanelProperty =
+        public static readonly DependencyProperty StageNameProperty =
+            DependencyProperty.Register("StageName", typeof(string), typeof(OlapView));
+
+        public static readonly DependencyProperty OlapViewPanelProperty =
 			DependencyProperty.Register("OlapViewPanel", typeof(Panel), typeof(OlapView));
 
 		public Panel OlapViewPanel
@@ -34,12 +36,18 @@ namespace FCHA
 			set { SetValue(OlapViewPanelProperty, value); }
 		}
 
-		public OlapView(string name, SQLiteConnection conn, string tableName, OlapStage stage)
+        public string StageName
+        {
+            get { return (string)GetValue(StageNameProperty); }
+            set { SetValue(StageNameProperty, value); }
+        }
+
+        public OlapView(string stringKey, SQLiteConnection conn, string tableName, OlapStage stage)
 		{
 			m_conn = conn;
 			m_tableName = tableName;
 			m_stage = stage;
-            m_name = name;
+            SetResourceReference(StageNameProperty, stringKey);
 			RefreshView();
 			InitializeComponent();
 		}
@@ -50,8 +58,6 @@ namespace FCHA
 		}
 
         // todo: introduce report, StageName -> ReportName
-
-        public string StageName { get { return m_name; } }
 
         public override string ToString()
         {

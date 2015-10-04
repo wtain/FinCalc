@@ -193,3 +193,28 @@ todo: indexes for tables
 Drag & Drop
 
 user controls
+
+Docking?
+
+Expense
+Type
+>0
+	Expense
+<0
+	Income
+=>
+CategoryType
+
+ExpenseType -> Expense, Income, TransferOut, TransferIn
+
+
+delete -> prompt
+
+
+todo: check account balance before performing an operation
+
+LocBAML?
+
+settings
+
+// todo: introduce report, StageName -> ReportName

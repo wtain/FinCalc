@@ -144,9 +144,9 @@ namespace FCHA
 			}
 
             Reports = new ObservableCollection<OlapView>();
-            Reports.Add(new OlapView("Expense by Date & Category", m_connection, "ExpenseByCategory", new OlapStage("Date", "Category", "Amount")));
-            Reports.Add(new OlapView("Expense by Month & Category", m_connection, "ExpenseByCategoryAndMonth", new OlapStage("Month", "Category", "Amount")));
-            Reports.Add(new OlapView("Expense by Month & Top Category", m_connection, "ExpenseByTopLevelCategoryAndMonth", new OlapStage("Month", "Category", "Amount")));
+            Reports.Add(new OlapView("ExpenseByCategory", m_connection, "ExpenseByCategory", new OlapStage("Date", "Category", "Amount")));
+            Reports.Add(new OlapView("ExpenseByCategoryAndMonth", m_connection, "ExpenseByCategoryAndMonth", new OlapStage("Month", "Category", "Amount")));
+            Reports.Add(new OlapView("ExpenseByTopLevelCategoryAndMonth", m_connection, "ExpenseByTopLevelCategoryAndMonth", new OlapStage("Month", "Category", "Amount")));
             
 
             if (Reports.Count > 0)

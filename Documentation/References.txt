@@ -11,3 +11,21 @@ http://stackoverflow.com/questions/172735/create-use-user-defined-functions-in-s
 ПСК
 http://www.banki.ru/wikibank/polnaya_stoimost_kredita/
 http://habrahabr.ru/post/233987/
+
+
+Newtonsoft.Json
+https://github.com/JamesNK/Newtonsoft.Json
+
+Git credentials
+http://gitcredentialstore.codeplex.com/
+
+DBBrowser for sqlite
+https://github.com/sqlitebrowser/sqlitebrowser/releases
+
+cppnetlib
+http://cpp-netlib.org/0.11.1/index.html
+
+Icons
+https://www.iconfinder.com/iconsets/48x48-free-object-icons
+http://all-free-download.com/
+http://www.softicons.com/business-icons

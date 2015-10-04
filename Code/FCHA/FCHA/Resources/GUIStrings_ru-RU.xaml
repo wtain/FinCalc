@@ -1,0 +1,76 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:FCHA.Resources"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+
+    <s:String x:Key="ApplicationName">Финансовый Калькулятор и Домашняя Бухгалтерия</s:String>
+
+    <s:String x:Key="Categories">Категории</s:String>
+    <s:String x:Key="UsersAndAccounts">Пользователи и счета</s:String>
+    <s:String x:Key="Expenses">Расходы</s:String>
+    <s:String x:Key="Statistics">Статистика</s:String>
+    <s:String x:Key="LoanCalculator">Кредитный калькулятор</s:String>
+    <s:String x:Key="LiveInfo">Рыночная информация</s:String>
+    <s:String x:Key="Settings">Настройки</s:String>
+
+    <s:String x:Key="EditDots">Изменить...</s:String>
+    <s:String x:Key="Add">Добавить</s:String>
+    <s:String x:Key="AddDots">Добавить...</s:String>
+    <s:String x:Key="AddChild">Добавить дочерний</s:String>
+    <s:String x:Key="ChangeDots">Изменить...</s:String>
+    <s:String x:Key="Remove">Удалить</s:String>
+    <s:String x:Key="Change">Изменить</s:String>
+    <s:String x:Key="Rename">Переименовать</s:String>
+    <s:String x:Key="TransferDots">Перевести...</s:String>
+
+    <s:String x:Key="Type">Тип</s:String>
+    <s:String x:Key="Balance">Баланс</s:String>
+    <s:String x:Key="LastUpdated">Последнее обновление</s:String>
+
+    <s:String x:Key="SourceAccount">Исходный счёт</s:String>
+    <s:String x:Key="AccountOwner">Владелец</s:String>
+    <s:String x:Key="Date">Дата</s:String>
+    <s:String x:Key="Amount">Сумма</s:String>
+    <s:String x:Key="Currency">Валюта</s:String>
+    <s:String x:Key="Category">Категория</s:String>
+    <s:String x:Key="Description">Описание</s:String>
+
+    <s:String x:Key="Notional">Номинал</s:String>
+    <s:String x:Key="InterestRate">Процентная ставка</s:String>
+    <s:String x:Key="Duration">Длительность</s:String>
+    <s:String x:Key="Calendar">Календарь</s:String>
+    <s:String x:Key="Schedules">График платежей</s:String>
+    
+    <s:String x:Key="Calculate">Посчитать</s:String>
+    <s:String x:Key="AdditionalPayment">Дополнительный платёж</s:String>
+
+    <s:String x:Key="CCY">Валюта</s:String>
+    <s:String x:Key="Rate">Курс</s:String>
+
+    <s:String x:Key="Exit">Выход</s:String>
+
+    <s:String x:Key="StatementDots">Выписка со счёта</s:String>
+
+    <s:String x:Key="AccountInformation">Информация о счёте</s:String>
+    <s:String x:Key="OK">ОК</s:String>
+    <s:String x:Key="Cancel">Отмена</s:String>
+
+    <s:String x:Key="InputString">Введите строку</s:String>
+
+    <s:String x:Key="Transfer">Перевод</s:String>
+    <s:String x:Key="TransferAndConvert">Перевод и конвертация</s:String>
+    <s:String x:Key="TargetAccount">Целевой счёт</s:String>
+    <s:String x:Key="TransferAmount">Сумма перевода</s:String>
+    <s:String x:Key="ConversionRatio">Коэффициент конвертации</s:String>
+
+    <s:String x:Key="UserName">Имя пользователя</s:String>
+    <s:String x:Key="FullName">Полное имя</s:String>
+    <s:String x:Key="UserInfo">Информация о пользователе</s:String>
+
+    <s:String x:Key="AccountName">Название счёта</s:String>
+
+    <s:String x:Key="ExpenseByCategory">Траты по датам и категориям</s:String>
+    <s:String x:Key="ExpenseByCategoryAndMonth">Траты по месяцам и категориям</s:String>
+    <s:String x:Key="ExpenseByTopLevelCategoryAndMonth">Траты по месяцам и основным категориям</s:String>
+    
+</ResourceDictionary>

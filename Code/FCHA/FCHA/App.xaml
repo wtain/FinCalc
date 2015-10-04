@@ -25,6 +25,13 @@
         <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/AddChild.png" x:Key="AddChildIcon" />
         <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Ok.png" x:Key="OkIcon" />
         <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Cancel.png" x:Key="CancelIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Conversion.png" x:Key="ConversionIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Exit.png" x:Key="ExitIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Settings.png" x:Key="SettingsIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Transfer.png" x:Key="TransferIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Money.png" x:Key="MoneyIcon" />
+        <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Lightning.png" x:Key="LightningIcon" />
+        
 
         <Style TargetType="TextBlock" x:Key="MoneyAmountTextStyle">
             <Setter Property="Foreground" Value="{Binding Text, RelativeSource={RelativeSource Self}, Converter={x:Static local:MoneyAmountTextToColorConverter.Instance}}" />
@@ -36,6 +43,22 @@
                     <Setter Property="Background" Value="LightYellow" />
                 </Trigger>
             </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Margin">
+            <Setter Property="Control.Margin" Value="2" />
+        </Style>
+
+        <Style x:Key="AllControlsMargin">
+            <Style.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource Margin}" />
+                    <Style TargetType="Button" BasedOn="{StaticResource Margin}" />
+                    <Style TargetType="TextBox" BasedOn="{StaticResource Margin}" />
+                    <Style TargetType="ListView" BasedOn="{StaticResource Margin}" />
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource Margin}" />
+                    <Style TargetType="DatePicker" BasedOn="{StaticResource Margin}" />
+                    <Style TargetType="TabControl" BasedOn="{StaticResource Margin}" />
+            </Style.Resources>
         </Style>
     </Application.Resources>
 </Application>
