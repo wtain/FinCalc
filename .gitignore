@@ -9,3 +9,4 @@ Debug
 Release
 Thumbs.db
 ~$*.xlsx
+Code/FCHA/packages/*
