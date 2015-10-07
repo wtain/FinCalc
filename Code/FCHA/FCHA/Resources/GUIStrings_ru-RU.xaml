@@ -72,5 +72,10 @@
     <s:String x:Key="ExpenseByCategory">Траты по датам и категориям</s:String>
     <s:String x:Key="ExpenseByCategoryAndMonth">Траты по месяцам и категориям</s:String>
     <s:String x:Key="ExpenseByTopLevelCategoryAndMonth">Траты по месяцам и основным категориям</s:String>
-    
+
+    <s:String x:Key="AccountTypeCash">Наличные</s:String>
+    <s:String x:Key="AccountTypeDebetCard">Дебетовая карта</s:String>
+    <s:String x:Key="AccountTypeCreditCard">Кредитная карта</s:String>
+    <s:String x:Key="AccountTypeDeposit">Депозит</s:String>
+
 </ResourceDictionary>

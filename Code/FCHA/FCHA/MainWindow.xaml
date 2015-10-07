@@ -195,7 +195,7 @@
                                 </StackPanel>
                                 
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource Type}" />
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AccountType, Mode=OneWay}" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AccountType, Mode=OneWay, Converter={x:Static local:AccountTypeToStringConverter.Instance}}" />
 
                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource Balance}" />
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Balance, Mode=OneWay}" Style="{StaticResource MoneyAmountTextStyle}" />

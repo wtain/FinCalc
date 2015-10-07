@@ -218,3 +218,8 @@ LocBAML?
 settings
 
 // todo: introduce report, StageName -> ReportName
+
+
+Type: cash -> Наличные
+
+AccountType -> overdraftcard

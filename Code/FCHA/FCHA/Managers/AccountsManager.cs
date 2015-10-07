@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SQLite;
 using System.Diagnostics;
+using FCHA.DataTypes;
 
 namespace FCHA
 {
@@ -49,7 +50,7 @@ namespace FCHA
 			string currency = reader.GetString(1);
 			long ownerPersonId = reader.GetInt64(2);
 			string name = reader.GetString(3);
-			AccountType type = Account.AccountTypeFromString(reader.GetString(4));
+			AccountType type = AccountTypeHelper.AccountTypeFromString(reader.GetString(4));
 			return new Account(accountId, currency, ownerPersonId, name, type);
 		}
 
@@ -113,7 +114,7 @@ namespace FCHA
 
 		private KeyValuePair<string, string> GetTypeColumnPair(AccountType type)
 		{
-			return new KeyValuePair<string, string>("Type", QueryBuilder.DecorateString(Account.AccountTypeToString(type)));
+			return new KeyValuePair<string, string>("Type", QueryBuilder.DecorateString(AccountTypeHelper.AccountTypeToString(type)));
 		}
 
 		public long AddAccount(string name, string currency, long ownerPersonId, AccountType type)

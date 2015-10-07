@@ -80,6 +80,26 @@ namespace FCHA
             get { return (string)CurrentDictionary["ExpenseByTopLevelCategoryAndMonth"]; }
         }
 
+        public string AccountTypeCash
+        {
+            get { return (string)CurrentDictionary["AccountTypeCash"]; }
+        }
+
+        public string AccountTypeDebetCard
+        {
+            get { return (string)CurrentDictionary["AccountTypeDebetCard"]; }
+        }
+
+        public string AccountTypeCreditCard
+        {
+            get { return (string)CurrentDictionary["AccountTypeCreditCard"]; }
+        }
+
+        public string AccountTypeDeposit
+        {
+            get { return (string)CurrentDictionary["AccountTypeDeposit"]; }
+        }
+
         public static App ThisApp
         {
             get { return (App)App.Current; }

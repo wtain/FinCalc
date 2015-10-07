@@ -73,4 +73,9 @@
     <s:String x:Key="ExpenseByCategoryAndMonth">Expense by Month &amp; Category</s:String>
     <s:String x:Key="ExpenseByTopLevelCategoryAndMonth">Expense by Month &amp; Top Category</s:String>
 
+    <s:String x:Key="AccountTypeCash">Cash</s:String>
+    <s:String x:Key="AccountTypeDebetCard">Debet Card</s:String>
+    <s:String x:Key="AccountTypeCreditCard">Credit Card</s:String>
+    <s:String x:Key="AccountTypeDeposit">Deposit</s:String>
+    
 </ResourceDictionary>

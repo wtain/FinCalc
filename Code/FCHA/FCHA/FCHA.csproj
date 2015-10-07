@@ -74,7 +74,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataTypes\AccountType.cs" />
     <Compile Include="AccountTypeToImageConverter.cs" />
+    <Compile Include="AccountTypeToStringConverter.cs" />
     <Compile Include="Calendar.cs" />
     <Compile Include="CbrClient\CbrClient.cs" />
     <Compile Include="CbrClient\FxRate.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="DataTypes\Account.cs" />
     <Compile Include="AccountancyApplication.cs" />
     <Compile Include="DataTypes\AccountBalance.cs" />
+    <Compile Include="DataTypes\AccountTypeHelper.cs" />
     <Compile Include="Dialogs\AccountDialog.xaml.cs">
       <DependentUpon>AccountDialog.xaml</DependentUpon>
     </Compile>
