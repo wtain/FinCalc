@@ -31,7 +31,13 @@
         <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Transfer.png" x:Key="TransferIcon" />
         <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Money.png" x:Key="MoneyIcon" />
         <BitmapImage UriSource="pack://application:,,,/FCHA;component/Icons/Lightning.png" x:Key="LightningIcon" />
-        
+
+        <ResourceDictionary x:Key="Strings">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resource Resources/GUIStrings.xaml" />
+                <ResourceDictionary Source="Resource Resources/GUIStrings_ru-RU.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
 
         <Style TargetType="TextBlock" x:Key="MoneyAmountTextStyle">
             <Setter Property="Foreground" Value="{Binding Text, RelativeSource={RelativeSource Self}, Converter={x:Static local:MoneyAmountTextToColorConverter.Instance}}" />

@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:FCHA.Resources"
+                    xmlns:local="clr-namespace:FCHA"
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
 
     <s:String x:Key="ApplicationName">Финансовый Калькулятор и Домашняя Бухгалтерия</s:String>
@@ -77,5 +77,9 @@
     <s:String x:Key="AccountTypeDebetCard">Дебетовая карта</s:String>
     <s:String x:Key="AccountTypeCreditCard">Кредитная карта</s:String>
     <s:String x:Key="AccountTypeDeposit">Депозит</s:String>
+
+    <s:String x:Key="CategoryDialogTitle">Свойства категории</s:String>
+    <s:String x:Key="CategoryName">Имя</s:String>
+    <s:String x:Key="CategoryIsIncome">Доход?</s:String>
 
 </ResourceDictionary>

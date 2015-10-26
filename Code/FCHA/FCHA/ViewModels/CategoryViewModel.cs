@@ -29,7 +29,10 @@ namespace FCHA
 		public static readonly DependencyProperty NameProperty =
 			DependencyProperty.Register("Name", typeof(string), typeof(CategoryViewModel));
 
-		public static readonly DependencyProperty ChildrenProperty =
+        public static readonly DependencyProperty IsIncomeProperty =
+            DependencyProperty.Register("IsIncome", typeof(bool), typeof(CategoryViewModel));
+
+        public static readonly DependencyProperty ChildrenProperty =
 			DependencyProperty.Register("Children", typeof(ObservableCollection<CategoryViewModel>), typeof(CategoryViewModel));
 
 		public string Name
@@ -38,7 +41,13 @@ namespace FCHA
 			set { SetValue(NameProperty, value); }
 		}
 
-		public ObservableCollection<CategoryViewModel> Children
+        public bool IsIncome
+        {
+            get { return (bool)GetValue(IsIncomeProperty); }
+            set { SetValue(IsIncomeProperty, value); }
+        }
+
+        public ObservableCollection<CategoryViewModel> Children
 		{
 			get { return (ObservableCollection<CategoryViewModel>)GetValue(ChildrenProperty); }
 			set { SetValue(ChildrenProperty, value); }
@@ -53,6 +62,7 @@ namespace FCHA
 		{
 			m_underlyingData = category;
 			Name = m_underlyingData.name;
+            IsIncome = m_underlyingData.isIncome;
 		}
 
 		public CategoryViewModel(CategoriesManager categoriesManager, CategoryViewModel parent, Category category)
@@ -68,5 +78,11 @@ namespace FCHA
 		{
 			return Name;
 		}
-	}
+
+        public void UpdateUnderlyingData()
+        {
+            m_underlyingData.name = Name;
+            m_underlyingData.isIncome = IsIncome;
+        }
+    }
 }

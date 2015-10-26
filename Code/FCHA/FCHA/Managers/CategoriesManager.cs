@@ -7,7 +7,7 @@ namespace FCHA
 	{
 		private SQLiteConnection m_conn;
 
-		private static readonly string[] Columns = new string[] { "name", "categoryId", "parentId" };
+		private static readonly string[] Columns = new string[] { "name", "categoryId", "parentId", "SeqNo", "IsIncome" };
 
 		public CategoriesManager(SQLiteConnection conn)
 		{
@@ -24,9 +24,9 @@ namespace FCHA
 			return SelectCategories(QueryBuilder.Select(Columns, "categories", "parentId", parentId.ToString()));
 		}
 
-		public long AddCategory(string name)
+		public long AddCategory(string name, bool isIncome)
 		{
-			return AddCategory(name, 0);
+			return AddCategory(name, 0, isIncome);
 		}
 
 		private KeyValuePair<string, string> GetNameColumnPair(string name)
@@ -39,11 +39,18 @@ namespace FCHA
 			return new KeyValuePair<string, string>("parentId", parentId.ToString());
 		}
 
-		public long AddCategory(string name, long parentId)
+        private KeyValuePair<string, string> GetIsIncomeColumnPair(bool isIncome)
+        {
+            return new KeyValuePair<string, string>("IsIncome", isIncome ? "1" : "0");
+        }
+
+        public long AddCategory(string name, long parentId, bool isIncome)
 		{
-			string query = QueryBuilder.InsertView("categories_view", "categories", "CategoryId",
-				                                                  GetNameColumnPair(name),
-															      GetParentIdColumnPair(parentId));
+            //InsertView
+            // "categories_view", "CategoryId",
+            string query = QueryBuilder.Insert("categories", GetNameColumnPair(name),
+															      GetParentIdColumnPair(parentId),
+                                                                  GetIsIncomeColumnPair(isIncome));
 			using (SQLiteCommand insert = new SQLiteCommand(query, m_conn))
 				return (long) insert.ExecuteScalar();
 		}
@@ -52,7 +59,8 @@ namespace FCHA
 		{
 			string query = QueryBuilder.Update("categories", "categoryId", cat.categoryId.ToString(),
 														          GetNameColumnPair(cat.name),
-																  GetParentIdColumnPair(cat.parentId));
+																  GetParentIdColumnPair(cat.parentId),
+                                                                  GetIsIncomeColumnPair(cat.isIncome));
 			using (SQLiteCommand update = new SQLiteCommand(query, m_conn))
 				update.ExecuteNonQuery();
 		}
@@ -74,7 +82,11 @@ namespace FCHA
 						string name = reader.GetString(0);
 						long categoryId = reader.GetInt64(1);
 						long parentId = reader.GetInt64(2);
-						yield return new Category(name, categoryId, parentId);
+                        long seqNo = reader.GetInt64(3);
+                        bool isIncome = false;
+                        if (!reader.IsDBNull(4))
+                            isIncome = reader.GetBoolean(4);
+						yield return new Category(name, categoryId, parentId, isIncome);
 					}
 				}
 		}

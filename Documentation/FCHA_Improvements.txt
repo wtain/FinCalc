@@ -223,3 +223,8 @@ settings
 Type: cash -> Наличные
 
 AccountType -> overdraftcard
+
+
+QR codes for cheques
+
+Foreign keys in sqlite?

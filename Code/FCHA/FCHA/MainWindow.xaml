@@ -65,7 +65,7 @@
                             <Button Name="btnRename" Click="btnRename_Click">
                                 <StackPanel Orientation="Vertical">
                                     <Image Source="{StaticResource UpdateIcon}" Width="24" Height="24" />
-                                    <TextBlock Text="{DynamicResource Rename}" />
+                                    <TextBlock Text="{DynamicResource EditDots}" />
                                 </StackPanel>
                             </Button>
                             <Button Name="btnRemove" Click="btnRemove_Click">

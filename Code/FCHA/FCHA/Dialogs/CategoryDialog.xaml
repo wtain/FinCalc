@@ -1,0 +1,42 @@
+﻿<Window x:Class="FCHA.Dialogs.CategoryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FCHA.Dialogs"
+        mc:Ignorable="d"
+        Title="{DynamicResource CategoryDialogTitle}" 
+        Height="110" Width="200" Name="dlgCategory" ResizeMode="NoResize" ShowInTaskbar="False" IsVisibleChanged="dlgCategory_IsVisibleChanged">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24" />
+            <RowDefinition Height="24" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{DynamicResource CategoryName}" />
+        <TextBox Grid.Row="0" Grid.Column="1" Name="txtCategoryName" Text="{Binding Mode=TwoWay, Path=CategoryName, ElementName=dlgCategory}" />
+
+        <CheckBox VerticalAlignment="Center" Grid.Row="1" Name="chkIsIncome" Grid.Column="0" Grid.ColumnSpan="2" 
+                  IsChecked="{Binding Mode=TwoWay, Path=IsIncome, ElementName=dlgCategory}" Content="{DynamicResource CategoryIsIncome}"  />
+
+        <Button Grid.Row="2" Grid.Column="0" Name="btnOK" Click="btnOK_Click" IsDefault="True">
+            <StackPanel Orientation="Vertical">
+                <Image Source="{StaticResource OkIcon}" Width="16" Height="16" />
+                <TextBlock Text="{DynamicResource OK}" />
+            </StackPanel>
+        </Button>
+
+        <Button Grid.Row="2" Grid.Column="1" Name="btnCancel" Click="btnCancel_Click" IsCancel="True">
+            <StackPanel Orientation="Vertical">
+                <Image Source="{StaticResource CancelIcon}" Width="16" Height="16" />
+                <TextBlock Text="{DynamicResource Cancel}" />
+            </StackPanel>
+        </Button>
+    </Grid>
+</Window>

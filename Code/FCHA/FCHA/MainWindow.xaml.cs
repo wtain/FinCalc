@@ -19,6 +19,7 @@ using IOPath = System.IO.Path;
 using System.Globalization;
 using System.Windows.Controls.Primitives;
 using System.Threading;
+using FCHA.Dialogs;
 
 namespace FCHA
 {
@@ -75,31 +76,32 @@ namespace FCHA
 
 		private void btnAdd_Click(object sender, RoutedEventArgs e)
 		{
-			InputDialog dlg = new InputDialog();
+			CategoryDialog dlg = new CategoryDialog();
 			if (true != dlg.ShowDialog())
 				return;
-			AccountancyApplication.AddCategory(dlg.Value);
+			AccountancyApplication.AddCategory(dlg.CategoryName, dlg.IsIncome);
 		}
 
 		private void btnAddChild_Click(object sender, RoutedEventArgs e)
 		{
 			if (null == SelectedCategory)
 				return;
-			InputDialog dlg = new InputDialog();
+            CategoryDialog dlg = new CategoryDialog();
 			if (true != dlg.ShowDialog())
 				return;
-			AccountancyApplication.AddChildCategory(SelectedCategory, dlg.Value);
+			AccountancyApplication.AddChildCategory(SelectedCategory, dlg.CategoryName, dlg.IsIncome);
 		}
 
 		private void btnRename_Click(object sender, RoutedEventArgs e)
 		{
 			if (null == SelectedCategory)
 				return;
-			InputDialog dlg = new InputDialog();
-			dlg.Value = SelectedCategory.UnderlyingData.name;
-			if (true != dlg.ShowDialog())
+            CategoryDialog dlg = new CategoryDialog();
+			dlg.CategoryName = SelectedCategory.UnderlyingData.name;
+            dlg.IsIncome = SelectedCategory.UnderlyingData.isIncome;
+            if (true != dlg.ShowDialog())
 				return;
-			AccountancyApplication.RenameCategory(SelectedCategory, dlg.Value);
+			AccountancyApplication.ChangeCategory(SelectedCategory, dlg.CategoryName, dlg.IsIncome);
 		}
 
 		private void btnRemove_Click(object sender, RoutedEventArgs e)

@@ -134,7 +134,7 @@ namespace FCHA
 			Accounts = new ObservableCollection<AccountViewModel>(m_accountsManager.EnumAllAccounts().Select(a => GetAccount(a)));
 			Categories = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumAllCategories().Select(c => new CategoryViewModel(c)));
 			Expenses = new ObservableCollection<ExpenseViewModel>(m_expensesManager.EnumAllExpenses().Select(e => new ExpenseViewModel(e, this)));
-			VirtualRoot = new CategoryViewModel(m_categoriesManager, null, new Category("Virtual", 0));
+			VirtualRoot = new CategoryViewModel(m_categoriesManager, null, new Category("Virtual", 0, false));
 			SelectedDate = DateTime.Now.Date;
 			if (Users.Count > 0)
 			{
@@ -193,18 +193,18 @@ namespace FCHA
 			return m_accountCache[a.accountId];
 		}
 
-		public void AddCategory(string name)
+		public void AddCategory(string name, bool bIsIncome)
 		{
-			long catId = m_categoriesManager.AddCategory(name);
-			Category c = new Category(name, catId);
+			long catId = m_categoriesManager.AddCategory(name, bIsIncome);
+			Category c = new Category(name, catId, bIsIncome);
 			VirtualRoot.Children.Add(new CategoryViewModel(m_categoriesManager, VirtualRoot, c));
 			Categories.Add(new CategoryViewModel(c));
 		}
 
-		public void AddChildCategory(CategoryViewModel category, string name)
+		public void AddChildCategory(CategoryViewModel category, string name, bool bIsIncome)
 		{
-			long catId = m_categoriesManager.AddCategory(name, category.CategoryId);
-			Category c = new Category(name, catId, category.CategoryId);
+			long catId = m_categoriesManager.AddCategory(name, category.CategoryId, bIsIncome);
+			Category c = new Category(name, catId, category.CategoryId, bIsIncome);
 			category.Children.Add(new CategoryViewModel(m_categoriesManager, category, c));
 			Categories.Add(new CategoryViewModel(c));
 		}
@@ -214,14 +214,16 @@ namespace FCHA
 			return Categories.Where(c => c.CategoryId == categoryId).FirstOrDefault();
 		}
 
-		public void RenameCategory(CategoryViewModel category, string newName)
+		public void ChangeCategory(CategoryViewModel category, string newName, bool isincome)
 		{
 			Category cat = category.UnderlyingData;
 			cat.name = newName;
-			m_categoriesManager.UpdateCategory(cat);
-			category.Name = newName;
-			GetCategory(category.CategoryId).Name = newName;
-		}
+            cat.isIncome = isincome;
+            m_categoriesManager.UpdateCategory(cat);
+            category.Name = newName;
+            category.IsIncome = isincome;
+            category.UpdateUnderlyingData();
+        }
 
 		public void RemoveCategory(CategoryViewModel category)
 		{

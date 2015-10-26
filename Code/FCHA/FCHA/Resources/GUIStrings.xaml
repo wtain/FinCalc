@@ -77,5 +77,9 @@
     <s:String x:Key="AccountTypeDebetCard">Debet Card</s:String>
     <s:String x:Key="AccountTypeCreditCard">Credit Card</s:String>
     <s:String x:Key="AccountTypeDeposit">Deposit</s:String>
-    
+
+    <s:String x:Key="CategoryDialogTitle">Category Properties</s:String>
+    <s:String x:Key="CategoryName">Category Name</s:String>
+    <s:String x:Key="CategoryIsIncome">Is Income?</s:String>
+
 </ResourceDictionary>
