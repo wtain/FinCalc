@@ -62,6 +62,7 @@
     <ProjectReference Include="..\FCHA\FCHA.csproj">
       <Project>{19C9068B-E776-420B-A7F0-66A60FC77702}</Project>
       <Name>FCHA</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Choose>
