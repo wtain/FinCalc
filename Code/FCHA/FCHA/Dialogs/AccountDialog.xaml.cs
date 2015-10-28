@@ -40,7 +40,8 @@ namespace FCHA
 		public AccountDialog(PersonViewModel selectedUser, AccountancyApplication accountancyApplication)
 			: this(accountancyApplication.CreateAccount(selectedUser), accountancyApplication)
 		{
-
+            // todo: create account only user has confirmed - pressed OK. 
+            // If user presses cancel account still exists
 		}
 
 		public AccountDialog(AccountViewModel account, AccountancyApplication accountancyApplication)

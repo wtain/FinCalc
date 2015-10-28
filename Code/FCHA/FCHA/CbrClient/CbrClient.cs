@@ -1,4 +1,5 @@
 ﻿using FCHA.CBR;
+using FCHA.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,9 +9,12 @@ using System.Windows;
 
 namespace FCHA
 {
-    public class CbrClient : DependencyObject
+    public class CbrClient : DependencyObject, IFXRateSource
     {
         private DailyInfoSoapClient m_srv = new DailyInfoSoapClient();
+        private Dictionary<string, FxRate> m_rates = new Dictionary<string, FxRate>();
+
+        private object m_lock = new object();
 
         public static readonly DependencyProperty SelectedDateProperty =
             DependencyProperty.Register("SelectedDate", typeof(DateTime), typeof(CbrClient), 
@@ -27,14 +31,24 @@ namespace FCHA
 
         public IEnumerable<FxRate> FXRates
         {
-            get { return (IEnumerable<FxRate>)GetValue(FXRatesProperty); }
-            set { SetValue(FXRatesProperty, value); }
+            get { lock (m_lock) return (IEnumerable<FxRate>)GetValue(FXRatesProperty); }
+            set { lock (m_lock) SetValue(FXRatesProperty, value); }
         }
 
         public CbrClient()
         {
             m_srv.GetCursOnDateCompleted += OnFxRatesRequestCompleted;
             SelectedDate = DateTime.Now.Date;
+        }
+
+        public FxRate GetFXRate(string CCY)
+        {
+            lock (m_lock)
+            {
+                if (null == m_rates || !m_rates.ContainsKey(CCY))
+                    return null;
+                return m_rates[CCY];
+            }
         }
 
         private void OnFxRatesRequestCompleted(object sendser, GetCursOnDateCompletedEventArgs e)
@@ -50,7 +64,13 @@ namespace FCHA
                 string VchCode = r["VchCode"] as string;
                 rates.Add(new FxRate(VchCode, Vcurs));
             }
-            FXRates = rates;
+            lock (m_lock)
+            {
+                FXRates = rates;
+                m_rates = new Dictionary<string, FxRate>();
+                foreach (FxRate rate in FXRates)
+                    m_rates.Add(rate.CCY, rate);
+            }
         }
 
         private static void OnSelectedDateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:FCHA"
+        xmlns:wpfh="clr-namespace:FCHA.WPFHelpers"
         Title="{DynamicResource ApplicationName}" 
         Height="420" Width="800" 
         Name="winMain"
@@ -40,14 +41,24 @@
                             <RowDefinition Height="48" />
                         </Grid.RowDefinitions>
 
-                        <TreeView Grid.Row="0" 
-                                  ItemsSource="{Binding VirtualRoot.Children}" Name="treeCategories">
-                            <TreeView.ItemTemplate>
-                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                    <TextBlock Text="{Binding Name}" />
-                                </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>
-                        </TreeView>
+                        <!--<wpfh:ItemsControlDragDropDecorator Grid.Row="0" AllowDrop="True" 
+                        ItemType="{x:Type this:Product}" DataTemplate="{StaticResource listBoxDataTemplate}" >-->
+                            <TreeView Grid.Row="0"
+                                    ItemsSource="{Binding VirtualRoot.Children}" Name="treeCategories"
+                                    AllowDrop="True"
+                                    Drop="treeCategories_Drop"
+                                    DragOver="treeCategories_DragOver">
+                                <TreeView.ItemTemplate>
+                                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                        <TextBlock Name="tbCategory" Text="{Binding Name}" 
+                                               AllowDrop="True"
+                                               Drop="tbCategory_Drop"
+                                               DragOver="tbCategory_DragOver"
+                                               MouseMove="tbCategory_MouseMove" />
+                                    </HierarchicalDataTemplate>
+                                </TreeView.ItemTemplate>
+                            </TreeView>
+                        <!--</wpfh:ItemsControlDragDropDecorator>-->
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <Button Name="btnAdd" Click="btnAdd_Click">

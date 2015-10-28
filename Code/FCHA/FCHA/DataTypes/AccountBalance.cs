@@ -5,10 +5,15 @@ using System.Text;
 
 namespace FCHA
 {
-	public struct AccountBalance
+	public class AccountBalance
 	{
 		public long balance;
 		public DateTime lastUpdated;
+
+        public AccountBalance()
+        {
+            balance = 0;
+        }
 
 		public AccountBalance(long balance, DateTime lastUpdated)
 		{

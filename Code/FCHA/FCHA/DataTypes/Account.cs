@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace FCHA
 {
-	public struct Account
+	public class Account
 	{
 		public long accountId;
 		public string currency;
@@ -19,6 +19,7 @@ namespace FCHA
 			return new Account(0, "RUB", ownerId, "(Default)", AccountType.Cash);
 		}
 
+        // Do we need id here?
 		public Account(long accountId, string currency, long ownerPersonId, string name, AccountType type)
 		{
 			this.accountId = accountId;

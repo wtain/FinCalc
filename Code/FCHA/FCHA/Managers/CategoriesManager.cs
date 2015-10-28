@@ -1,10 +1,11 @@
 ﻿using System.Data.SQLite;
 using System.Collections.Generic;
+using FCHA.Interfaces;
 
 namespace FCHA
 {
-	public class CategoriesManager
-	{
+	public class CategoriesManager : ICategoriesManager
+    {
 		private SQLiteConnection m_conn;
 
 		private static readonly string[] Columns = new string[] { "name", "categoryId", "parentId", "SeqNo", "IsIncome" };
@@ -16,12 +17,12 @@ namespace FCHA
 
 		public IEnumerable<Category> EnumAllCategories()
 		{
-			return SelectCategories(QueryBuilder.Select(Columns, "categories"));
+			return SelectCategories(QueryBuilder.Ordered(QueryBuilder.Select(Columns, "categories"), "SeqNo"));
 		}
 
 		public IEnumerable<Category> EnumCategoriesByParent(long parentId)
 		{
-			return SelectCategories(QueryBuilder.Select(Columns, "categories", "parentId", parentId.ToString()));
+			return SelectCategories(QueryBuilder.Ordered(QueryBuilder.Select(Columns, "categories", "parentId", parentId.ToString()), "SeqNo"));
 		}
 
 		public long AddCategory(string name, bool isIncome)

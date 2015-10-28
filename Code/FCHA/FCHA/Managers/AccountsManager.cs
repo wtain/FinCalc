@@ -5,11 +5,12 @@ using System.Text;
 using System.Data.SQLite;
 using System.Diagnostics;
 using FCHA.DataTypes;
+using FCHA.Interfaces;
 
 namespace FCHA
 {
-	public class AccountsManager
-	{
+	public class AccountsManager : IAccountsManager
+    {
 		private SQLiteConnection m_conn;
 
 		private static readonly string[] Columns = 
@@ -94,7 +95,7 @@ namespace FCHA
 					while (reader.Read())
 						return BuildAccountStructure(reader);
 				}
-			return new Account();
+			return null;
 		}
 
 		private KeyValuePair<string, string> GetNameColumnPair(string name)

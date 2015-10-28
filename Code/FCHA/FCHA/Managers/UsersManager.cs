@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Data.SQLite;
 using System.Diagnostics;
+using FCHA.Interfaces;
 
 namespace FCHA
 {
-	public class UsersManager
-	{
+	public class UsersManager : IUsersManager
+    {
 		private SQLiteConnection m_conn;
 
 		public static readonly string[] Columns = new string[] { "Name", "FullName", "PersonId" };
@@ -56,7 +57,7 @@ namespace FCHA
 					while (reader.Read())
 						return BuildUserStructure(reader);
 				}
-			return new Person();
+			return null;
 		}
 
 		private KeyValuePair<string, string> GetNameColumnPair(string name)

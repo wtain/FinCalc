@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.SQLite;
+using FCHA.Interfaces;
 
 namespace FCHA
 {
-	public class ExpensesManager
-	{
+	public class ExpensesManager : IExpensesManager
+    {
 		private SQLiteConnection m_conn;
 
 		private static readonly string[] Columns = 

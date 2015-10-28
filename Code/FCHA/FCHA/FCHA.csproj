@@ -74,6 +74,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AccountancyDatabase.cs" />
+    <Compile Include="Interfaces\IAccountancyDatabase.cs" />
+    <Compile Include="Interfaces\IFXRateSource.cs" />
     <Compile Include="DataTypes\AccountType.cs" />
     <Compile Include="AccountTypeToImageConverter.cs" />
     <Compile Include="AccountTypeToStringConverter.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="AccountancyApplication.cs" />
     <Compile Include="DataTypes\AccountBalance.cs" />
     <Compile Include="DataTypes\AccountTypeHelper.cs" />
+    <Compile Include="DataTypes\CategoryType.cs" />
     <Compile Include="Dialogs\AccountDialog.xaml.cs">
       <DependentUpon>AccountDialog.xaml</DependentUpon>
     </Compile>
@@ -99,6 +103,10 @@
       <DependentUpon>MoneyTransferDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Managers\AccountsManager.cs" />
+    <Compile Include="Interfaces\ICategoriesManager.cs" />
+    <Compile Include="Interfaces\IAccountsManager.cs" />
+    <Compile Include="Interfaces\IExpensesManager.cs" />
+    <Compile Include="Interfaces\IUsersManager.cs" />
     <Compile Include="MoneyAmountTextToColorConverter.cs" />
     <Compile Include="OlapCellInfo.cs" />
     <Compile Include="Service References\CBR\Reference.cs">
@@ -127,6 +135,11 @@
       <DependentUpon>UserInfoDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Managers\UsersManager.cs" />
+    <Compile Include="WPFHelpers\BaseDecorator.cs" />
+    <Compile Include="WPFHelpers\DragAdorner.cs" />
+    <Compile Include="WPFHelpers\IEnumerableExtensions.cs" />
+    <Compile Include="WPFHelpers\ItemsControlDragDropDecorator.cs" />
+    <Compile Include="WPFHelpers\ItemsControlHelper.cs" />
     <Page Include="Controls\AccountControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -198,7 +211,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
     <None Include="Properties\DataSources\System.Xml.XmlNode.datasource" />

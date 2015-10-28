@@ -27,6 +27,11 @@ namespace FCHA
 			sb.AppendFormat(" FROM {0}", tableName);
 			return sb.ToString();
 		}
+
+        public static string Ordered(string selectQuery, params string[] columns)
+        {
+            return string.Format("{0} ORDER BY {1}", selectQuery, string.Join(", ", columns.AsEnumerable()));
+        }
 		
 		public static string Select(string[] fields, string tableName, params string[] filters)
 		{

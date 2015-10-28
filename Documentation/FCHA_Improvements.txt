@@ -1,20 +1,16 @@
 Code quality
 - Uniquify all managers
 - Unit tests
-- Organize files in filesystem (move by layers - data access, data structures, view models, dialogs, ...)
 - Utilize Linq to sqlite
 - Utilize WPF features to reduce code size
 - Separate libraries for functionality
-- Introduce UserControls
 
 UI
 - General dialogs (rather than speciffic ones for each data structure)
 - Property sheets
 
 Collections management
-- Utilize observable collections
 - Preserve selection and expanded nodes (for tree view)
-- Don't update everything
 
 User experrience
 - Add hotkeys
@@ -41,16 +37,9 @@ Specific features
 
 Settings
 - Database path
-- MUI?
-
-Graphics
-- Icons
 
 Code organization
 - Move database code to Code from Data
-
-Technical
-- Migrate to the latest Visual Studio
 
 Information
  - Static - e.g. currency list
@@ -62,28 +51,16 @@ Processes
 
 
 todo:
-All viewModels should be unique in the process
 factories for creating models
 Introduce one place in code for all objects, objects' view models access (so that only one copy of each physical entity exists)
 
-managers to cache viewmodels
-nobody should manipultate plain data
-
-UnderlyingData to be updated when accesed - in get accessor?
-
-Expenses - update balance - aggregate flows
+UnderlyingData to be updated when accessed - in get accessor?
 
 ? What to do with deleted account's flows and expenses?
-? Enforce update of cached entities?
-? How do I get the id of just-added entity?
-
 
 + Task tracking
 
 expenses filter - hierarchical categories
-
-
-todo: remove from caches
 
 
 group dates in OLAP - week, month, year
@@ -206,6 +183,7 @@ Type
 CategoryType
 
 ExpenseType -> Expense, Income, TransferOut, TransferIn
+IsIncome?
 
 
 delete -> prompt
@@ -228,3 +206,15 @@ AccountType -> overdraftcard
 QR codes for cheques
 
 Foreign keys in sqlite?
+
++ Rename for entities
+
+Adorners
+
+stubs/mocks and interfaces
+
+plugins
+
+struct -> class
+
+AccountBalance -> AccountState

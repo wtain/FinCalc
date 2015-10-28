@@ -65,8 +65,8 @@ namespace FCHA
 
 			SQLiteConnection conn = new SQLiteConnection(string.Format("Data Source={0};Version=3;", DatabaseFileName));
 			conn.Open();
-
-			AccountancyApplication = new AccountancyApplication(conn);
+            
+			AccountancyApplication = new AccountancyApplication(new AccountancyDatabase(conn));
 		}
 
 		public CategoryViewModel SelectedCategory
@@ -218,6 +218,70 @@ namespace FCHA
         private void btnLanguageEnglish_Click(object sender, RoutedEventArgs e)
         {
             App.ThisApp.SetLanguage("en-US");
+        }
+
+        private CategoryViewModel CategoryFromTextBlockSender(object sender)
+        {
+            FrameworkElement fe = sender as FrameworkElement;
+            if (null == fe)
+                return null;
+            return fe.DataContext as CategoryViewModel;
+        }
+
+        private void tbCategory_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                CategoryViewModel category = CategoryFromTextBlockSender(sender);
+                if (null != category)
+                {
+                    DataObject dataObj = new DataObject();
+                    dataObj.SetData("Category", category);
+                    DragDrop.DoDragDrop(treeCategories, dataObj, DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void tbCategory_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("Category"))
+            {
+                CategoryViewModel category = (CategoryViewModel)e.Data.GetData("Category");
+
+                e.Effects = DragDropEffects.Move;
+            }
+            e.Handled = true;
+        }
+
+        private void CheckCanDrop(CategoryViewModel currentCategory, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.None;
+            if (null == currentCategory)
+                return;
+            if (!e.Data.GetDataPresent("Category"))
+                return;
+            e.Handled = true;
+            CategoryViewModel category = (CategoryViewModel)e.Data.GetData("Category");
+            if (null == category)
+                return;
+            if (category.IsCovers(currentCategory))
+                return;
+            e.Effects = DragDropEffects.Move;
+        }
+
+        private void tbCategory_DragOver(object sender, DragEventArgs e)
+        {
+            CheckCanDrop(CategoryFromTextBlockSender(sender), e);
+        }
+
+        private void treeCategories_Drop(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void treeCategories_DragOver(object sender, DragEventArgs e)
+        {
+            CheckCanDrop(AccountancyApplication.VirtualRoot, e);
         }
     }
 }

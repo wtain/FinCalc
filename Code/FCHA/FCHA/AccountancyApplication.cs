@@ -5,17 +5,14 @@ using System.Text;
 using System.Data.SQLite;
 using System.Collections.ObjectModel;
 using System.Windows;
+using FCHA.Interfaces;
+using FCHA.WPFHelpers;
 
 namespace FCHA
 {
 	public class AccountancyApplication : DependencyObject
-		//: IDisposable
 	{
-		private SQLiteConnection m_connection;
-		private CategoriesManager m_categoriesManager;
-		private UsersManager m_usersManager;
-		private AccountsManager m_accountsManager;
-		private ExpensesManager m_expensesManager;
+        private IAccountancyDatabase m_database;
 
 		private Dictionary<long, PersonViewModel> m_personCache;
 		private Dictionary<long, AccountViewModel> m_accountCache;
@@ -119,22 +116,19 @@ namespace FCHA
             set { SetValue(ReportsProperty, value); }
         }
 
-        public AccountancyApplication(SQLiteConnection connection)
+        public AccountancyApplication(IAccountancyDatabase database)
 		{
-			m_connection = connection;
-			m_categoriesManager = new CategoriesManager(m_connection);
-			m_usersManager = new UsersManager(m_connection);
-			m_accountsManager = new AccountsManager(m_connection);
-			m_expensesManager = new ExpensesManager(m_connection);
+            m_database = database;
 
 			m_personCache = new Dictionary<long, PersonViewModel>();
 			m_accountCache = new Dictionary<long, AccountViewModel>();
 
-			Users = new ObservableCollection<PersonViewModel>(m_usersManager.EnumAllUsers().Select(p => GetPerson(p)));
-			Accounts = new ObservableCollection<AccountViewModel>(m_accountsManager.EnumAllAccounts().Select(a => GetAccount(a)));
-			Categories = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumAllCategories().Select(c => new CategoryViewModel(c)));
-			Expenses = new ObservableCollection<ExpenseViewModel>(m_expensesManager.EnumAllExpenses().Select(e => new ExpenseViewModel(e, this)));
-			VirtualRoot = new CategoryViewModel(m_categoriesManager, null, new Category("Virtual", 0, false));
+			Users = new ObservableCollection<PersonViewModel>(m_database.EnumAllUsers().Select(p => GetPerson(p)));
+			Accounts = new ObservableCollection<AccountViewModel>(m_database.EnumAllAccounts().Select(a => GetAccount(a)));
+			Categories = new ObservableCollection<CategoryViewModel>(m_database.EnumAllCategories().Select(c => new CategoryViewModel(m_database, c)));
+            Categories.ForEach(c => c.AdjustParent(this));
+            Expenses = new ObservableCollection<ExpenseViewModel>(m_database.EnumAllExpenses().Select(e => new ExpenseViewModel(e, this)));
+			VirtualRoot = new CategoryViewModel(m_database, null, new Category("Virtual", 0, false));
 			SelectedDate = DateTime.Now.Date;
 			if (Users.Count > 0)
 			{
@@ -143,16 +137,19 @@ namespace FCHA
 					SelectedAccount = SelectedUser.UserAccounts[0];
 			}
 
-            Reports = new ObservableCollection<OlapView>();
-            Reports.Add(new OlapView("ExpenseByCategory", m_connection, "ExpenseByCategory", new OlapStage("Date", "Category", "Amount")));
-            Reports.Add(new OlapView("ExpenseByCategoryAndMonth", m_connection, "ExpenseByCategoryAndMonth", new OlapStage("Month", "Category", "Amount")));
-            Reports.Add(new OlapView("ExpenseByTopLevelCategoryAndMonth", m_connection, "ExpenseByTopLevelCategoryAndMonth", new OlapStage("Month", "Category", "Amount")));
+            Reports = new ObservableCollection<OlapView>(m_database.Reports);
             
 
             if (Reports.Count > 0)
                 SelectedReport = Reports[0];
 
-            LiveSource = new CbrClient();
+            // todo: add stub
+            try
+            {
+                LiveSource = new CbrClient();
+            }
+            catch (System.InvalidOperationException)
+            { }
         }
 
         private static void OnSelectedReportChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
@@ -164,8 +161,13 @@ namespace FCHA
 
         public PersonViewModel GetPerson(long personId)
 		{
-			if (!m_personCache.ContainsKey(personId))
-				m_personCache[personId] = new PersonViewModel(m_usersManager.GetUser(personId), this);
+            if (!m_personCache.ContainsKey(personId))
+            {
+                Person person = m_database.GetUser(personId);
+                if (null == person)
+                    return null;
+                m_personCache.Add(personId, new PersonViewModel(person, this));
+            }
 			return m_personCache[personId];
 		}
 
@@ -176,8 +178,13 @@ namespace FCHA
 
 		public AccountViewModel GetAccount(long accountId)
 		{
-			if (!m_accountCache.ContainsKey(accountId))
-				m_accountCache[accountId] = new AccountViewModel(m_accountsManager.GetAccount(accountId), this);
+            if (!m_accountCache.ContainsKey(accountId))
+            {
+                Account account = m_database.GetAccount(accountId);
+                if (null == account)
+                    return null;
+                m_accountCache.Add(accountId, new AccountViewModel(account, this));
+            }
 			return m_accountCache[accountId];
 		}
 
@@ -195,23 +202,27 @@ namespace FCHA
 
 		public void AddCategory(string name, bool bIsIncome)
 		{
-			long catId = m_categoriesManager.AddCategory(name, bIsIncome);
+			long catId = m_database.AddCategory(name, bIsIncome);
 			Category c = new Category(name, catId, bIsIncome);
-			VirtualRoot.Children.Add(new CategoryViewModel(m_categoriesManager, VirtualRoot, c));
-			Categories.Add(new CategoryViewModel(c));
+            CategoryViewModel newCategory = new CategoryViewModel(m_database, VirtualRoot, c);
+            VirtualRoot.Children.Add(newCategory);
+			Categories.Add(newCategory);
 		}
 
 		public void AddChildCategory(CategoryViewModel category, string name, bool bIsIncome)
 		{
-			long catId = m_categoriesManager.AddCategory(name, category.CategoryId, bIsIncome);
+			long catId = m_database.AddCategory(name, category.CategoryId, bIsIncome);
 			Category c = new Category(name, catId, category.CategoryId, bIsIncome);
-			category.Children.Add(new CategoryViewModel(m_categoriesManager, category, c));
-			Categories.Add(new CategoryViewModel(c));
+            CategoryViewModel newCategory = new CategoryViewModel(m_database, category, c);
+            category.Children.Add(newCategory);
+			Categories.Add(newCategory);
 		}
 
 		public CategoryViewModel GetCategory(long categoryId)
 		{
-			return Categories.Where(c => c.CategoryId == categoryId).FirstOrDefault();
+            if (0 == categoryId)
+                return VirtualRoot;
+            return Categories.Where(c => c.CategoryId == categoryId).FirstOrDefault();
 		}
 
 		public void ChangeCategory(CategoryViewModel category, string newName, bool isincome)
@@ -219,7 +230,7 @@ namespace FCHA
 			Category cat = category.UnderlyingData;
 			cat.name = newName;
             cat.isIncome = isincome;
-            m_categoriesManager.UpdateCategory(cat);
+            m_database.UpdateCategory(cat);
             category.Name = newName;
             category.IsIncome = isincome;
             category.UpdateUnderlyingData();
@@ -227,7 +238,7 @@ namespace FCHA
 
 		public void RemoveCategory(CategoryViewModel category)
 		{
-			m_categoriesManager.DeleteCategory(category.UnderlyingData);
+            m_database.DeleteCategory(category.UnderlyingData);
 			category.Parent.Children.Remove(category);
 			Categories.Remove(GetCategory(category.CategoryId));
 		}
@@ -240,7 +251,7 @@ namespace FCHA
 		public void AddPerson(PersonViewModel person)
 		{
 			Person refPerson = person.UnderlyingData;
-			m_usersManager.AddUser(ref refPerson);
+            m_database.AddUser(ref refPerson);
 			person.UnderlyingData = refPerson;
 			m_personCache.Add(refPerson.personId, person);
 			Users.Add(person);
@@ -248,12 +259,12 @@ namespace FCHA
 
 		public void UpdatePerson(PersonViewModel person)
 		{
-			m_usersManager.UpdateUser(person.UnderlyingData);
+            m_database.UpdateUser(person.UnderlyingData);
 		}
 
 		public void RemovePerson(PersonViewModel person)
 		{
-			m_usersManager.DeleteUser(person.UnderlyingData);
+            m_database.DeleteUser(person.UnderlyingData);
 			m_personCache.Remove(person.PersonId);
 			Users.Remove(person);
 		}
@@ -265,13 +276,14 @@ namespace FCHA
 
 		public IEnumerable<AccountViewModel> EnumUserAccounts(PersonViewModel person)
 		{
-			return m_accountsManager.EnumUserAccounts(person.UnderlyingData).Select(a => GetAccount(person, a));
+			return m_database.EnumUserAccounts(person.UnderlyingData).Select(a => GetAccount(person, a));
 		}
 
 		public void AddAccount(AccountViewModel account)
 		{
+            // todo: add account to particular person specified
 			Account refAccount = account.UnderlyingData;
-			m_accountsManager.AddAccount(ref refAccount);
+            m_database.AddAccount(ref refAccount);
 			account.UnderlyingData = refAccount;
 			account.Owner.UserAccounts.Add(account);
 			m_accountCache.Add(account.AccountId, account);
@@ -279,29 +291,31 @@ namespace FCHA
 
 		public void UpdateAccount(AccountViewModel account)
 		{
-			m_accountsManager.UpdateAccount(account.UnderlyingData);
+            m_database.UpdateAccount(account.UnderlyingData);
 		}
 
 		public void DeleteAccount(AccountViewModel account)
 		{
-			m_accountsManager.DeleteAccount(account.UnderlyingData);
+            m_database.DeleteAccount(account.UnderlyingData);
 			account.Owner.UserAccounts.Remove(account);
 			m_accountCache.Remove(account.AccountId);
 		}
 
 		public AccountBalance GetAccountState(AccountViewModel account)
 		{
-			return m_accountsManager.GetAccountBalance(account.AccountId);
+			return m_database.GetAccountBalance(account.AccountId);
 		}
 
-		public void AddExpense(ExpenseViewModel expense)
+		public long AddExpense(ExpenseViewModel expense)
 		{
 			Expense refExpense = expense.UnderlyingData;
-			m_expensesManager.AddExpense(ref refExpense);
+            m_database.AddExpense(ref refExpense);
 			expense.UnderlyingData = refExpense;
 			Expenses.Add(expense);
 			expense.Account.UpdateAccountState();
-            SelectedReport.RefreshView();
+            if (null != SelectedReport)
+                SelectedReport.RefreshView();
+            return refExpense.expenseId;
 		}
 
 		public void UpdateExpense(ExpenseViewModel expense)
@@ -310,19 +324,21 @@ namespace FCHA
 			if (expense.Account.AccountId != expense.AccountId)
 				oldAccount = GetAccount(expense.AccountId);
 			expense.UpdateUnderlyingData();
-			m_expensesManager.UpdateExpense(expense.UnderlyingData);
+            m_database.UpdateExpense(expense.UnderlyingData);
 			expense.Account.UpdateAccountState();
 			if (null != oldAccount)
 				oldAccount.UpdateAccountState();
-            SelectedReport.RefreshView();
+            if (null != SelectedReport)
+                SelectedReport.RefreshView();
 		}
 
 		public void DeleteExpense(ExpenseViewModel expense)
 		{
-			m_expensesManager.DeleteExpense(expense.UnderlyingData);
+            m_database.DeleteExpense(expense.UnderlyingData);
 			Expenses.Remove(expense);
 			expense.Account.UpdateAccountState();
-            SelectedReport.RefreshView();
+            if (null != SelectedReport)
+                SelectedReport.RefreshView();
 		}
 	}
 }

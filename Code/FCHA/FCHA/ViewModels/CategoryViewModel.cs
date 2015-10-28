@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using FCHA.Interfaces;
 
 namespace FCHA
 {
@@ -13,7 +14,7 @@ namespace FCHA
 		: DependencyObject
 	{
 		private Category m_underlyingData;
-		private CategoriesManager m_categoriesManager;
+		private ICategoriesManager m_categoriesManager;
 		private CategoryViewModel m_parent;
 
 		public Category UnderlyingData
@@ -58,21 +59,39 @@ namespace FCHA
 			get { return m_parent; }
 		}
 
-		public CategoryViewModel(Category category)
+		private CategoryViewModel(Category category)
 		{
 			m_underlyingData = category;
 			Name = m_underlyingData.name;
             IsIncome = m_underlyingData.isIncome;
 		}
 
-		public CategoryViewModel(CategoriesManager categoriesManager, CategoryViewModel parent, Category category)
+		public CategoryViewModel(ICategoriesManager categoriesManager, CategoryViewModel parent, Category category)
 			: this(category)
 		{
 			m_categoriesManager = categoriesManager;
 			m_parent = parent;
 
-			Children = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumCategoriesByParent(CategoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c)));
+            WatchChildren();
 		}
+
+        public CategoryViewModel(ICategoriesManager categoriesManager, Category category)
+            : this(category)
+        {
+            m_categoriesManager = categoriesManager;
+            
+            WatchChildren();
+        }
+
+        internal void AdjustParent(AccountancyApplication app)
+        {
+            m_parent = app.GetCategory(m_underlyingData.categoryId);
+        }
+
+        private void WatchChildren()
+        {
+            Children = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumCategoriesByParent(CategoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c)));
+        }
 
 		public override string ToString()
 		{
@@ -83,6 +102,33 @@ namespace FCHA
         {
             m_underlyingData.name = Name;
             m_underlyingData.isIncome = IsIncome;
+        }
+
+        public bool IsCovers(CategoryViewModel category)
+        {
+            CategoryViewModel c = category;
+            while (null != c)
+            {
+                if (c.CategoryId == CategoryId)
+                    return true;
+                c = c.Parent;
+            }
+            return false;
+        }
+
+        public int Level
+        {
+            get
+            {
+                int rv = 0;
+                CategoryViewModel cvm = Parent;
+                while (null != cvm)
+                {
+                    ++rv;
+                    cvm = cvm.Parent;
+                }
+                return rv;
+            }
         }
     }
 }

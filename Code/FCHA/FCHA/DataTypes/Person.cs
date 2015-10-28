@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FCHA
 {
-	public struct Person
+	public class Person
 	{
 		public string name;
 		public string fullName;
