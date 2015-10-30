@@ -19,7 +19,7 @@ namespace FCHA.Tests
             get
             {
                 if (null == m_app)
-                    m_app = new AccountancyApplication(Database);
+                    m_app = new AccountancyApplication(Database, null);
                 return m_app;
             }
         }
@@ -315,12 +315,21 @@ namespace FCHA.Tests
             AccountBalance accState = Application.GetAccountState(account);
             long oldBalance = accState.balance;
             expense.Amount = 150;
-            expense.UpdateUnderlyingData();
-            // todo: move expense to different account
             Application.UpdateExpense(expense);
             accState = Application.GetAccountState(account);
             long newBalance = accState.balance;
             Assert.AreEqual(newBalance + 50, oldBalance);
+            PersonViewModel person2 = Application.GetPerson(Database.User2Id);
+            AccountViewModel account2 = person2.UserAccounts.First();
+            AccountBalance accState2 = Application.GetAccountState(account2);
+            long accBalance2 = accState2.balance;
+            expense.Account = account2;
+            Application.UpdateExpense(expense);
+            accState = Application.GetAccountState(account);
+            accState2 = Application.GetAccountState(account2);
+            newBalance = accState.balance;
+            Assert.AreEqual(newBalance, 0);
+            Assert.AreEqual(accState2.balance + 150, accBalance2);
         }
 
         [TestMethod()]

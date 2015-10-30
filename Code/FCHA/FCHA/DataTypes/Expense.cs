@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 
 namespace FCHA
 {
+    [DebuggerDisplay("{amount}, accountId={accountId}")]
 	public struct Expense
 	{
 		public long expenseId;

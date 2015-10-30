@@ -14,6 +14,7 @@ namespace FCHA
 	{
         private IAccountancyDatabase m_database;
 
+        // todo: introduce cached database source
 		private Dictionary<long, PersonViewModel> m_personCache;
 		private Dictionary<long, AccountViewModel> m_accountCache;
 		
@@ -51,7 +52,7 @@ namespace FCHA
         public static readonly DependencyProperty LiveSourceProperty
             = DependencyProperty.Register("LiveSource", typeof(CbrClient), typeof(MainWindow));
 
-        public CbrClient LiveSource
+        public IFXRateSource LiveSource
         {
             get { return (CbrClient)GetValue(LiveSourceProperty); }
             private set { SetValue(LiveSourceProperty, value); }
@@ -116,40 +117,46 @@ namespace FCHA
             set { SetValue(ReportsProperty, value); }
         }
 
-        public AccountancyApplication(IAccountancyDatabase database)
-		{
+        public AccountancyApplication(IAccountancyDatabase database, IFXRateSource liveSource)
+        {
             m_database = database;
+            LiveSource = liveSource;
 
-			m_personCache = new Dictionary<long, PersonViewModel>();
-			m_accountCache = new Dictionary<long, AccountViewModel>();
+            BuildCaches();
+            BuildObjectCollections();
 
-			Users = new ObservableCollection<PersonViewModel>(m_database.EnumAllUsers().Select(p => GetPerson(p)));
-			Accounts = new ObservableCollection<AccountViewModel>(m_database.EnumAllAccounts().Select(a => GetAccount(a)));
-			Categories = new ObservableCollection<CategoryViewModel>(m_database.EnumAllCategories().Select(c => new CategoryViewModel(m_database, c)));
-            Categories.ForEach(c => c.AdjustParent(this));
-            Expenses = new ObservableCollection<ExpenseViewModel>(m_database.EnumAllExpenses().Select(e => new ExpenseViewModel(e, this)));
-			VirtualRoot = new CategoryViewModel(m_database, null, new Category("Virtual", 0, false));
-			SelectedDate = DateTime.Now.Date;
-			if (Users.Count > 0)
-			{
-				SelectedUser = Users[0];
-				if (SelectedUser.UserAccounts.Count > 0)
-					SelectedAccount = SelectedUser.UserAccounts[0];
-			}
+            AdjustSelections();
+        }
 
-            Reports = new ObservableCollection<OlapView>(m_database.Reports);
-            
+        private void AdjustSelections()
+        {
+            SelectedDate = DateTime.Now.Date;
+            if (Users.Count > 0)
+            {
+                SelectedUser = Users[0];
+                if (SelectedUser.UserAccounts.Count > 0)
+                    SelectedAccount = SelectedUser.UserAccounts[0];
+            }
 
             if (Reports.Count > 0)
                 SelectedReport = Reports[0];
+        }
 
-            // todo: add stub
-            try
-            {
-                LiveSource = new CbrClient();
-            }
-            catch (System.InvalidOperationException)
-            { }
+        private void BuildCaches()
+        {
+            m_personCache = new Dictionary<long, PersonViewModel>();
+            m_accountCache = new Dictionary<long, AccountViewModel>();
+        }
+
+        private void BuildObjectCollections()
+        {
+            Users = new ObservableCollection<PersonViewModel>(m_database.EnumAllUsers().Select(p => GetPerson(p)));
+            Accounts = new ObservableCollection<AccountViewModel>(m_database.EnumAllAccounts().Select(a => GetAccount(a)));
+            Categories = new ObservableCollection<CategoryViewModel>(m_database.EnumAllCategories().Select(c => new CategoryViewModel(m_database, c)));
+            Categories.ForEach(c => c.AdjustParent(this));
+            Expenses = new ObservableCollection<ExpenseViewModel>(m_database.EnumAllExpenses().Select(e => new ExpenseViewModel(e, this)));
+            VirtualRoot = new CategoryViewModel(m_database, null, new Category("Virtual", 0, false));
+            Reports = new ObservableCollection<OlapView>(m_database.Reports);
         }
 
         private static void OnSelectedReportChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)

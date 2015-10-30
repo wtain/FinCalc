@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace FCHA
 {
-	[DebuggerDisplay("{Name}")]
+    [DebuggerDisplay("{Name}")]
 	public class PersonViewModel : DependencyObject
 	{
 		private Person m_underlyingData;

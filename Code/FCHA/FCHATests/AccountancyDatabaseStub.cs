@@ -229,16 +229,17 @@ namespace FCHA.Tests
 
         public void UpdateExpense(Expense expense)
         {
-            AccountBalance accountBalance = GetAccountBalance(expense.accountId);
+            AccountBalance accountBalance1 = GetAccountBalance(m_expenses[expense.expenseId].accountId);
+            AccountBalance accountBalance2 = GetAccountBalance(expense.accountId);
             if (GetCategory(expense.categoryId).isIncome)
-                accountBalance.balance -= m_expenses[expense.expenseId].amount;
+                accountBalance1.balance -= m_expenses[expense.expenseId].amount;
             else
-                accountBalance.balance += m_expenses[expense.expenseId].amount;
+                accountBalance1.balance += m_expenses[expense.expenseId].amount;
             m_expenses[expense.expenseId] = expense;
             if (GetCategory(expense.categoryId).isIncome)
-                accountBalance.balance += expense.amount;
+                accountBalance2.balance += expense.amount;
             else
-                accountBalance.balance -= expense.amount;
+                accountBalance2.balance -= expense.amount;
         }
 
         public void UpdateUser(Person person)

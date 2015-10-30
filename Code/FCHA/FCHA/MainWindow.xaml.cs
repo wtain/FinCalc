@@ -66,7 +66,7 @@ namespace FCHA
 			SQLiteConnection conn = new SQLiteConnection(string.Format("Data Source={0};Version=3;", DatabaseFileName));
 			conn.Open();
             
-			AccountancyApplication = new AccountancyApplication(new AccountancyDatabase(conn));
+			AccountancyApplication = new AccountancyApplication(new AccountancyDatabase(conn), new CbrClient());
 		}
 
 		public CategoryViewModel SelectedCategory

@@ -135,11 +135,11 @@ namespace FCHA
 
 				if (bLeftTotals)
 					for (row = 0; row < nLeftTotals; ++row)
-						grid.Children.Add(CreateCell(nStartRow + row, nStartColumn + nTopTotals, leftTotals[row].ToString(), false, null)); // todo:
+						grid.Children.Add(CreateCell(nStartRow + row, nStartColumn + nTopTotals, leftTotals[row].ToString(), false, null));
 
 				if (bTopTotals)
 					for (column = 0; column < nTopTotals; ++column)
-						grid.Children.Add(CreateCell(nStartRow + nLeftTotals, nStartColumn + column, topTotals[column].ToString(), false, null)); // todo:
+						grid.Children.Add(CreateCell(nStartRow + nLeftTotals, nStartColumn + column, topTotals[column].ToString(), false, null));
 
 				if (bGrandTotals)
 					grid.Children.Add(CreateCell(nStartRow + nLeftTotals, nStartColumn + nTopTotals, grandTotals.ToString(), false, null));

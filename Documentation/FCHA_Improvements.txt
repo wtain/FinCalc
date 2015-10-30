@@ -218,3 +218,8 @@ plugins
 struct -> class
 
 AccountBalance -> AccountState
+
+UnderlyingData -> BuildDataStructure()
+
+
+events for viewmodels instead of application reference

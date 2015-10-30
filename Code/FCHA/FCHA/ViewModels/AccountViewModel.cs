@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Diagnostics;
+using System.Windows;
 
 namespace FCHA
 {
-	[DebuggerDisplay("{Name}")]
+    [DebuggerDisplay("{Name}")]
 	public class AccountViewModel : DependencyObject
 	{
 		private Account m_underlyingData;
