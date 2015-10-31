@@ -17,17 +17,17 @@ namespace FCHA
 
 		public IEnumerable<Category> EnumAllCategories()
 		{
-			return SelectCategories(QueryBuilder.Ordered(QueryBuilder.Select(Columns, "categories"), "SeqNo"));
+			return Select(QueryBuilder.Ordered(QueryBuilder.Select(Columns, "categories"), "SeqNo"));
 		}
 
-		public IEnumerable<Category> EnumCategoriesByParent(long parentId)
+		public IEnumerable<Category> EnumByParent(long parentId)
 		{
-			return SelectCategories(QueryBuilder.Ordered(QueryBuilder.Select(Columns, "categories", "parentId", parentId.ToString()), "SeqNo"));
+			return Select(QueryBuilder.Ordered(QueryBuilder.Select(Columns, "categories", "parentId", parentId.ToString()), "SeqNo"));
 		}
 
-		public long AddCategory(string name, bool isIncome)
+		public long Add(string name, bool isIncome)
 		{
-			return AddCategory(name, 0, isIncome);
+			return Add(name, 0, isIncome);
 		}
 
 		private KeyValuePair<string, string> GetNameColumnPair(string name)
@@ -45,7 +45,7 @@ namespace FCHA
             return new KeyValuePair<string, string>("IsIncome", isIncome ? "1" : "0");
         }
 
-        public long AddCategory(string name, long parentId, bool isIncome)
+        public long Add(string name, long parentId, bool isIncome)
 		{
             //InsertView
             // "categories_view", "CategoryId",
@@ -56,7 +56,7 @@ namespace FCHA
 				return (long) insert.ExecuteScalar();
 		}
 
-		public void UpdateCategory(Category cat)
+		public void Update(Category cat)
 		{
 			string query = QueryBuilder.Update("categories", "categoryId", cat.categoryId.ToString(),
 														          GetNameColumnPair(cat.name),
@@ -66,14 +66,14 @@ namespace FCHA
 				update.ExecuteNonQuery();
 		}
 
-		public void DeleteCategory(Category cat)
+		public void Delete(Category cat)
 		{
 			string query = QueryBuilder.Delete("categories", "categoryId", cat.categoryId.ToString());
 			using (SQLiteCommand delete = new SQLiteCommand(query, m_conn))
 				delete.ExecuteNonQuery();
 		}
 
-		private IEnumerable<Category> SelectCategories(string query)
+		private IEnumerable<Category> Select(string query)
 		{
 			using (SQLiteCommand select = new SQLiteCommand(query, m_conn))
 				using (SQLiteDataReader reader = select.ExecuteReader())

@@ -4,11 +4,11 @@ namespace FCHA.Interfaces
 {
     public interface ICategoriesManager
     {
-        long AddCategory(string name, bool isIncome);
-        long AddCategory(string name, long parentId, bool isIncome);
-        void DeleteCategory(Category cat);
+        long Add(string name, bool isIncome);
+        long Add(string name, long parentId, bool isIncome);
+        void Delete(Category cat);
         IEnumerable<Category> EnumAllCategories();
-        IEnumerable<Category> EnumCategoriesByParent(long parentId);
-        void UpdateCategory(Category cat);
+        IEnumerable<Category> EnumByParent(long parentId);
+        void Update(Category cat);
     }
 }

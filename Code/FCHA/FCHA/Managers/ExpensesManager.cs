@@ -23,10 +23,10 @@ namespace FCHA
 
 		public IEnumerable<Expense> EnumAllExpenses()
 		{
-			return SelectExpenses(QueryBuilder.Select(Columns, TableName));
+			return Select(QueryBuilder.Select(Columns, TableName));
 		}
 
-		private Expense BuildExpenseStructure(SQLiteDataReader reader)
+		private Expense BuildStructure(SQLiteDataReader reader)
 		{
 			long expenseId = reader.GetInt64(0);
 			long accountId = reader.GetInt64(1);
@@ -37,13 +37,13 @@ namespace FCHA
 			return new Expense(expenseId, accountId, amount, categoryId, date, description);
 		}
 
-		private IEnumerable<Expense> SelectExpenses(string query)
+		private IEnumerable<Expense> Select(string query)
 		{
 			using (SQLiteCommand select = new SQLiteCommand(query, m_conn))
 				using (SQLiteDataReader reader = select.ExecuteReader())
 				{
 					while (reader.Read())
-						yield return BuildExpenseStructure(reader);
+						yield return BuildStructure(reader);
 				}
 		}
 

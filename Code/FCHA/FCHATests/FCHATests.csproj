@@ -58,6 +58,7 @@
     <Compile Include="AccountancyDatabaseStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtensionsTests.cs" />
+    <Compile Include="WPFHelpers\IEnumerableExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FCHA\FCHA.csproj">

@@ -4,13 +4,13 @@ namespace FCHA.Interfaces
 {
     public interface IAccountsManager
     {
-        void AddAccount(ref Account account);
+        void Add(ref Account account);
         long AddAccount(string name, string currency, long ownerPersonId, AccountType type);
-        void DeleteAccount(Account account);
+        void Delete(Account account);
         IEnumerable<Account> EnumAllAccounts();
         IEnumerable<Account> EnumUserAccounts(Person person);
-        Account GetAccount(long accountId);
-        AccountBalance GetAccountBalance(long accountId);
-        void UpdateAccount(Account account);
+        Account Get(long accountId);
+        AccountBalance GetBalance(long accountId);
+        void Update(Account account);
     }
 }

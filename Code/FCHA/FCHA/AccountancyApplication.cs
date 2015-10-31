@@ -187,7 +187,7 @@ namespace FCHA
 		{
             if (!m_accountCache.ContainsKey(accountId))
             {
-                Account account = m_database.GetAccount(accountId);
+                Account account = m_database.Get(accountId);
                 if (null == account)
                     return null;
                 m_accountCache.Add(accountId, new AccountViewModel(account, this));
@@ -209,7 +209,7 @@ namespace FCHA
 
 		public void AddCategory(string name, bool bIsIncome)
 		{
-			long catId = m_database.AddCategory(name, bIsIncome);
+			long catId = m_database.Add(name, bIsIncome);
 			Category c = new Category(name, catId, bIsIncome);
             CategoryViewModel newCategory = new CategoryViewModel(m_database, VirtualRoot, c);
             VirtualRoot.Children.Add(newCategory);
@@ -218,7 +218,7 @@ namespace FCHA
 
 		public void AddChildCategory(CategoryViewModel category, string name, bool bIsIncome)
 		{
-			long catId = m_database.AddCategory(name, category.CategoryId, bIsIncome);
+			long catId = m_database.Add(name, category.CategoryId, bIsIncome);
 			Category c = new Category(name, catId, category.CategoryId, bIsIncome);
             CategoryViewModel newCategory = new CategoryViewModel(m_database, category, c);
             category.Children.Add(newCategory);
@@ -237,7 +237,7 @@ namespace FCHA
 			Category cat = category.UnderlyingData;
 			cat.name = newName;
             cat.isIncome = isincome;
-            m_database.UpdateCategory(cat);
+            m_database.Update(cat);
             category.Name = newName;
             category.IsIncome = isincome;
             category.UpdateUnderlyingData();
@@ -245,7 +245,7 @@ namespace FCHA
 
 		public void RemoveCategory(CategoryViewModel category)
 		{
-            m_database.DeleteCategory(category.UnderlyingData);
+            m_database.Delete(category.UnderlyingData);
 			category.Parent.Children.Remove(category);
 			Categories.Remove(GetCategory(category.CategoryId));
 		}
@@ -290,7 +290,7 @@ namespace FCHA
 		{
             // todo: add account to particular person specified
 			Account refAccount = account.UnderlyingData;
-            m_database.AddAccount(ref refAccount);
+            m_database.Add(ref refAccount);
 			account.UnderlyingData = refAccount;
 			account.Owner.UserAccounts.Add(account);
 			m_accountCache.Add(account.AccountId, account);
@@ -298,19 +298,19 @@ namespace FCHA
 
 		public void UpdateAccount(AccountViewModel account)
 		{
-            m_database.UpdateAccount(account.UnderlyingData);
+            m_database.Update(account.UnderlyingData);
 		}
 
 		public void DeleteAccount(AccountViewModel account)
 		{
-            m_database.DeleteAccount(account.UnderlyingData);
+            m_database.Delete(account.UnderlyingData);
 			account.Owner.UserAccounts.Remove(account);
 			m_accountCache.Remove(account.AccountId);
 		}
 
 		public AccountBalance GetAccountState(AccountViewModel account)
 		{
-			return m_database.GetAccountBalance(account.AccountId);
+			return m_database.GetBalance(account.AccountId);
 		}
 
 		public long AddExpense(ExpenseViewModel expense)

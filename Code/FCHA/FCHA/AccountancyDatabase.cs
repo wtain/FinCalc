@@ -79,19 +79,19 @@ namespace FCHA
             m_usersManager.UpdateUser(person);
         }
 
-        public long AddCategory(string name, bool isIncome)
+        public long Add(string name, bool isIncome)
         {
-            return m_categoriesManager.AddCategory(name, isIncome);
+            return m_categoriesManager.Add(name, isIncome);
         }
 
-        public long AddCategory(string name, long parentId, bool isIncome)
+        public long Add(string name, long parentId, bool isIncome)
         {
-            return m_categoriesManager.AddCategory(name, parentId, isIncome);
+            return m_categoriesManager.Add(name, parentId, isIncome);
         }
 
-        public void DeleteCategory(Category cat)
+        public void Delete(Category cat)
         {
-            m_categoriesManager.DeleteCategory(cat);
+            m_categoriesManager.Delete(cat);
         }
 
         public IEnumerable<Category> EnumAllCategories()
@@ -99,19 +99,19 @@ namespace FCHA
             return m_categoriesManager.EnumAllCategories();
         }
 
-        public IEnumerable<Category> EnumCategoriesByParent(long parentId)
+        public IEnumerable<Category> EnumByParent(long parentId)
         {
-            return m_categoriesManager.EnumCategoriesByParent(parentId);
+            return m_categoriesManager.EnumByParent(parentId);
         }
 
-        public void UpdateCategory(Category cat)
+        public void Update(Category cat)
         {
-            m_categoriesManager.UpdateCategory(cat);
+            m_categoriesManager.Update(cat);
         }
 
-        public void AddAccount(ref Account account)
+        public void Add(ref Account account)
         {
-            m_accountsManager.AddAccount(ref account);
+            m_accountsManager.Add(ref account);
         }
 
         public long AddAccount(string name, string currency, long ownerPersonId, AccountType type)
@@ -119,9 +119,9 @@ namespace FCHA
             return m_accountsManager.AddAccount(name, currency, ownerPersonId, type);
         }
 
-        public void DeleteAccount(Account account)
+        public void Delete(Account account)
         {
-            m_accountsManager.DeleteAccount(account);
+            m_accountsManager.Delete(account);
         }
 
         public IEnumerable<Account> EnumAllAccounts()
@@ -134,19 +134,19 @@ namespace FCHA
             return m_accountsManager.EnumUserAccounts(person);
         }
 
-        public Account GetAccount(long accountId)
+        public Account Get(long accountId)
         {
-            return m_accountsManager.GetAccount(accountId);
+            return m_accountsManager.Get(accountId);
         }
 
-        public AccountBalance GetAccountBalance(long accountId)
+        public AccountBalance GetBalance(long accountId)
         {
-            return m_accountsManager.GetAccountBalance(accountId);
+            return m_accountsManager.GetBalance(accountId);
         }
 
-        public void UpdateAccount(Account account)
+        public void Update(Account account)
         {
-            m_accountsManager.UpdateAccount(account);
+            m_accountsManager.Update(account);
         }
 
         public void AddExpense(ref Expense expense)

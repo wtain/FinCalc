@@ -61,16 +61,16 @@ namespace FCHA.Tests
             m_user1salary = AddAccount("Salary", "RUB", m_user1id, AccountType.DebetCard);
             m_user2cash = AddAccount("Cash", "RUB", m_user2id, AccountType.Cash);
             m_user2salary = AddAccount("Salary", "RUB", m_user2id, AccountType.DebetCard);
-            m_catIncomesId = AddCategory("Incomes", true);
-            m_catIncomesSalaryId = AddCategory("Salary", m_catIncomesId, true);
-            m_catIncomesFreelanceId = AddCategory("Freelance", m_catIncomesId, true);
-            m_catFoodId = AddCategory("Food", false);
-            m_catFoodstuffId = AddCategory("Foodstuff", m_catFoodId, false);
-            m_catRestaurantId = AddCategory("Restaurant", m_catFoodId, false);
-            m_catFastfoodId = AddCategory("Fastfood", m_catFoodId, false);
-            m_catTransportId = AddCategory("Transport", false);
-            m_catTrainTicketId = AddCategory("Train Ticket", m_catTransportId, false);
-            m_catSubwayTicketId = AddCategory("Subway Ticket", m_catTransportId, false);
+            m_catIncomesId = Add("Incomes", true);
+            m_catIncomesSalaryId = Add("Salary", m_catIncomesId, true);
+            m_catIncomesFreelanceId = Add("Freelance", m_catIncomesId, true);
+            m_catFoodId = Add("Food", false);
+            m_catFoodstuffId = Add("Foodstuff", m_catFoodId, false);
+            m_catRestaurantId = Add("Restaurant", m_catFoodId, false);
+            m_catFastfoodId = Add("Fastfood", m_catFoodId, false);
+            m_catTransportId = Add("Transport", false);
+            m_catTrainTicketId = Add("Train Ticket", m_catTransportId, false);
+            m_catSubwayTicketId = Add("Subway Ticket", m_catTransportId, false);
         }
 
         private long GetNewId()
@@ -78,7 +78,7 @@ namespace FCHA.Tests
             return m_nextId++;
         }
 
-        public void AddAccount(ref Account account)
+        public void Add(ref Account account)
         {
             account.accountId = GetNewId();
             m_accounts.Add(account.accountId, account);
@@ -87,18 +87,18 @@ namespace FCHA.Tests
         public long AddAccount(string name, string currency, long ownerPersonId, AccountType type)
         {
             Account account = new Account(0, currency, ownerPersonId, name, type);
-            AddAccount(ref account);
+            Add(ref account);
             return account.accountId;
         }
 
-        public long AddCategory(string name, bool isIncome)
+        public long Add(string name, bool isIncome)
         {
             Category category = new Category(name, GetNewId(), isIncome);
             m_categories.Add(category.categoryId, category);
             return category.categoryId;
         }
 
-        public long AddCategory(string name, long parentId, bool isIncome)
+        public long Add(string name, long parentId, bool isIncome)
         {
             Category category = new Category(name, GetNewId(), parentId, isIncome);
             m_categories.Add(category.categoryId, category);
@@ -114,7 +114,7 @@ namespace FCHA.Tests
         {
             expense.expenseId = GetNewId();
             m_expenses.Add(expense.expenseId, expense);
-            AccountBalance accountBalance = GetAccountBalance(expense.accountId);
+            AccountBalance accountBalance = GetBalance(expense.accountId);
             if (GetCategory(expense.categoryId).isIncome)
                 accountBalance.balance += expense.amount;
             else
@@ -141,12 +141,12 @@ namespace FCHA.Tests
             return person.personId;
         }
 
-        public void DeleteAccount(Account account)
+        public void Delete(Account account)
         {
             m_accounts.Remove(account.accountId);
         }
 
-        public void DeleteCategory(Category cat)
+        public void Delete(Category cat)
         {
             m_categories.Remove(cat.categoryId);
         }
@@ -154,7 +154,7 @@ namespace FCHA.Tests
         public void DeleteExpense(Expense expense)
         {
             m_expenses.Remove(expense.expenseId);
-            AccountBalance accountBalance = GetAccountBalance(expense.accountId);
+            AccountBalance accountBalance = GetBalance(expense.accountId);
             if (!GetCategory(expense.categoryId).isIncome)
                 accountBalance.balance += expense.amount;
             else
@@ -186,7 +186,7 @@ namespace FCHA.Tests
             return m_persons.Values;
         }
 
-        public IEnumerable<Category> EnumCategoriesByParent(long parentId)
+        public IEnumerable<Category> EnumByParent(long parentId)
         {
             return EnumAllCategories().Where(c => c.parentId == parentId);
         }
@@ -196,14 +196,14 @@ namespace FCHA.Tests
             return EnumAllAccounts().Where(a => a.ownerPersonId == person.personId);
         }
 
-        public Account GetAccount(long accountId)
+        public Account Get(long accountId)
         {
             if (!m_accounts.ContainsKey(accountId))
                 return null;
             return m_accounts[accountId];
         }
 
-        public AccountBalance GetAccountBalance(long accountId)
+        public AccountBalance GetBalance(long accountId)
         {
             if (!m_accountBalances.ContainsKey(accountId))
                 m_accountBalances[accountId] = new AccountBalance();
@@ -217,20 +217,20 @@ namespace FCHA.Tests
             return m_persons[personId];
         }
 
-        public void UpdateAccount(Account account)
+        public void Update(Account account)
         {
             m_accounts[account.accountId] = account;
         }
 
-        public void UpdateCategory(Category cat)
+        public void Update(Category cat)
         {
             m_categories[cat.categoryId] = cat;
         }
 
         public void UpdateExpense(Expense expense)
         {
-            AccountBalance accountBalance1 = GetAccountBalance(m_expenses[expense.expenseId].accountId);
-            AccountBalance accountBalance2 = GetAccountBalance(expense.accountId);
+            AccountBalance accountBalance1 = GetBalance(m_expenses[expense.expenseId].accountId);
+            AccountBalance accountBalance2 = GetBalance(expense.accountId);
             if (GetCategory(expense.categoryId).isIncome)
                 accountBalance1.balance -= m_expenses[expense.expenseId].amount;
             else

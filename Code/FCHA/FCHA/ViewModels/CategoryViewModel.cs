@@ -90,7 +90,7 @@ namespace FCHA
 
         private void WatchChildren()
         {
-            Children = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumCategoriesByParent(CategoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c)));
+            Children = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumByParent(CategoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c)));
         }
 
 		public override string ToString()
