@@ -56,8 +56,13 @@
   <ItemGroup>
     <Compile Include="AccountancyApplicationTests.cs" />
     <Compile Include="AccountancyDatabaseStub.cs" />
+    <Compile Include="CalendarTests.cs" />
+    <Compile Include="CommonTestObjects.cs" />
+    <Compile Include="DepositTests.cs" />
+    <Compile Include="LoanTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtensionsTests.cs" />
+    <Compile Include="ViewModels\CategoryViewModelTests.cs" />
     <Compile Include="WPFHelpers\IEnumerableExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>

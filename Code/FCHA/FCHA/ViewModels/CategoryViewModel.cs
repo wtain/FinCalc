@@ -6,6 +6,7 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using FCHA.Interfaces;
+using FCHA.DataTypes;
 
 namespace FCHA
 {
@@ -30,22 +31,31 @@ namespace FCHA
 		public static readonly DependencyProperty NameProperty =
 			DependencyProperty.Register("Name", typeof(string), typeof(CategoryViewModel));
 
-        public static readonly DependencyProperty IsIncomeProperty =
-            DependencyProperty.Register("IsIncome", typeof(bool), typeof(CategoryViewModel));
+        public static readonly DependencyProperty TypeProperty =
+            DependencyProperty.Register("Type", typeof(CategoryType), typeof(CategoryViewModel));
 
         public static readonly DependencyProperty ChildrenProperty =
 			DependencyProperty.Register("Children", typeof(ObservableCollection<CategoryViewModel>), typeof(CategoryViewModel));
 
-		public string Name
+        public static readonly DependencyProperty SeqNoProperty =
+            DependencyProperty.Register("SeqNo", typeof(double), typeof(CategoryViewModel));
+
+        public string Name
 		{
 			get { return (string)GetValue(NameProperty); }
 			set { SetValue(NameProperty, value); }
 		}
 
-        public bool IsIncome
+        public CategoryType Type
         {
-            get { return (bool)GetValue(IsIncomeProperty); }
-            set { SetValue(IsIncomeProperty, value); }
+            get { return (CategoryType)GetValue(TypeProperty); }
+            set { SetValue(TypeProperty, value); }
+        }
+
+        public double SeqNo
+        {
+            get { return (double)GetValue(SeqNoProperty); }
+            set { SetValue(SeqNoProperty, value); }
         }
 
         public ObservableCollection<CategoryViewModel> Children
@@ -63,7 +73,8 @@ namespace FCHA
 		{
 			m_underlyingData = category;
 			Name = m_underlyingData.name;
-            IsIncome = m_underlyingData.isIncome;
+            Type = m_underlyingData.type;
+            SeqNo = m_underlyingData.seqNo;
 		}
 
 		public CategoryViewModel(ICategoriesManager categoriesManager, CategoryViewModel parent, Category category)
@@ -90,7 +101,7 @@ namespace FCHA
 
         private void WatchChildren()
         {
-            Children = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumByParent(CategoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c)));
+            Children = new ObservableCollection<CategoryViewModel>(m_categoriesManager.EnumByParent(CategoryId).Select(c => new CategoryViewModel(m_categoriesManager, this, c)).OrderBy(cvm => cvm.SeqNo));
         }
 
 		public override string ToString()
@@ -101,7 +112,8 @@ namespace FCHA
         public void UpdateUnderlyingData()
         {
             m_underlyingData.name = Name;
-            m_underlyingData.isIncome = IsIncome;
+            m_underlyingData.type = Type;
+            m_underlyingData.seqNo = SeqNo;
         }
 
         public bool IsCovers(CategoryViewModel category)

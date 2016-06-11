@@ -80,6 +80,6 @@
 
     <s:String x:Key="CategoryDialogTitle">Свойства категории</s:String>
     <s:String x:Key="CategoryName">Имя</s:String>
-    <s:String x:Key="CategoryIsIncome">Доход?</s:String>
+    <s:String x:Key="CategoryType">Тип категории</s:String>
 
 </ResourceDictionary>

@@ -43,8 +43,16 @@
     <ApplicationIcon>Icons\FCHA.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLite.Designer, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
@@ -75,6 +83,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AccountancyDatabase.cs" />
+    <Compile Include="CombinedCalendar.cs" />
+    <Compile Include="DataTypes\BumpType.cs" />
+    <Compile Include="DataTypes\Calendar\JsonCalendar.cs" />
+    <Compile Include="DataTypes\Calendar\JsonDay.cs" />
+    <Compile Include="DataTypes\Calendar\JsonDayType.cs" />
+    <Compile Include="DataTypes\Calendar\JsonMonth.cs" />
+    <Compile Include="DataTypes\Calendar\JsonYear.cs" />
+    <Compile Include="DataTypes\Cashflow.cs" />
+    <Compile Include="DataTypes\CategoryTypeHelper.cs" />
+    <Compile Include="DataTypes\SimpleCashflow.cs" />
+    <Compile Include="Deposit.cs" />
+    <Compile Include="Interfaces\IAccountancyApplication.cs" />
     <Compile Include="Interfaces\IAccountancyDatabase.cs" />
     <Compile Include="Interfaces\IFXRateSource.cs" />
     <Compile Include="DataTypes\AccountType.cs" />
@@ -102,6 +122,7 @@
     <Compile Include="Dialogs\MoneyTransferDialog.xaml.cs">
       <DependentUpon>MoneyTransferDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Loan.cs" />
     <Compile Include="Managers\AccountsManager.cs" />
     <Compile Include="Interfaces\ICategoriesManager.cs" />
     <Compile Include="Interfaces\IAccountsManager.cs" />
@@ -109,11 +130,13 @@
     <Compile Include="Interfaces\IUsersManager.cs" />
     <Compile Include="MoneyAmountTextToColorConverter.cs" />
     <Compile Include="OlapCellInfo.cs" />
+    <Compile Include="Salary.cs" />
     <Compile Include="Service References\CBR\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="SimpleCalendar.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="DataTypes\Category.cs" />
@@ -135,6 +158,7 @@
       <DependentUpon>UserInfoDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Managers\UsersManager.cs" />
+    <Compile Include="WeekendsCalendar.cs" />
     <Compile Include="WPFHelpers\BaseDecorator.cs" />
     <Compile Include="WPFHelpers\DragAdorner.cs" />
     <Compile Include="WPFHelpers\IEnumerableExtensions.cs" />
@@ -294,6 +318,7 @@
   <ItemGroup>
     <Resource Include="Icons\Lightning.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -80,6 +80,6 @@
 
     <s:String x:Key="CategoryDialogTitle">Category Properties</s:String>
     <s:String x:Key="CategoryName">Category Name</s:String>
-    <s:String x:Key="CategoryIsIncome">Is Income?</s:String>
+    <s:String x:Key="CategoryType">Category Type</s:String>
 
 </ResourceDictionary>

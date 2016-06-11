@@ -8,7 +8,7 @@ namespace FCHA
 	public class AccountViewModel : DependencyObject
 	{
 		private Account m_underlyingData;
-		private AccountancyApplication m_accountancyApplication;
+		private IAccountancyApplication m_accountancyApplication;
 
 		public Account UnderlyingData
 		{
@@ -80,12 +80,12 @@ namespace FCHA
 			set { SetValue(LastUpdatedProperty, value); }
 		}
 
-		public AccountViewModel(Account account, AccountancyApplication accountancyApplication)
+		public AccountViewModel(Account account, IAccountancyApplication accountancyApplication)
 			: this(account, accountancyApplication, accountancyApplication.GetPerson(account.ownerPersonId))
 		{
 		}
 
-		public AccountViewModel(Account account, AccountancyApplication accountancyApplication, PersonViewModel owner)
+		public AccountViewModel(Account account, IAccountancyApplication accountancyApplication, PersonViewModel owner)
 		{
 			m_accountancyApplication = accountancyApplication;
 			m_underlyingData = account;
@@ -98,7 +98,12 @@ namespace FCHA
 			UpdateAccountState();
 		}
 
-		public void UpdateUnderlyingData()
+        public AccountBalance GetState()
+        {
+            return m_accountancyApplication.GetAccountState(this);
+        }
+
+        public void UpdateUnderlyingData()
 		{
 			if (Owner.PersonId != OwnerPersonId)
 			{

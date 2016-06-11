@@ -5,33 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FCHA.Interfaces;
+using FCHA.DataTypes;
 
 namespace FCHA.Tests
 {
     [TestClass()]
     public class AccountancyApplicationTests
     {
-        private AccountancyApplication m_app;
-        private AccountancyDatabaseStub m_database;
-
         public AccountancyApplication Application
         {
-            get
-            {
-                if (null == m_app)
-                    m_app = new AccountancyApplication(Database, null);
-                return m_app;
-            }
+            get { return CommonTestObjects.Application; }
         }
 
         public AccountancyDatabaseStub Database
         {
-            get
-            {
-                if (null == m_database)
-                    m_database = new AccountancyDatabaseStub();
-                return m_database;
-            }
+            get { return CommonTestObjects.Database; }
         }
 
         [TestMethod()]
@@ -103,7 +91,7 @@ namespace FCHA.Tests
         public void AddCategoryTest()
         {
             string testCategoryName = "TestCategory";
-            Application.AddCategory(testCategoryName, false);
+            Application.AddCategory(testCategoryName, CategoryType.Expense);
             Assert.IsTrue(Application.VirtualRoot.Children.Count(c => c.Name == testCategoryName) == 1);
         }
 
@@ -112,7 +100,7 @@ namespace FCHA.Tests
         {
             string testCategoryName = "TestChildCategory";
             CategoryViewModel lastCategory = Application.VirtualRoot.Children.Last();
-            Application.AddChildCategory(lastCategory, testCategoryName, false);
+            Application.AddChildCategory(lastCategory, testCategoryName, CategoryType.Expense);
             Assert.IsTrue(lastCategory.Children.Count(c => c.Name == testCategoryName) == 1);
         }
 
@@ -129,16 +117,16 @@ namespace FCHA.Tests
             CategoryViewModel salary = Application.GetCategory(Database.CatIncomesSalaryId);
             Assert.IsNotNull(salary);
             string newName = "Primary salary";
-            Application.ChangeCategory(salary, newName, true);
+            Application.ChangeCategory(salary, newName, CategoryType.Income);
             Assert.IsTrue(Application.Categories.Count(c => c.Name == newName) == 1);
             CategoryViewModel transport = Application.GetCategory(Database.CatTransportId);
             string oldName = transport.Name;
             Assert.IsNotNull(transport);
-            Assert.IsFalse(transport.IsIncome);
-            Application.ChangeCategory(transport, transport.Name, true);
-            Assert.IsTrue(transport.IsIncome);
+            Assert.AreEqual(CategoryType.Expense, transport.Type);
+            Application.ChangeCategory(transport, transport.Name, CategoryType.Income);
+            Assert.AreEqual(CategoryType.Income, transport.Type);
             transport = Application.GetCategory(Database.CatTransportId);
-            Assert.IsTrue(transport.IsIncome);
+            Assert.AreEqual(CategoryType.Income, transport.Type);
             Assert.AreEqual(oldName, transport.Name);
         }
 
@@ -150,8 +138,8 @@ namespace FCHA.Tests
             Application.RemoveCategory(transport);
             transport = Application.GetCategory(Database.CatTransportId);
             Assert.IsNull(transport);
-            Application.AddCategory(catTransport.name, catTransport.isIncome);
-            transport = Application.Categories.Where(c => c.Name == catTransport.name && c.IsIncome == catTransport.isIncome).First();
+            Application.AddCategory(catTransport.name, catTransport.type);
+            transport = Application.Categories.Where(c => c.Name == catTransport.name && c.Type == catTransport.type).First();
             Assert.IsNotNull(transport);
         }
 
@@ -207,6 +195,7 @@ namespace FCHA.Tests
         [TestMethod()]
         public void CreateAccountTest()
         {
+            CommonTestObjects.RecreateAll();
             PersonViewModel person = Application.GetPerson(Database.User1Id);
             Assert.IsNotNull(person);
             AccountViewModel account = Application.CreateAccount(person);
@@ -225,6 +214,7 @@ namespace FCHA.Tests
         [TestMethod()]
         public void AddAccountTest()
         {
+            CommonTestObjects.RecreateAll();
             PersonViewModel person = Application.GetPerson(Database.User1Id);
             Assert.IsNotNull(person);
             AccountViewModel account = Application.CreateAccount(person);
@@ -294,11 +284,11 @@ namespace FCHA.Tests
             PersonViewModel person1 = Application.GetPerson(Database.User1Id);
             Assert.IsNotNull(person1);
             AccountViewModel account = person1.UserAccounts.First();
-            AccountBalance accState = Application.GetAccountState(account);
+            AccountBalance accState = account.GetState();
             long oldBalance = accState.balance;
             long amount = 100;
             Application.AddExpense(new ExpenseViewModel(new Expense(0, account.AccountId, amount, Database.CatFoodId, DateTime.Now, string.Empty), Application));
-            accState = Application.GetAccountState(account);
+            accState = account.GetState();
             long newBalance = accState.balance;
             Assert.AreEqual(oldBalance - amount, newBalance);
         }
@@ -306,27 +296,28 @@ namespace FCHA.Tests
         [TestMethod()]
         public void UpdateExpenseTest()
         {
+            CommonTestObjects.RecreateAll();
             PersonViewModel person1 = Application.GetPerson(Database.User1Id);
             Assert.IsNotNull(person1);
             AccountViewModel account = person1.UserAccounts.First();
             long amount = 100;
             ExpenseViewModel expense = new ExpenseViewModel(new Expense(0, account.AccountId, amount, Database.CatFoodId, DateTime.Now, string.Empty), Application);
             long expenseId = Application.AddExpense(expense);
-            AccountBalance accState = Application.GetAccountState(account);
+            AccountBalance accState = account.GetState();
             long oldBalance = accState.balance;
             expense.Amount = 150;
             Application.UpdateExpense(expense);
-            accState = Application.GetAccountState(account);
+            accState = account.GetState();
             long newBalance = accState.balance;
             Assert.AreEqual(newBalance + 50, oldBalance);
             PersonViewModel person2 = Application.GetPerson(Database.User2Id);
             AccountViewModel account2 = person2.UserAccounts.First();
-            AccountBalance accState2 = Application.GetAccountState(account2);
+            AccountBalance accState2 = account2.GetState();
             long accBalance2 = accState2.balance;
             expense.Account = account2;
             Application.UpdateExpense(expense);
-            accState = Application.GetAccountState(account);
-            accState2 = Application.GetAccountState(account2);
+            accState = account.GetState();
+            accState2 = account2.GetState();
             newBalance = accState.balance;
             Assert.AreEqual(newBalance, 0);
             Assert.AreEqual(accState2.balance + 150, accBalance2);
@@ -338,18 +329,75 @@ namespace FCHA.Tests
             PersonViewModel person1 = Application.GetPerson(Database.User1Id);
             Assert.IsNotNull(person1);
             AccountViewModel account = person1.UserAccounts.First();
-            AccountBalance accState = Application.GetAccountState(account);
+            Assert.IsNotNull(account);
+            AccountBalance accState = account.GetState();
             long oldBalance = accState.balance;
             long amount = 100;
             ExpenseViewModel expense = new ExpenseViewModel(new Expense(0, account.AccountId, amount, Database.CatFoodId, DateTime.Now, string.Empty), Application);
             Application.AddExpense(expense);
-            accState = Application.GetAccountState(account);
+            accState = account.GetState();
             long newBalance = accState.balance;
             Assert.AreEqual(oldBalance - amount, newBalance);
             Application.DeleteExpense(expense);
-            accState = Application.GetAccountState(account);
+            accState = account.GetState();
             newBalance = accState.balance;
             Assert.AreEqual(oldBalance, newBalance);
+        }
+
+        [TestMethod()]
+        public void TransferTest()
+        {
+            PersonViewModel person1 = Application.GetPerson(Database.User1Id);
+            Assert.IsNotNull(person1);
+            AccountViewModel account1 = person1.UserAccounts.First();
+            Assert.IsNotNull(account1);
+            PersonViewModel person2 = Application.GetPerson(Database.User2Id);
+            Assert.IsNotNull(person2);
+            AccountViewModel account2 = person2.UserAccounts.First();
+            Assert.IsNotNull(account2);
+            long account1balance1 = account1.GetState().balance;
+            long account2balance1 = account2.GetState().balance;
+            long amount = 100;
+            Application.Transfer(account1, account2, amount);
+            long account1balance2 = account1.GetState().balance;
+            long account2balance2 = account2.GetState().balance;
+            Assert.AreEqual(account1balance1 + account2balance1, account1balance2 + account2balance2);
+            Assert.AreEqual(account1balance1 - amount, account1balance2);
+            Assert.AreEqual(account2balance1 + amount, account2balance2);
+        }
+
+        [TestMethod()]
+        public void TransferWithConversionTest()
+        {
+            PersonViewModel person1 = Application.GetPerson(Database.User1Id);
+            Assert.IsNotNull(person1);
+            AccountViewModel account1 = person1.UserAccounts.First();
+            Assert.IsNotNull(account1);
+            PersonViewModel person2 = Application.GetPerson(Database.User2Id);
+            Assert.IsNotNull(person2);
+            AccountViewModel account2 = person2.UserAccounts.First();
+            Assert.IsNotNull(account2);
+            long account1balance1 = account1.GetState().balance;
+            long account2balance1 = account2.GetState().balance;
+            long amount = 100;
+            double rate = 0.5;
+            Application.TransferWithConversion(account1, account2, amount, rate);
+            long account1balance2 = account1.GetState().balance;
+            long account2balance2 = account2.GetState().balance;
+            Assert.AreEqual(account1balance1 - amount, account1balance2);
+            Assert.AreEqual(account2balance1 + (long)(rate * amount), account2balance2);
+        }
+
+        [TestMethod()]
+        public void ChangeCategoryOrderTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ChangeCategoryParentTest()
+        {
+            Assert.Fail();
         }
     }
 }

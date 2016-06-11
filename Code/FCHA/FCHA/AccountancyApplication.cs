@@ -7,11 +7,14 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using FCHA.Interfaces;
 using FCHA.WPFHelpers;
+using FCHA.DataTypes;
 
 namespace FCHA
 {
-	public class AccountancyApplication : DependencyObject
-	{
+	public class AccountancyApplication 
+        : DependencyObject
+        , IAccountancyApplication
+    {
         private IAccountancyDatabase m_database;
 
         // todo: introduce cached database source
@@ -117,6 +120,34 @@ namespace FCHA
             set { SetValue(ReportsProperty, value); }
         }
 
+        private CategoryViewModel GetDefaultCatregory(CategoryType type, string defaultName)
+        {
+            CategoryViewModel category = Categories.FirstOrDefault(c => c.Type == type);
+            if (null != category)
+                return category;
+            return AddCategory(defaultName, type);
+        }
+
+        public CategoryViewModel DefaultIncomeCategory
+        {
+            get { return GetDefaultCatregory(CategoryType.Income, "DefaultIncome"); }
+        }
+
+        public CategoryViewModel DefaultExpenseCategory
+        {
+            get { return GetDefaultCatregory(CategoryType.Expense, "DefaultExpense"); }
+        }
+
+        public CategoryViewModel DefaultTransferOutCategory
+        {
+            get { return GetDefaultCatregory(CategoryType.TransferOut, "DefaultTransferOut"); }
+        }
+
+        public CategoryViewModel DefaultTransferInCategory
+        {
+            get { return GetDefaultCatregory(CategoryType.TransferIn, "DefaultTransferIn"); }
+        }
+
         public AccountancyApplication(IAccountancyDatabase database, IFXRateSource liveSource)
         {
             m_database = database;
@@ -155,7 +186,7 @@ namespace FCHA
             Categories = new ObservableCollection<CategoryViewModel>(m_database.EnumAllCategories().Select(c => new CategoryViewModel(m_database, c)));
             Categories.ForEach(c => c.AdjustParent(this));
             Expenses = new ObservableCollection<ExpenseViewModel>(m_database.EnumAllExpenses().Select(e => new ExpenseViewModel(e, this)));
-            VirtualRoot = new CategoryViewModel(m_database, null, new Category("Virtual", 0, false));
+            VirtualRoot = new CategoryViewModel(m_database, null, new Category("Virtual", 0, CategoryType.Expense, 0.0));
             Reports = new ObservableCollection<OlapView>(m_database.Reports);
         }
 
@@ -207,23 +238,20 @@ namespace FCHA
 			return m_accountCache[a.accountId];
 		}
 
-		public void AddCategory(string name, bool bIsIncome)
+		public CategoryViewModel AddCategory(string name, CategoryType type)
 		{
-			long catId = m_database.Add(name, bIsIncome);
-			Category c = new Category(name, catId, bIsIncome);
-            CategoryViewModel newCategory = new CategoryViewModel(m_database, VirtualRoot, c);
-            VirtualRoot.Children.Add(newCategory);
-			Categories.Add(newCategory);
-		}
+            return AddChildCategory(VirtualRoot, name, type);
+        }
 
-		public void AddChildCategory(CategoryViewModel category, string name, bool bIsIncome)
+		public CategoryViewModel AddChildCategory(CategoryViewModel category, string name, CategoryType type)
 		{
-			long catId = m_database.Add(name, category.CategoryId, bIsIncome);
-			Category c = new Category(name, catId, category.CategoryId, bIsIncome);
+			long catId = m_database.Add(name, category.CategoryId, type);
+			Category c = new Category(name, catId, category.CategoryId, type, double.NaN);
             CategoryViewModel newCategory = new CategoryViewModel(m_database, category, c);
             category.Children.Add(newCategory);
 			Categories.Add(newCategory);
-		}
+            return newCategory;
+        }
 
 		public CategoryViewModel GetCategory(long categoryId)
 		{
@@ -232,14 +260,14 @@ namespace FCHA
             return Categories.Where(c => c.CategoryId == categoryId).FirstOrDefault();
 		}
 
-		public void ChangeCategory(CategoryViewModel category, string newName, bool isincome)
+		public void ChangeCategory(CategoryViewModel category, string newName, CategoryType type)
 		{
 			Category cat = category.UnderlyingData;
 			cat.name = newName;
-            cat.isIncome = isincome;
+            cat.type = type;
             m_database.Update(cat);
             category.Name = newName;
-            category.IsIncome = isincome;
+            category.Type = type;
             category.UpdateUnderlyingData();
         }
 
@@ -310,6 +338,7 @@ namespace FCHA
 
 		public AccountBalance GetAccountState(AccountViewModel account)
 		{
+            // todo: move to account
 			return m_database.GetBalance(account.AccountId);
 		}
 
@@ -347,5 +376,31 @@ namespace FCHA
             if (null != SelectedReport)
                 SelectedReport.RefreshView();
 		}
-	}
+
+        public void Transfer(AccountViewModel source, AccountViewModel target, long amount)
+        {
+            // todo: "all or nothing" semantics
+            string description = string.Format("{0} -> {1}", source, target);
+            AddExpense(new ExpenseViewModel(amount, DefaultTransferOutCategory, source, description, this));
+            AddExpense(new ExpenseViewModel(amount, DefaultTransferInCategory, target, description, this));
+        }
+
+        public void TransferWithConversion(AccountViewModel source, AccountViewModel target, long amount, double rate)
+        {
+            // todo: "all or nothing" semantics
+            string description = string.Format("{0} -> {1}", source, target);
+            AddExpense(new ExpenseViewModel(amount, DefaultTransferOutCategory, source, description, this));
+            AddExpense(new ExpenseViewModel((long) (amount * rate), DefaultTransferInCategory, target, description, this));
+        }
+
+        public void ChangeCategoryOrder(CategoryViewModel category, CategoryViewModel categoryBefore)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ChangeCategoryParent(CategoryViewModel category, CategoryViewModel newParent)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -29,6 +29,9 @@ Functionality
 - User commands (for most-frequent entries)
 - Order categories
 
+Account type:
+- Virtual/internet money
+
 Specific features
 - User setting - date change bound
 - User setting - currency
@@ -49,6 +52,17 @@ Information
 Processes
  - Account flows aggregation?
 
+Refactor
+ - AccountBalance -> AccountState
+
+Funcational extensions
+ - Task tracking
+
+All unit tests complete:
+ - All tests written
+ - Functionality written:
+    - Loans/deposits
+    - Calendars
 
 todo:
 factories for creating models
@@ -58,7 +72,6 @@ UnderlyingData to be updated when accessed - in get accessor?
 
 ? What to do with deleted account's flows and expenses?
 
-+ Task tracking
 
 expenses filter - hierarchical categories
 
@@ -68,21 +81,19 @@ group dates in OLAP - week, month, year
 trees for olap filters, utilise Grid
 
 
-AccountBalance -> AccountState
-
 why caching? may be it is not useful since we load all items always?
 
 todo: move categories or remove seqno
 
 todo: triggers for deleting user or account - check accounts and expenses
 
-todo: manage categories - one VM object should exist (currently - two - one in teh tree and one in the all list)
+todo: manage categories - one VM object should exist (currently - two - one in the tree and one in the all list)
 
 account can live without a person
 
 todo: common classes for managers and viewmodels
 
-todo: messagex instead of silent failures and returns
+todo: messagebox instead of silent failures and returns
 
 todo: change expense account - synch combobox
 
@@ -223,3 +234,53 @@ UnderlyingData -> BuildDataStructure()
 
 
 events for viewmodels instead of application reference
+
+
+todo: check constraints (e.g. before doing transaction check account balance to be enough)
+
+transactions: all or nothing semantics - e.g. moving money from one account to another or changing expense
+
+check currencies are same when transferring
+
++ Convert
+
+check exceptions in unit tests
+
+SeqNo -> Number rather than int
+
+move code to view objects from application; application is a facade
+
+converter for friendly name of accounttype & categorytype
+
+
+GetOrCreate:
+ - DefaultIncomeCategory
+ - DefaultExpenseCategory
+ - DefaultTransferInCategory
+ - DefaultTransferOutCategory
+
+Check the category if this type exists and ask user to create one if there's no such categories
+
+
+TransferIn/Out - integrity constraints? 
+
+
+EnumAllAccounts -> Accounts property
+
+
+last_insert_rowid() != lastId
+select id from ... where rowid=last_insert_rowid()
+
+todo: utilize accountcontrol on mainform
+
+
+move code: Application -> viewmodels
+
+
+introduce a tool: test data generation
+
+
+List of shopping items & tags:places/retailers
+
+gitflow?
+cygwin

@@ -22,8 +22,10 @@
         <TextBlock Grid.Row="0" Grid.Column="1" Text="{DynamicResource CategoryName}" />
         <TextBox Grid.Row="0" Grid.Column="1" Name="txtCategoryName" Text="{Binding Mode=TwoWay, Path=CategoryName, ElementName=dlgCategory}" />
 
-        <CheckBox VerticalAlignment="Center" Grid.Row="1" Name="chkIsIncome" Grid.Column="0" Grid.ColumnSpan="2" 
-                  IsChecked="{Binding Mode=TwoWay, Path=IsIncome, ElementName=dlgCategory}" Content="{DynamicResource CategoryIsIncome}"  />
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{DynamicResource CategoryType}" />
+        <ComboBox VerticalAlignment="Center" Grid.Row="1" Name="cboType" Grid.Column="1" 
+                  ItemsSource="{Binding Source={x:Static local:CategoryDialog.CategoryTypes}}"
+                  SelectedValue="{Binding Mode=TwoWay, Path=Type, ElementName=dlgCategory}" />
 
         <Button Grid.Row="2" Grid.Column="0" Name="btnOK" Click="btnOK_Click" IsDefault="True">
             <StackPanel Orientation="Vertical">

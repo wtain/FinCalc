@@ -23,8 +23,8 @@ CREATE TABLE "categories" (
 	`CategoryId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`ParentId`	INTEGER NOT NULL,
 	`Name`	TEXT NOT NULL UNIQUE,
-	`SeqNo`	INTEGER,
-	`IsIncome`	INTEGER
+	`SeqNo`	REAL UNIQUE,
+	`Type`	TEXT
 );
 CREATE TABLE "accounts" (
 	`AccountId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -86,13 +86,6 @@ BEGIN
 			LastUpdatedDate = date('now')
 		 WHERE AccountId = OLD.AccountId;
 END;
-CREATE TRIGGER categories_view_insert_trigger
-INSTEAD OF INSERT 
-ON categories_view
-BEGIN
-        INSERT INTO categories(CategoryId, ParentId, Name, SeqNo, IsIncome) 
-        SELECT NEW.CategoryId, NEW.ParentId, NEW.Name, NEW.CategoryId, NEW.IsIncome; 
-END;
 CREATE TRIGGER categories_view_after_delete_trigger
 AFTER DELETE
 ON categories
@@ -116,7 +109,7 @@ ON categories
 BEGIN
 	UPDATE categories
 	     SET SeqNo=CategoryId, 
-		       IsIncome = 0
+		     Type='Exp'
     WHERE SeqNo is NULL;
 END;
 CREATE TRIGGER categories_before_delete_trigger
@@ -152,13 +145,13 @@ BEGIN
 END;
 CREATE VIEW categories_view
 AS
-SELECT CategoryId, ParentId, Name, IsIncome
+SELECT CategoryId, ParentId, Name, Type
 FROM categories
 ORDER BY ParentId, SeqNo;
 CREATE VIEW ExpenseByTopLevelCategoryAndMonth AS 
-WITH RECURSIVE categories_recursive(CategoryId, Name, ParentId, Level, RootId, RootName, IsIncome) AS 
+WITH RECURSIVE categories_recursive(CategoryId, Name, ParentId, Level, RootId, RootName, Type) AS 
 (
- SELECT CategoryId, Name, ParentId, 0, CategoryId, Name, IsIncome
+ SELECT CategoryId, Name, ParentId, 0, CategoryId, Name, Type
  FROM categories WHERE ParentId=0
 	UNION ALL
  SELECT categories.CategoryId, 
@@ -170,14 +163,14 @@ WITH RECURSIVE categories_recursive(CategoryId, Name, ParentId, Level, RootId, R
 			   ELSE categories_recursive.RootId
 		   END as RootId,
 		   categories_recursive.RootName as RootName,
-		   categories.IsIncome
+		   categories.Type
 	FROM categories, categories_recursive 
 	WHERE categories.ParentId=categories_recursive.CategoryId
 )
 SELECT strftime('%m/%Y', date(exp.Date)) as Month, 
 	      cr.RootName AS Category, 
 		  CASE 
-			WHEN cr.IsIncome=1 THEN 1
+			WHEN cr.Type='Inc' OR cr.Type='Tri' THEN 1
 			ELSE -1
 		  END * exp.Amount AS Amount
 FROM expenses exp
@@ -188,7 +181,7 @@ CREATE VIEW ExpenseByCategoryAndMonth AS
 SELECT strftime('%m/%Y', date(exp.Date)) as Month, 
           cat.Name AS Category, 
 		  CASE
-			WHEN cat.IsIncome=1 THEN 1
+		  	WHEN cat.Type='Inc' OR cat.Type='Tri' THEN 1
 			ELSE -1
 		  END * exp.Amount AS Amount
  FROM expenses exp
@@ -198,7 +191,7 @@ CREATE VIEW ExpenseByCategoryAndDateMonthAggregation AS
 SELECT strftime('%m', exp.Date) AS Month, exp.Date, cat.Name, 
 	SUM(exp.Amount * 
 	      CASE
-			WHEN cat.IsIncome=1 THEN 1
+			WHEN cat.Type='Inc' OR cat.Type='Tri' THEN 1
 			ELSE -1
 		  END) as Amount
  FROM expenses exp

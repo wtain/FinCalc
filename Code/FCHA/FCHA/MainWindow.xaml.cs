@@ -79,7 +79,7 @@ namespace FCHA
 			CategoryDialog dlg = new CategoryDialog();
 			if (true != dlg.ShowDialog())
 				return;
-			AccountancyApplication.AddCategory(dlg.CategoryName, dlg.IsIncome);
+			AccountancyApplication.AddCategory(dlg.CategoryName, dlg.Type);
 		}
 
 		private void btnAddChild_Click(object sender, RoutedEventArgs e)
@@ -89,7 +89,7 @@ namespace FCHA
             CategoryDialog dlg = new CategoryDialog();
 			if (true != dlg.ShowDialog())
 				return;
-			AccountancyApplication.AddChildCategory(SelectedCategory, dlg.CategoryName, dlg.IsIncome);
+			AccountancyApplication.AddChildCategory(SelectedCategory, dlg.CategoryName, dlg.Type);
 		}
 
 		private void btnRename_Click(object sender, RoutedEventArgs e)
@@ -98,10 +98,10 @@ namespace FCHA
 				return;
             CategoryDialog dlg = new CategoryDialog();
 			dlg.CategoryName = SelectedCategory.UnderlyingData.name;
-            dlg.IsIncome = SelectedCategory.UnderlyingData.isIncome;
+            dlg.Type = SelectedCategory.UnderlyingData.type;
             if (true != dlg.ShowDialog())
 				return;
-			AccountancyApplication.ChangeCategory(SelectedCategory, dlg.CategoryName, dlg.IsIncome);
+			AccountancyApplication.ChangeCategory(SelectedCategory, dlg.CategoryName, dlg.Type);
 		}
 
 		private void btnRemove_Click(object sender, RoutedEventArgs e)
@@ -171,10 +171,7 @@ namespace FCHA
 			CategoryViewModel selectedCategory = cboExpenseCategory.SelectedItem as CategoryViewModel;
 			if (null == selectedCategory)
 				return;
-			Expense ex = new Expense(0, AccountancyApplication.SelectedAccount.AccountId,
-									long.Parse(txtExpenseAmount.Text), selectedCategory.CategoryId,
-									AccountancyApplication.SelectedDate, txtExpenseDescription.Text);
-			AccountancyApplication.AddExpense(new ExpenseViewModel(ex, AccountancyApplication));
+			AccountancyApplication.AddExpense(new ExpenseViewModel(long.Parse(txtExpenseAmount.Text), selectedCategory.CategoryId, txtExpenseDescription.Text, AccountancyApplication));
 		}
 
 		public ExpenseViewModel SelectedExpense
@@ -207,6 +204,9 @@ namespace FCHA
 
         private void btnAccountTransfer_Click(object sender, RoutedEventArgs e)
         {
+            MoneyTransferDialog dlg = new MoneyTransferDialog();
+            if (true != dlg.ShowDialog())
+                return;
 
         }
 

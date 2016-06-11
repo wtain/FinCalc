@@ -1,27 +1,28 @@
 ﻿
+using FCHA.DataTypes;
+
 namespace FCHA
 {
-	public struct Category
+	public class Category
 	{
 		public long categoryId;
 		public long parentId;
 		public string name;
-        public bool isIncome;
+        public CategoryType type;
+        public double seqNo;
 
-		public Category(string name, long categoryId, long parentId, bool isIncome)
+		public Category(string name, long categoryId, long parentId, CategoryType type, double seqNo)
 		{
 			this.categoryId = categoryId;
 			this.name = name;
 			this.parentId = parentId;
-            this.isIncome = isIncome;
+            this.type = type;
+            this.seqNo = seqNo;
         }
 
-		public Category(string name, long categoryId, bool isIncome)
+		public Category(string name, long categoryId, CategoryType type, double seqNo)
+            : this(name, categoryId, 0, type, seqNo)
 		{
-			this.categoryId = categoryId;
-			this.name = name;
-			this.parentId = 0;
-            this.isIncome = isIncome;
         }
 	}
 }

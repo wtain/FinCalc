@@ -77,7 +77,19 @@ namespace FCHA
 			m_underlyingData = e;
 		}
 
-		public void UpdateUnderlyingData()
+        public ExpenseViewModel(long amount, long categoryId, string description, AccountancyApplication app)
+            : this(new Expense(0, app.SelectedAccount.AccountId, amount, categoryId, app.SelectedDate, description), app)
+        {
+
+        }
+
+        public ExpenseViewModel(long amount, CategoryViewModel category, AccountViewModel account, string description, AccountancyApplication app)
+            : this(new Expense(0, account.AccountId, amount, category.CategoryId, app.SelectedDate, description), app)
+        {
+
+        }
+
+        public void UpdateUnderlyingData()
 		{
 			m_underlyingData = new Expense(m_underlyingData.expenseId, Account.AccountId, Amount, Category.CategoryId, Date, Description);
 		}

@@ -6,24 +6,20 @@
         xmlns:local="clr-namespace:FCHA.Dialogs"
         xmlns:controls="clr-namespace:FCHA.Controls"
         mc:Ignorable="d"
-        Title="{DynamicResource TransferAndConvert}" Height="282" Width="550" ShowInTaskbar="False" ResizeMode="NoResize" Style="{StaticResource AllControlsMargin}">
+        Title="{DynamicResource TransferAndConvert}" Height="554" Width="350" ShowInTaskbar="False" ResizeMode="NoResize" Style="{StaticResource AllControlsMargin}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-
-        <GroupBox Grid.Row="0" Grid.Column="0" Header="{DynamicResource SourceAccount}">
+        <GroupBox Grid.Row="0" Header="{DynamicResource SourceAccount}">
             <controls:AccountControl />
         </GroupBox>
 
-        <UniformGrid Grid.Row="0" Grid.Column="1" Columns="2">
+        <UniformGrid Grid.Row="1" Columns="2">
             <TextBlock Text="{DynamicResource TransferAmount}" Height="24" />
             <TextBox Height="24" />
 
@@ -31,11 +27,11 @@
             <TextBlock Height="24" />
         </UniformGrid>
 
-        <GroupBox Grid.Row="0" Grid.Column="2" Header="{DynamicResource TargetAccount}">
+        <GroupBox Grid.Row="2" Header="{DynamicResource TargetAccount}">
             <controls:AccountControl />
         </GroupBox>
 
-        <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
 
             <Button Name="btnTransfer" IsDefault="True" Height="48" Click="btnTransfer_Click">
                 <StackPanel Orientation="Vertical">

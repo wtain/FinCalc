@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FCHA.DataTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,8 +22,13 @@ namespace FCHA.Dialogs
         public static readonly DependencyProperty CategoryNameProperty
             = DependencyProperty.Register("CategoryName", typeof(string), typeof(CategoryDialog));
 
-        public static readonly DependencyProperty IsIncomeProperty
-            = DependencyProperty.Register("IsIncome", typeof(bool), typeof(CategoryDialog));
+        public static readonly DependencyProperty TypeProperty
+            = DependencyProperty.Register("Type", typeof(CategoryType), typeof(CategoryDialog));
+
+        public static Array CategoryTypes
+        {
+            get { return Enum.GetValues(typeof(CategoryType)); }
+        }
 
         public string CategoryName
         {
@@ -30,10 +36,10 @@ namespace FCHA.Dialogs
             set { SetValue(CategoryNameProperty, value); }
         }
 
-        public bool IsIncome
+        public CategoryType Type
         {
-            get { return (bool)GetValue(IsIncomeProperty); }
-            set { SetValue(IsIncomeProperty, value); }
+            get { return (CategoryType)GetValue(TypeProperty); }
+            set { SetValue(TypeProperty, value); }
         }
 
         public CategoryDialog()

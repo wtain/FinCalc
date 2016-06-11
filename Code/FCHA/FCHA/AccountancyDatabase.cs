@@ -1,4 +1,5 @@
 ﻿
+using FCHA.DataTypes;
 using FCHA.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -79,14 +80,14 @@ namespace FCHA
             m_usersManager.UpdateUser(person);
         }
 
-        public long Add(string name, bool isIncome)
+        public long Add(string name, CategoryType type)
         {
-            return m_categoriesManager.Add(name, isIncome);
+            return m_categoriesManager.Add(name, type);
         }
 
-        public long Add(string name, long parentId, bool isIncome)
+        public long Add(string name, long parentId, CategoryType type)
         {
-            return m_categoriesManager.Add(name, parentId, isIncome);
+            return m_categoriesManager.Add(name, parentId, type);
         }
 
         public void Delete(Category cat)
